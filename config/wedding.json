@@ -1,0 +1,167 @@
+{
+  "wedding": {
+    "couple": {
+      "partner1": {
+        "firstName": "Koji",
+        "lastName": "Adriano"
+      },
+      "partner2": {
+        "firstName": "Bea",
+        "lastName": "Almine"
+      }
+    },
+    "date": "2026-08-14",
+    "time": "2:30PM",
+    "datetime": "2026-08-14T14:30:00",
+    "venue": {
+      "ceremony": {
+        "name": "Naga Metropolitan Cathedral",
+        "address": "Cathedral, Jacob, Naga City, Camarines Sur, Philippines",
+        "googleMapsUrl": "https://maps.app.goo.gl/?q=5C3qArxAZf6k3vLN7"
+      },
+      "reception": {
+        "name": "Solaya",
+        "address": "Naga City, Camarines Sur, Philippines",
+        "googleMapsUrl": "https://maps.app.goo.gl/?q=8pMUZ4RLAgFq7YsN8"
+      }
+    }
+  },
+  "theme": {
+    "colors": {
+      "primary": "#D4668C",
+      "secondary": "#F8B4D0",
+      "accent": "#FFE4EC",
+      "gold": "#D4AF37",
+      "background": "#FFF5F7",
+      "foreground": "#2D2424"
+    },
+    "fonts": {
+      "serif": "Playfair Display",
+      "sans": "Inter"
+    }
+  },
+  "content": {
+    "hero": {
+      "enabled": true,
+      "tagline": "Join Us In Celebrating Our Love",
+      "backgroundImage": "/images/hero-bg.jpg"
+    },
+    "story": {
+      "enabled": true,
+      "title": "Our Story",
+      "content": "We met in the spring of 2020, and it was love at first sight. After years of adventures together, we're ready to start our next chapter.",
+      "timeline": [
+        {
+          "year": "2020",
+          "title": "We Met",
+          "description": "A chance encounter at a coffee shop changed everything."
+        },
+        {
+          "year": "2023",
+          "title": "The Proposal",
+          "description": "Under the stars on a beach in Hawaii, the question was asked."
+        },
+        {
+          "year": "2026",
+          "title": "The Wedding",
+          "description": "Join us as we celebrate our love and commitment."
+        }
+      ]
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "Our Journey",
+      "images": [
+        "/images/gallery/photo1.jpg",
+        "/images/gallery/photo2.jpg",
+        "/images/gallery/photo3.jpg",
+        "/images/gallery/photo4.jpg",
+        "/images/gallery/photo5.jpg",
+        "/images/gallery/photo6.jpg"
+      ]
+    },
+    "schedule": {
+      "enabled": true,
+      "title": "Schedule",
+      "events": [
+        {
+          "time": "3:30 PM",
+          "title": "Guest Arrival",
+          "description": "Please arrive early to find your seat"
+        },
+        {
+          "time": "4:00 PM",
+          "title": "Ceremony",
+          "description": "Join us as we exchange vows"
+        },
+        {
+          "time": "5:00 PM",
+          "title": "Cocktail Hour",
+          "description": "Enjoy drinks and hors d'oeuvres"
+        },
+        {
+          "time": "6:00 PM",
+          "title": "Reception",
+          "description": "Dinner, dancing, and celebration"
+        },
+        {
+          "time": "10:00 PM",
+          "title": "Last Dance",
+          "description": "Send us off with love"
+        }
+      ]
+    },
+    "registry": {
+      "enabled": true,
+      "title": "Registry",
+      "message": "Your presence is the greatest gift, but if you wish to honor us with a gift, we've registered at the following:",
+      "registries": [
+        {
+          "name": "Amazon",
+          "url": "https://www.amazon.com/wedding/registry/..."
+        },
+        {
+          "name": "Target",
+          "url": "https://www.target.com/gift-registry/..."
+        }
+      ]
+    },
+    "rsvp": {
+      "enabled": true,
+      "title": "RSVP",
+      "deadline": "2026-07-15",
+      "formUrl": "https://forms.google.com/...",
+      "message": "Please RSVP by July 15th, 2026"
+    },
+    "faq": {
+      "enabled": true,
+      "title": "FAQ",
+      "questions": [
+        {
+          "question": "What should I wear?",
+          "answer": "Cocktail attire. We suggest dressy but comfortable shoes for the outdoor ceremony."
+        },
+        {
+          "question": "Are children welcome?",
+          "answer": "We love your little ones, but this will be an adults-only celebration."
+        },
+        {
+          "question": "Is there parking available?",
+          "answer": "Yes, there is ample free parking at the venue."
+        },
+        {
+          "question": "Will food be provided?",
+          "answer": "Yes, a full dinner will be served with vegetarian options available."
+        }
+      ]
+    }
+  },
+  "contact": {
+    "email": "kojiandbea2026@gmail.com",
+    "phone": ""
+  },
+  "social": {
+    "instagram": "#aBEAutifullifewithKOJI",
+    "hashtag": "#aBEAutifullifewithKOJI"
+  }
+}
