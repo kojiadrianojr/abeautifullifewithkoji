@@ -89,15 +89,24 @@ export default function Navigation() {
     <>
       <AppBar
         position="fixed"
-        elevation={trigger ? 4 : 1}
+        elevation={trigger ? 4 : 0}
         sx={{
-          background: trigger ? 'white' : 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(10px)',
+          background: trigger 
+            ? 'rgba(255, 255, 255, 0.98)' 
+            : 'linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%)',
+          backdropFilter: trigger ? 'blur(10px)' : 'blur(5px)',
           transition: 'all 0.3s ease',
-          py: trigger ? 1 : 1.5,
+          py: trigger ? 0.5 : 0,
         }}
       >
-        <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, md: 4 } }}>
+        <Toolbar 
+          sx={{ 
+            justifyContent: 'space-between', 
+            px: { xs: 2, md: 4 },
+            minHeight: trigger ? '64px !important' : '80px !important',
+            transition: 'min-height 0.3s ease',
+          }}
+        >
           <Typography
             variant="h5"
             component="div"
@@ -105,12 +114,14 @@ export default function Navigation() {
             sx={{
               fontFamily: 'var(--font-serif)',
               fontWeight: 700,
-              color: 'primary.main',
+              color: trigger ? 'primary.main' : 'white',
               cursor: 'pointer',
+              fontSize: trigger ? '1.5rem' : '1.75rem',
+              textShadow: trigger ? 'none' : '0 2px 4px rgba(0,0,0,0.3)',
               '&:hover': {
                 opacity: 0.8,
               },
-              transition: 'opacity 0.2s',
+              transition: 'all 0.3s ease',
             }}
           >
             K & B
@@ -128,12 +139,16 @@ export default function Navigation() {
                     key={item.href}
                     onClick={() => smoothScrollTo(sectionId)}
                     sx={{
-                      color: isActive ? 'primary.main' : 'text.primary',
+                      color: trigger 
+                        ? (isActive ? 'primary.main' : 'text.primary')
+                        : (isActive ? 'white' : 'rgba(255, 255, 255, 0.9)'),
                       fontWeight: 600,
                       position: 'relative',
+                      textShadow: trigger ? 'none' : '0 1px 2px rgba(0,0,0,0.3)',
+                      fontSize: trigger ? '0.875rem' : '1rem',
                       '&:hover': {
-                        color: 'primary.main',
-                        backgroundColor: 'transparent',
+                        color: trigger ? 'primary.main' : 'white',
+                        backgroundColor: trigger ? 'rgba(212, 102, 140, 0.08)' : 'rgba(255, 255, 255, 0.1)',
                       },
                       '&::after': isActive ? {
                         content: '""',
@@ -143,9 +158,10 @@ export default function Navigation() {
                         transform: 'translateX(-50%)',
                         width: '60%',
                         height: '2px',
-                        backgroundColor: 'primary.main',
+                        backgroundColor: trigger ? 'primary.main' : 'white',
                         borderRadius: '2px',
                       } : {},
+                      transition: 'all 0.3s ease',
                     }}
                   >
                     {item.label}
@@ -158,9 +174,12 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           {isMobile && (
             <IconButton
-              color="primary"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
+              sx={{
+                color: trigger ? 'primary.main' : 'white',
+                transition: 'color 0.3s ease',
+              }}
             >
               {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
             </IconButton>
