@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { Great_Vibes, Inter } from 'next/font/google';
 import './globals.css';
 import { getCoupleNames, getWeddingConfig } from '@/lib/config';
 import ThemeProvider from '@/components/ThemeProvider';
 
-const playfair = Playfair_Display({
+const greatVibes = Great_Vibes({
+  weight: '400',
   subsets: ['latin'],
   variable: '--font-serif',
   display: 'swap',
@@ -29,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang="en" className={`${greatVibes.variable} ${inter.variable}`}>
       <body>
         <ThemeProvider theme={config.theme}>
           {children}
