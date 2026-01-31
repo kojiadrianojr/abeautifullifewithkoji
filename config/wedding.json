@@ -36,11 +36,14 @@
       "foreground": "#2D2424"
     },
     "fonts": {
-      "serif": "Great Vibes",
-      "sans": "Inter"
+      "heading": "Great Vibes",
+      "body": "Inter"
     }
   },
   "content": {
+    "splashScreen": {
+      "enabled": true
+    },
     "hero": {
       "enabled": true,
       "tagline": "Join Us In Celebrating Our Love",

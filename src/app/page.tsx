@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { Box } from '@mui/material';
 import Hero from '@/components/sections/Hero';
 import Story from '@/components/sections/Story';
@@ -8,13 +11,31 @@ import RSVP from '@/components/sections/RSVP';
 import FAQ from '@/components/sections/FAQ';
 import Footer from '@/components/sections/Footer';
 import Navigation from '@/components/Navigation';
+import SplashScreen from '@/components/SplashScreen';
 import { getWeddingConfig } from '@/lib/config';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Home() {
   const config = getWeddingConfig();
   const { content } = config;
+  const [showSplash, setShowSplash] = useState(content.splashScreen?.enabled !== false);
+
+  const handleEnterSite = () => {
+    setShowSplash(false);
+  };
+
+  if (showSplash) {
+    return <SplashScreen onEnter={handleEnterSite} />;
+  }
 
   return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1, ease: "easeIn" }}
+      >
     <Box component="main" sx={{ minHeight: '100vh' }}>
       <Navigation />
       {content.hero.enabled && <Hero />}
@@ -24,8 +45,9 @@ export default function Home() {
       {content.registry.enabled && <Registry />}
       {content.rsvp.enabled && <RSVP />}
       {content.faq.enabled && <FAQ />}
-      
       <Footer />
     </Box>
+    </motion.div>
+    </AnimatePresence>
   );
 }

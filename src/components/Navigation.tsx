@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const navItems = [
   { label: 'Our Story', href: '#story' },
@@ -33,6 +34,7 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [mounted, setMounted] = useState(false);
+  const [showNav, setShowNav] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const trigger = useScrollTrigger({
@@ -42,6 +44,20 @@ export default function Navigation() {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.querySelector('section');
+      if (heroSection) {
+        const heroBottom = heroSection.offsetHeight;
+        setShowNav(window.scrollY > heroBottom * 0.8);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -86,9 +102,18 @@ export default function Navigation() {
   };
 
   return (
-    <>
-      <AppBar
-        position="fixed"
+    <AnimatePresence mode="wait">
+      {showNav && (
+        <motion.div
+          key="navigation"
+          initial={{ y: -100, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          exit={{ y: -100, opacity: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1100 }}
+        >
+          <AppBar
+            position="static"
         elevation={trigger ? 4 : 0}
         sx={{
           background: trigger 
@@ -235,6 +260,8 @@ export default function Navigation() {
 
       {/* Spacer for fixed AppBar */}
       <Toolbar />
-    </>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
