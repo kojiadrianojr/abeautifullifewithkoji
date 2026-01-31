@@ -1,9 +1,25 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Countdown from 'react-countdown';
 import { Box, Typography, Paper, Stack } from '@mui/material';
 import { getWeddingConfig } from '@/lib/config';
 
 function CountdownComponent() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Box sx={{ minHeight: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Typography variant="h5" sx={{ opacity: 0.7 }}>Loading...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Countdown 
       date={new Date(getWeddingConfig().wedding.datetime).getTime()}
@@ -49,7 +65,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
           sx={{
             px: { xs: 2, sm: 3 },
             py: { xs: 1.5, sm: 2 },
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backgroundColor: 'transparent',
             backdropFilter: 'blur(10px)',
             borderRadius: 2,
             minWidth: { xs: 70, sm: 90 },
