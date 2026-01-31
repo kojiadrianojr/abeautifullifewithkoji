@@ -70,6 +70,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
             borderRadius: 2,
             minWidth: { xs: 70, sm: 90 },
             textAlign: 'center',
+            display: index === 3 ? { xs: 'none', md: 'block' } : 'block',
           }}
         >
           <Typography
