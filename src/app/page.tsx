@@ -13,7 +13,6 @@ import Footer from '@/components/sections/Footer';
 import Navigation from '@/components/Navigation';
 import SplashScreen from '@/components/SplashScreen';
 import { getWeddingConfig } from '@/lib/config';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Home() {
   const config = getWeddingConfig();
@@ -24,30 +23,23 @@ export default function Home() {
     setShowSplash(false);
   };
 
-  if (showSplash) {
-    return <SplashScreen onEnter={handleEnterSite} />;
-  }
-
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 1, ease: "easeIn" }}
-      >
-    <Box component="main" sx={{ minHeight: '100vh' }}>
-      <Navigation />
-      {content.hero.enabled && <Hero />}
-      {content.story.enabled && <Story />}
-      {content.gallery.enabled && <Gallery />}
-      {content.schedule.enabled && <Schedule />}
-      {content.registry.enabled && <Registry />}
-      {content.rsvp.enabled && <RSVP />}
-      {content.faq.enabled && <FAQ />}
-      <Footer />
+    <Box sx={{ minHeight: '100vh' }}>
+      {showSplash ? (
+        <SplashScreen onEnter={handleEnterSite} />
+      ) : (
+        <Box component="main" sx={{ minHeight: '100vh' }}>
+          <Navigation />
+          {content.hero.enabled && <Hero />}
+          {content.story.enabled && <Story />}
+          {content.gallery.enabled && <Gallery />}
+          {content.schedule.enabled && <Schedule />}
+          {content.registry.enabled && <Registry />}
+          {content.rsvp.enabled && <RSVP />}
+          {content.faq.enabled && <FAQ />}
+          <Footer />
+        </Box>
+      )}
     </Box>
-    </motion.div>
-    </AnimatePresence>
   );
 }

@@ -70,7 +70,7 @@ export default function Hero() {
           px: 2,
         }}
       >
-        <Slide direction="down" in={mounted} timeout={1000}>
+        <Slide direction="down" in={mounted} timeout={2000}>
           <Typography
             variant="h5"
             component="p"
@@ -100,7 +100,7 @@ export default function Hero() {
           </Typography>
         </Grow>
 
-        <Slide direction="up" in={mounted} timeout={1000}>
+        <Slide direction="up" in={mounted} timeout={1500}>
           <Box sx={{ mb: 6 }}>
             <Typography
               variant="h5"
