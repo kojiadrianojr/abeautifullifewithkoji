@@ -1,8 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -11,86 +10,89 @@ interface ThemeProviderProps {
       primary: string;
       secondary: string;
       accent: string;
+      gold?: string;
       background: string;
       foreground: string;
     };
     fonts: {
-      serif: string;
-      sans: string;
+      heading: string;
+      body: string;
     };
   };
 }
 
 export default function ThemeProvider({ children, theme }: ThemeProviderProps) {
-  const muiTheme = useMemo(
+  const chakraTheme = useMemo(
     () =>
-      createTheme({
-        palette: {
-          mode: 'light',
+      extendTheme({
+        colors: {
           primary: {
-            main: theme.colors.primary,
+            50: adjustColor(theme.colors.primary, 95),
+            100: adjustColor(theme.colors.primary, 85),
+            200: adjustColor(theme.colors.primary, 70),
+            300: adjustColor(theme.colors.primary, 55),
+            400: adjustColor(theme.colors.primary, 40),
+            500: theme.colors.primary,
+            600: adjustColor(theme.colors.primary, -15),
+            700: adjustColor(theme.colors.primary, -30),
+            800: adjustColor(theme.colors.primary, -45),
+            900: adjustColor(theme.colors.primary, -60),
           },
           secondary: {
-            main: theme.colors.secondary,
+            50: adjustColor(theme.colors.secondary, 95),
+            100: adjustColor(theme.colors.secondary, 85),
+            200: adjustColor(theme.colors.secondary, 70),
+            300: adjustColor(theme.colors.secondary, 55),
+            400: adjustColor(theme.colors.secondary, 40),
+            500: theme.colors.secondary,
+            600: adjustColor(theme.colors.secondary, -15),
+            700: adjustColor(theme.colors.secondary, -30),
+            800: adjustColor(theme.colors.secondary, -45),
+            900: adjustColor(theme.colors.secondary, -60),
           },
-          background: {
-            default: theme.colors.background,
-            paper: '#ffffff',
-          },
-          text: {
-            primary: theme.colors.foreground,
-            secondary: theme.colors.secondary,
+          accent: {
+            50: adjustColor(theme.colors.accent, 95),
+            100: adjustColor(theme.colors.accent, 85),
+            200: adjustColor(theme.colors.accent, 70),
+            300: adjustColor(theme.colors.accent, 55),
+            400: adjustColor(theme.colors.accent, 40),
+            500: theme.colors.accent,
+            600: adjustColor(theme.colors.accent, -15),
+            700: adjustColor(theme.colors.accent, -30),
+            800: adjustColor(theme.colors.accent, -45),
+            900: adjustColor(theme.colors.accent, -60),
           },
         },
-        typography: {
-          fontFamily: `var(${theme.fonts.sans}), Arial, sans-serif`,
-          h1: {
-            fontFamily: `var(${theme.fonts.serif}), Georgia, serif`,
-            fontWeight: 700,
-          },
-          h2: {
-            fontFamily: `var(${theme.fonts.serif}), Georgia, serif`,
-            fontWeight: 700,
-          },
-          h3: {
-            fontFamily: `var(${theme.fonts.serif}), Georgia, serif`,
-            fontWeight: 600,
-          },
-          h4: {
-            fontFamily: `var(${theme.fonts.serif}), Georgia, serif`,
-            fontWeight: 600,
-          },
-          h5: {
-            fontFamily: `var(${theme.fonts.serif}), Georgia, serif`,
-            fontWeight: 600,
-          },
-          h6: {
-            fontFamily: `var(${theme.fonts.serif}), Georgia, serif`,
-            fontWeight: 600,
+        fonts: {
+          heading: `var(--font-heading), ${theme.fonts.heading}, Georgia, serif`,
+          body: `var(--font-body), ${theme.fonts.body}, Arial, sans-serif`,
+        },
+        styles: {
+          global: {
+            body: {
+              bg: theme.colors.background,
+              color: theme.colors.foreground,
+            },
           },
         },
         components: {
-          MuiButton: {
-            styleOverrides: {
-              root: {
-                borderRadius: 12,
-                textTransform: 'none',
-                fontWeight: 600,
-                padding: '12px 32px',
+          Button: {
+            baseStyle: {
+              fontWeight: 600,
+              borderRadius: 'xl',
+            },
+            sizes: {
+              lg: {
+                px: 8,
+                py: 6,
+                fontSize: 'lg',
               },
             },
           },
-          MuiCard: {
-            styleOverrides: {
-              root: {
-                borderRadius: 16,
-              },
-            },
-          },
-          MuiPaper: {
-            styleOverrides: {
-              root: {
-                borderRadius: 12,
+          Card: {
+            baseStyle: {
+              container: {
+                borderRadius: '2xl',
               },
             },
           },
@@ -99,10 +101,25 @@ export default function ThemeProvider({ children, theme }: ThemeProviderProps) {
     [theme]
   );
 
+  return <ChakraProvider theme={chakraTheme}>{children}</ChakraProvider>;
+}
+
+// Helper function to adjust color brightness
+function adjustColor(color: string, percent: number): string {
+  const num = parseInt(color.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+  const R = (num >> 16) + amt;
+  const G = ((num >> 8) & 0x00ff) + amt;
+  const B = (num & 0x0000ff) + amt;
   return (
-    <MuiThemeProvider theme={muiTheme}>
-      <CssBaseline />
-      {children}
-    </MuiThemeProvider>
+    '#' +
+    (
+      0x1000000 +
+      (R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
+      (G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
+      (B < 255 ? (B < 0 ? 0 : B) : 255)
+    )
+      .toString(16)
+      .slice(1)
   );
 }

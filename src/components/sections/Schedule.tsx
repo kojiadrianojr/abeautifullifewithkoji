@@ -1,92 +1,69 @@
-import { Box, Container, Typography, Card, CardContent, Chip } from '@mui/material';
+'use client';
+
+import { Box, Container, Card, CardBody, Tag, Heading, Text, VStack } from '@chakra-ui/react';
 import { getWeddingConfig } from '@/lib/config';
+import { SectionTitle } from '@/components/ui/SectionTitle';
 
 export default function Schedule() {
   const config = getWeddingConfig();
   const { schedule } = config.content;
 
   return (
-    <Box
-      id="schedule"
-      component="section"
-      sx={{
-        py: { xs: 8, md: 12 },
-        bgcolor: 'background.default',
-      }}
-    >
-      <Container maxWidth="md">
-        <Typography
-          variant="h2"
-          align="center"
-          gutterBottom
-          sx={{
-            mb: 8,
-            fontSize: { xs: '2.5rem', md: '3.5rem' },
-            color: 'primary.main',
-          }}
-        >
+    <Box id="schedule" as="section" py={{ base: 16, md: 24 }}>
+      <Container maxW="3xl">
+        <SectionTitle color="primary.500" mb={16}>
           {schedule.title}
-        </Typography>
+        </SectionTitle>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <VStack spacing={6} align="stretch">
           {schedule.events.map((event, index) => (
             <Card
               key={index}
-              elevation={2}
-              sx={{
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  elevation: 4,
-                  transform: 'translateY(-4px)',
-                },
+              boxShadow="md"
+              transition="all 0.3s ease"
+              _hover={{
+                boxShadow: 'xl',
+                transform: 'translateY(-4px)',
               }}
+              borderRadius="xl"
             >
-              <CardContent
-                sx={{
-                  display: 'flex',
-                  flexDirection: { xs: 'column', md: 'row' },
-                  alignItems: { xs: 'flex-start', md: 'center' },
-                  gap: 3,
-                  p: 3,
-                }}
+              <CardBody
+                display="flex"
+                flexDirection={{ base: 'column', md: 'row' }}
+                alignItems={{ base: 'flex-start', md: 'center' }}
+                gap={6}
+                p={6}
               >
-                <Box sx={{ minWidth: { md: 120 } }}>
-                  <Chip
-                    label={event.time}
-                    color="secondary"
-                    sx={{
-                      fontSize: '1.25rem',
-                      fontWeight: 700,
-                      height: 'auto',
-                      py: 1.5,
-                      px: 2,
-                      '& .MuiChip-label': {
-                        px: 0,
-                      },
-                    }}
-                  />
+                <Box minW={{ md: 120 }}>
+                  <Tag
+                    size="lg"
+                    colorScheme="secondary"
+                    fontSize="xl"
+                    fontWeight="bold"
+                    py={3}
+                    px={4}
+                  >
+                    {event.time}
+                  </Tag>
                 </Box>
+
                 <Box
-                  sx={{
-                    flex: 1,
-                    borderTop: { xs: '2px solid', md: 'none' },
-                    borderLeft: { xs: 'none', md: '2px solid' },
-                    borderColor: 'primary.main',
-                    pt: { xs: 2, md: 0 },
-                    pl: { xs: 0, md: 3 },
-                  }}
+                  flex={1}
+                  borderTop={{ base: '2px solid', md: 'none' }}
+                  borderLeft={{ base: 'none', md: '2px solid' }}
+                  borderColor="primary.500"
+                  pt={{ base: 4, md: 0 }}
+                  pl={{ base: 0, md: 6 }}
                 >
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
+                  <Heading as="h3" size="md" mb={2} fontWeight="semibold">
                     {event.title}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    {event.description}
-                  </Typography>
+                  </Heading>
+                  <Text color="gray.600">{event.description}</Text>
                 </Box>
-              </CardContent>
+              </CardBody>
             </Card>
           ))}
-        </Box>
+        </VStack>
       </Container>
     </Box>
   );

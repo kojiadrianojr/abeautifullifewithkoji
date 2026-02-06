@@ -1,127 +1,73 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Container, Typography, Paper, Modal, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Box, Container, SimpleGrid, useDisclosure } from '@chakra-ui/react';
 import { getWeddingConfig } from '@/lib/config';
+import { SectionTitle } from '@/components/ui/SectionTitle';
+import { GalleryLightbox } from '@/components/ui/GalleryLightbox';
 
 export default function Gallery() {
   const config = getWeddingConfig();
   const { gallery } = config.content;
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{ src: string; index: number } | null>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleImageClick = (image: string, index: number) => {
+    setSelectedImage({ src: image, index });
+    onOpen();
+  };
+
+  const handleClose = () => {
+    onClose();
+    setSelectedImage(null);
+  };
 
   return (
-    <Box
-      id="gallery"
-      component="section"
-      sx={{
-        py: { xs: 8, md: 12 },
-        bgcolor: 'action.hover',
-      }}
-    >
-      <Container maxWidth="lg">
-        <Typography
-          variant="h2"
-          align="center"
-          gutterBottom
-          sx={{
-            mb: 8,
-            fontSize: { xs: '2.5rem', md: '3.5rem' },
-            color: 'primary.main',
-          }}
-        >
+    <Box id="gallery" as="section" py={{ base: 16, md: 24 }} bg="gray.100">
+      <Container maxW="7xl">
+        <SectionTitle color="primary.500" mb={16}>
           {gallery.title}
-        </Typography>
+        </SectionTitle>
 
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
-            gap: 3,
-          }}
-        >
+        <SimpleGrid columns={{ base: 2, md: 3 }} spacing={6}>
           {gallery.images.map((image, index) => (
-            <Paper
+            <Box
               key={index}
-              elevation={2}
-              onClick={() => setSelectedImage(image)}
-              sx={{
-                aspectRatio: '1',
-                cursor: 'pointer',
-                overflow: 'hidden',
-                borderRadius: 3,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  elevation: 6,
-                  transform: 'scale(1.05)',
-                },
+              aspectRatio={1}
+              cursor="pointer"
+              overflow="hidden"
+              borderRadius="2xl"
+              boxShadow="md"
+              transition="all 0.3s ease"
+              _hover={{
+                boxShadow: 'xl',
+                transform: 'scale(1.05)',
               }}
+              onClick={() => handleImageClick(image, index)}
             >
               <Box
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  bgcolor: 'grey.200',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+                w="full"
+                h="full"
+                bg="gray.300"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                color="gray.600"
+                fontSize="lg"
               >
-                <Typography color="text.secondary">Photo {index + 1}</Typography>
+                Photo {index + 1}
               </Box>
-            </Paper>
+            </Box>
           ))}
-        </Box>
+        </SimpleGrid>
       </Container>
 
-      {/* Lightbox Modal */}
-      <Modal
-        open={!!selectedImage}
-        onClose={() => setSelectedImage(null)}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Box
-          onClick={() => setSelectedImage(null)}
-          sx={{
-            position: 'relative',
-            maxWidth: '90vw',
-            maxHeight: '90vh',
-            outline: 'none',
-          }}
-        >
-          <IconButton
-            onClick={() => setSelectedImage(null)}
-            sx={{
-              position: 'absolute',
-              top: -50,
-              right: 0,
-              color: 'white',
-              fontSize: '2rem',
-            }}
-          >
-            <CloseIcon fontSize="large" />
-          </IconButton>
-          <Paper
-            elevation={8}
-            sx={{
-              p: 2,
-              bgcolor: 'grey.200',
-              width: 600,
-              height: 400,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 2,
-            }}
-          >
-            <Typography color="text.secondary">Selected Image</Typography>
-          </Paper>
-        </Box>
-      </Modal>
+      <GalleryLightbox
+        isOpen={isOpen}
+        onClose={handleClose}
+        imageSrc={selectedImage?.src || null}
+        imageIndex={selectedImage?.index || 0}
+      />
     </Box>
   );
 }

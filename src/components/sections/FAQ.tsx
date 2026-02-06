@@ -1,78 +1,68 @@
 'use client';
 
-import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Box,
+  Container,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Heading,
+  Text,
+} from '@chakra-ui/react';
 import { getWeddingConfig } from '@/lib/config';
+import { SectionTitle } from '@/components/ui/SectionTitle';
 
 export default function FAQ() {
   const config = getWeddingConfig();
   const { faq } = config.content;
 
   return (
-    <Box
-      id="faq"
-      component="section"
-      sx={{
-        py: { xs: 8, md: 12 },
-        bgcolor: 'background.default',
-      }}
-    >
-      <Container maxWidth="md">
-        <Typography
-          variant="h2"
-          align="center"
-          gutterBottom
-          sx={{
-            mb: 8,
-            fontSize: { xs: '2.5rem', md: '3.5rem' },
-            color: 'primary.main',
-          }}
-        >
+    <Box id="faq" as="section" py={{ base: 16, md: 24 }}>
+      <Container maxW="3xl">
+        <SectionTitle color="primary.500" mb={16}>
           {faq.title}
-        </Typography>
+        </SectionTitle>
 
-        <Box>
+        <Accordion allowMultiple>
           {faq.questions.map((item, index) => (
-            <Accordion
+            <AccordionItem
               key={index}
-              elevation={1}
-              sx={{
-                mb: 2,
-                '&:before': {
-                  display: 'none',
-                },
-                '&.Mui-expanded': {
-                  bgcolor: 'action.hover',
-                },
-              }}
+              border="1px solid"
+              borderColor="gray.200"
+              borderRadius="xl"
+              mb={4}
+              _last={{ mb: 0 }}
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon color="primary" />}
-                sx={{
-                  '& .MuiAccordionSummary-content': {
-                    my: 2,
-                  },
-                }}
+              <AccordionButton
+                py={4}
+                px={6}
+                _hover={{ bg: 'gray.50' }}
+                _expanded={{ bg: 'gray.50' }}
+                borderRadius="xl"
               >
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  {item.question}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{
-                  pt: 0,
-                  pb: 3,
-                  borderTop: '1px solid',
-                  borderColor: 'divider',
-                }}
+                <Box flex={1} textAlign="left">
+                  <Heading as="h3" size="md" fontWeight="semibold">
+                    {item.question}
+                  </Heading>
+                </Box>
+                <AccordionIcon color="primary.500" fontSize="2xl" />
+              </AccordionButton>
+              <AccordionPanel
+                pb={6}
+                px={6}
+                pt={4}
+                borderTop="1px solid"
+                borderColor="gray.200"
               >
-                <Typography color="text.secondary">
+                <Text color="gray.600" fontSize="md">
                   {item.answer}
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
+                </Text>
+              </AccordionPanel>
+            </AccordionItem>
           ))}
-        </Box>
+        </Accordion>
       </Container>
     </Box>
   );

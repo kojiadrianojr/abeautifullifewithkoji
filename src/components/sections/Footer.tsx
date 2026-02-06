@@ -1,5 +1,7 @@
-import { Box, Container, Typography, Link, Divider } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+'use client';
+
+import { Box, Container, Heading, Text, Link, Divider, VStack, Flex } from '@chakra-ui/react';
+import { FiHeart } from 'react-icons/fi';
 import { getCoupleNames, getWeddingConfig } from '@/lib/config';
 
 export default function Footer() {
@@ -8,99 +10,60 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Box
-      component="footer"
-      sx={{
-        bgcolor: 'text.primary',
-        color: 'white',
-        py: 8,
-      }}
-    >
-      <Container maxWidth="lg">
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography
-            variant="h3"
-            sx={{
-              fontFamily: 'var(--font-serif)',
-              fontWeight: 700,
-              mb: 2,
-            }}
+    <Box as="footer" bg="gray.900" color="white" py={16}>
+      <Container maxW="7xl">
+        <VStack spacing={8} textAlign="center">
+          <Heading
+            as="h2"
+            fontSize={{ base: '3xl', md: '4xl' }}
+            fontFamily="heading"
+            fontWeight="bold"
           >
             {getCoupleNames()}
-          </Typography>
-          
+          </Heading>
+
           {social.hashtag && (
-            <Typography
-              variant="h5"
-              sx={{
-                mb: 4,
-                color: 'secondary.main',
-              }}
-            >
+            <Heading as="h3" size="lg" color="secondary.500">
               {social.hashtag}
-            </Typography>
+            </Heading>
           )}
 
-          <Box sx={{ mb: 6 }}>
+          <VStack spacing={2}>
             {contact.email && (
-              <Typography sx={{ mb: 1 }}>
-                <Link
-                  href={`mailto:${contact.email}`}
-                  color="inherit"
-                  sx={{
-                    '&:hover': {
-                      color: 'secondary.main',
-                    },
-                    transition: 'color 0.3s',
-                  }}
-                >
-                  {contact.email}
-                </Link>
-              </Typography>
+              <Link
+                href={`mailto:${contact.email}`}
+                color="whiteAlpha.900"
+                _hover={{ color: 'secondary.400' }}
+                transition="color 0.3s"
+              >
+                {contact.email}
+              </Link>
             )}
             {contact.phone && (
-              <Typography>
-                <Link
-                  href={`tel:${contact.phone}`}
-                  color="inherit"
-                  sx={{
-                    '&:hover': {
-                      color: 'secondary.main',
-                    },
-                    transition: 'color 0.3s',
-                  }}
-                >
-                  {contact.phone}
-                </Link>
-              </Typography>
+              <Link
+                href={`tel:${contact.phone}`}
+                color="whiteAlpha.900"
+                _hover={{ color: 'secondary.400' }}
+                transition="color 0.3s"
+              >
+                {contact.phone}
+              </Link>
             )}
-          </Box>
+          </VStack>
 
-          <Divider sx={{ bgcolor: 'grey.700', mb: 4 }} />
+          <Divider borderColor="gray.700" />
 
-          <Typography
-            variant="body2"
-            sx={{
-              color: 'grey.400',
-              mb: 1,
-            }}
-          >
-            © {currentYear} {getCoupleNames()}. All rights reserved.
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'grey.500',
-              fontSize: '0.75rem',
-            }}
-          >
-            <Typography variant="caption">Made with</Typography>
-            <FavoriteIcon sx={{ fontSize: 16, mx: 0.5, color: 'error.light' }} />
-            <Typography variant="caption">using Wedding Website Template</Typography>
-          </Box>
-        </Box>
+          <VStack spacing={2}>
+            <Text fontSize="sm" color="gray.400">
+              © {currentYear} {getCoupleNames()}. All rights reserved.
+            </Text>
+            <Flex align="center" gap={2} color="gray.500" fontSize="xs">
+              <Text>Made with</Text>
+              <Box as={FiHeart} color="red.400" />
+              <Text>and code</Text>
+            </Flex>
+          </VStack>
+        </VStack>
       </Container>
     </Box>
   );
