@@ -1,126 +1,94 @@
-import { Box, Container, Typography, Card, CardContent, Link } from '@mui/material';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+'use client';
+
+import { Box, Container, Text, SimpleGrid, Card, CardBody, Link, Heading, Flex } from '@chakra-ui/react';
+import { FiGift, FiArrowRight } from 'react-icons/fi';
 import { getWeddingConfig } from '@/lib/config';
+import { SectionTitle } from '@/components/ui/SectionTitle';
 
 export default function Registry() {
   const config = getWeddingConfig();
   const { registry } = config.content;
 
   return (
-    <Box
-      id="registry"
-      component="section"
-      sx={{
-        py: { xs: 8, md: 12 },
-        bgcolor: 'action.hover',
-      }}
-    >
-      <Container maxWidth="md">
-        <Typography
-          variant="h2"
-          align="center"
-          gutterBottom
-          sx={{
-            mb: 4,
-            fontSize: { xs: '2.5rem', md: '3.5rem' },
-            color: 'primary.main',
-          }}
-        >
+    <Box id="registry" as="section" py={{ base: 16, md: 24 }} bg="gray.100">
+      <Container maxW="3xl">
+        <SectionTitle color="primary.500" mb={8}>
           {registry.title}
-        </Typography>
+        </SectionTitle>
 
-        <Typography
-          variant="h6"
-          align="center"
-          sx={{
-            maxWidth: 700,
-            mx: 'auto',
-            mb: 8,
-            color: 'text.secondary',
-          }}
+        <Text
+          fontSize={{ base: 'lg', md: 'xl' }}
+          textAlign="center"
+          maxW="2xl"
+          mx="auto"
+          mb={16}
+          color="gray.600"
         >
           {registry.message}
-        </Typography>
+        </Text>
 
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
-            gap: 3,
-            maxWidth: 700,
-            mx: 'auto',
-          }}
-        >
+        <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={6} maxW="2xl" mx="auto">
           {registry.registries.map((reg, index) => (
             <Link
               key={index}
               href={reg.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              underline="none"
-              sx={{ display: 'block' }}
+              isExternal
+              _hover={{ textDecoration: 'none' }}
             >
               <Card
-                elevation={2}
-                sx={{
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      elevation: 6,
-                      transform: 'translateY(-8px)',
-                      '& .gift-icon': {
-                        transform: 'scale(1.1)',
-                      },
-                      '& .view-text': {
-                        color: 'primary.main',
-                      },
-                      '& .arrow-icon': {
-                        transform: 'translateX(4px)',
-                      },
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 4 }}>
-                    <CardGiftcardIcon
-                      className="gift-icon"
-                      sx={{
-                        fontSize: 60,
-                        color: 'primary.main',
-                        mb: 2,
-                        transition: 'transform 0.3s ease',
-                      }}
-                    />
-                    <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
-                      {reg.name}
-                    </Typography>
+                boxShadow="md"
+                textAlign="center"
+                transition="all 0.3s ease"
+                cursor="pointer"
+                _hover={{
+                  boxShadow: 'xl',
+                  transform: 'translateY(-8px)',
+                  '& .gift-icon': {
+                    transform: 'scale(1.1)',
+                  },
+                  '& .view-text': {
+                    color: 'primary.500',
+                  },
+                  '& .arrow-icon': {
+                    transform: 'translateX(4px)',
+                  },
+                }}
+                borderRadius="xl"
+              >
+                <CardBody p={8}>
+                  <Box
+                    className="gift-icon"
+                    as={FiGift}
+                    fontSize="6xl"
+                    color="primary.500"
+                    mb={4}
+                    mx="auto"
+                    transition="transform 0.3s ease"
+                  />
+                  <Heading as="h3" size="md" mb={4} fontWeight="semibold">
+                    {reg.name}
+                  </Heading>
+                  <Flex
+                    className="view-text"
+                    align="center"
+                    justify="center"
+                    gap={2}
+                    color="gray.600"
+                    fontWeight="medium"
+                    transition="color 0.3s ease"
+                  >
+                    <Text>View Registry</Text>
                     <Box
-                      className="view-text"
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'secondary.main',
-                        fontWeight: 600,
-                        transition: 'color 0.3s ease',
-                      }}
-                    >
-                      <Typography>View Registry</Typography>
-                      <ArrowForwardIcon
-                        className="arrow-icon"
-                        sx={{
-                          ml: 0.5,
-                          fontSize: 20,
-                          transition: 'transform 0.3s ease',
-                        }}
-                      />
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Link>
+                      className="arrow-icon"
+                      as={FiArrowRight}
+                      transition="transform 0.3s ease"
+                    />
+                  </Flex>
+                </CardBody>
+              </Card>
+            </Link>
           ))}
-        </Box>
+        </SimpleGrid>
       </Container>
     </Box>
   );

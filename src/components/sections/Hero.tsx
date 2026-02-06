@@ -1,167 +1,58 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Box, Typography, Container, Fade, Grow, Slide } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Box, Container } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { getCoupleNames, formatWeddingDate, getWeddingConfig } from '@/lib/config';
+import { useScrollPosition } from '@/hooks/useScrollPosition';
+import { useMounted } from '@/hooks/useMounted';
+import { ParallaxBackground } from '@/components/ui/ParallaxBackground';
 import Countdown from '@/components/Countdown';
+import { HeroContent } from './Hero/HeroContent';
+import { ScrollIndicator } from './Hero/ScrollIndicator';
+
+const MotionBox = motion(Box);
 
 export default function Hero() {
   const config = getWeddingConfig();
   const { hero } = config.content;
   const { time, venue } = config.wedding;
-  const [scrollY, setScrollY] = useState(0);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const { scrollY } = useScrollPosition();
+  const mounted = useMounted();
 
   return (
     <Box
       id="hero"
-      component="section"
-      sx={{
-        position: 'relative',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-      }}
+      as="section"
+      position="relative"
+      minH="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      overflow="hidden"
     >
-      {/* Parallax Background */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${hero.backgroundImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          transform: `translateY(${scrollY * 0.5}px) scale(1.1)`,
-          transition: 'transform 0.1s',
-        }}
-      />
+      <ParallaxBackground imageUrl={hero.backgroundImage} scrollY={scrollY} />
 
-      {/* Overlay */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3))',
-        }}
-      />
+      <Container maxW="7xl" position="relative" zIndex={10} px={4}>
+        <HeroContent
+          tagline={hero.tagline}
+          coupleNames={getCoupleNames()}
+          weddingDate={formatWeddingDate()}
+          weddingTime={time}
+          venueName={venue.ceremony.name}
+          mounted={mounted}
+        />
 
-      {/* Content */}
-      <Container
-        maxWidth="lg"
-        sx={{
-          position: 'relative',
-          zIndex: 10,
-          textAlign: 'center',
-          color: 'white',
-          px: 2,
-        }}
-      >
-        <Slide direction="down" in={mounted} timeout={2000}>
-          <Typography
-            variant="h5"
-            component="p"
-            sx={{
-              mb: 2,
-              fontWeight: 300,
-              letterSpacing: '0.1em',
-              fontSize: { xs: '1.25rem', md: '1.5rem' },
-            }}
-          >
-            {hero.tagline}
-          </Typography>
-        </Slide>
-
-        <Grow in={mounted} timeout={1200} style={{ transformOrigin: 'center' }}>
-          <Typography
-            variant="h1"
-            component="h1"
-            sx={{
-              fontWeight: 700,
-              mb: 4,
-              letterSpacing: '-0.02em',
-              fontSize: { xs: '3rem', sm: '4rem', md: '5.5rem', lg: '7rem' },
-            }}
-          >
-            {getCoupleNames()}
-          </Typography>
-        </Grow>
-
-        <Slide direction="up" in={mounted} timeout={1500}>
-          <Box sx={{ mb: 6 }}>
-            <Typography
-              variant="h5"
-              component="p"
-              sx={{
-                mb: 1,
-                fontSize: { xs: '1.25rem', md: '1.5rem' },
-              }}
-            >
-              {formatWeddingDate()}
-            </Typography>
-            <Typography
-              variant="h5"
-              component="p"
-              sx={{
-                mb: 1,
-                fontSize: { xs: '1.25rem', md: '1.5rem' },
-              }}
-            >
-              {time}
-            </Typography>
-            <Typography
-              variant="h5"
-              component="p"
-              sx={{
-                fontWeight: 300,
-                fontSize: { xs: '1.25rem', md: '1.5rem' },
-              }}
-            >
-              {venue.ceremony.name}
-            </Typography>
-          </Box>
-        </Slide>
-
-        <Fade in={mounted} timeout={1500} style={{ transitionDelay: '400ms' }}>
-          <Box>
-            <Countdown />
-          </Box>
-        </Fade>
+        <MotionBox
+          mt={6}
+          initial={{ opacity: 0 }}
+          animate={mounted ? { opacity: 1 } : {}}
+          transition={{ duration: 1.5, delay: 0.4 }}
+        >
+          <Countdown />
+        </MotionBox>
       </Container>
 
-      {/* Scroll indicator */}
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 32,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          animation: 'bounce 2s infinite',
-          '@keyframes bounce': {
-            '0%, 100%': {
-              transform: 'translateX(-50%) translateY(0)',
-            },
-            '50%': {
-              transform: 'translateX(-50%) translateY(-10px)',
-            },
-          },
-        }}
-      >
-        <KeyboardArrowDownIcon sx={{ fontSize: 48, color: 'white' }} />
-      </Box>
+      <ScrollIndicator />
     </Box>
   );
 }

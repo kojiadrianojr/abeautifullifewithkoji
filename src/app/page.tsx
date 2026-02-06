@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Box } from '@mui/material';
+import { Box } from '@chakra-ui/react';
 import Hero from '@/components/sections/Hero';
 import Story from '@/components/sections/Story';
 import Gallery from '@/components/sections/Gallery';
@@ -24,11 +24,11 @@ export default function Home() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh' }}>
+    <Box minH="100vh">
       {showSplash ? (
         <SplashScreen onEnter={handleEnterSite} />
       ) : (
-        <Box component="main" sx={{ minHeight: '100vh' }}>
+        <Box as="main" minH="100vh">
           <Navigation />
           {content.hero.enabled && <Hero />}
           {content.story.enabled && <Story />}

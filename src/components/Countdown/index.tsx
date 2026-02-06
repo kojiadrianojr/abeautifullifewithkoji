@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Countdown from 'react-countdown';
-import { Box, Typography, Paper, Stack } from '@mui/material';
+import { Box, Text, Flex, VStack } from '@chakra-ui/react';
 import { getWeddingConfig } from '@/lib/config';
 
 function CountdownComponent() {
@@ -14,32 +14,36 @@ function CountdownComponent() {
 
   if (!mounted) {
     return (
-      <Box sx={{ minHeight: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography variant="h5" sx={{ opacity: 0.7 }}>Loading...</Typography>
+      <Box minH={100} display="flex" alignItems="center" justifyContent="center">
+        <Text fontSize="xl" opacity={0.7}>
+          Loading...
+        </Text>
       </Box>
     );
   }
 
   return (
-    <Countdown 
+    <Countdown
       date={new Date(getWeddingConfig().wedding.datetime).getTime()}
       renderer={renderer}
     />
   );
 }
 
-const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
+interface CountdownRenderProps {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  completed: boolean;
+}
+
+const renderer = ({ days, hours, minutes, seconds, completed }: CountdownRenderProps) => {
   if (completed) {
     return (
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: 600,
-          textShadow: '0 2px 4px rgba(0,0,0,0.2)',
-        }}
-      >
-        Today's the day! 🎉
-      </Typography>
+      <Text fontSize="2xl" fontWeight="semibold" textShadow="0 2px 4px rgba(0,0,0,0.2)">
+        Today&apos;s the day! 🎉
+      </Text>
     );
   }
 
@@ -51,56 +55,45 @@ const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
   ];
 
   return (
-    <Stack 
-      direction="row" 
-      spacing={2} 
+    <Flex
+      direction="row"
+      gap={4}
       justifyContent="center"
       flexWrap="wrap"
-      useFlexGap
     >
       {timeUnits.map((unit, index) => (
-        <Paper
+        <VStack
           key={index}
-          elevation={3}
-          sx={{
-            px: { xs: 2, sm: 3 },
-            py: { xs: 1.5, sm: 2 },
-            backgroundColor: 'transparent',
-            backdropFilter: 'blur(10px)',
-            borderRadius: 2,
-            minWidth: { xs: 70, sm: 90 },
-            textAlign: 'center',
-            display: index === 3 ? { xs: 'none', md: 'block' } : 'block',
-          }}
+          px={{ base: 4, sm: 6 }}
+          py={{ base: 3, sm: 4 }}
+          bg="whiteAlpha.200"
+          backdropFilter="blur(10px)"
+          borderRadius="lg"
+          minW={{ base: '70px', sm: '90px' }}
+          textAlign="center"
+          display={index === 3 ? { base: 'none', md: 'flex' } : 'flex'}
+          spacing={1}
         >
-          <Typography
-            variant="h3"
-            component="div"
-            sx={{
-              fontWeight: 700,
-              color: 'primary.main',
-              fontSize: { xs: '2rem', sm: '2.5rem' },
-              lineHeight: 1,
-              mb: 0.5,
-            }}
+          <Text
+            fontSize={{ base: '3xl', sm: '4xl' }}
+            fontWeight="bold"
+            color="white"
+            lineHeight={1}
           >
             {unit.value}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              fontWeight: 600,
-              color: 'text.secondary',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              fontSize: { xs: '0.75rem', sm: '0.875rem' },
-            }}
+          </Text>
+          <Text
+            fontSize={{ base: 'xs', sm: 'sm' }}
+            fontWeight="semibold"
+            color="whiteAlpha.800"
+            textTransform="uppercase"
+            letterSpacing="wide"
           >
             {unit.label}
-          </Typography>
-        </Paper>
+          </Text>
+        </VStack>
       ))}
-    </Stack>
+    </Flex>
   );
 };
 
