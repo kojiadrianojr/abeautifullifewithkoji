@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, Grid, VStack } from "@chakra-ui/react";
+import { Box, Container, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import {
 	getCoupleNames,
@@ -41,33 +41,40 @@ export default function Hero({ heroImages }: HeroProps) {
 		>
 			<HeroBackground />
 
+			{/* Content - Side by Side */}
 			<Container maxW="7xl" position="relative" zIndex={10} px={4} py={20}>
-				<Grid
-					templateColumns={{ base: "1fr", lg: hasImages ? "1fr 1fr" : "1fr" }}
-					gap={{ base: 8, lg: 12 }}
+				<Box
+					display="flex"
+					flexDirection={{ base: "column", lg: "row" }}
+					gap={{ base: 12, lg: 16 }}
 					alignItems="center"
-					justifyItems={!hasImages ? "center" : "initial"}
+					justifyContent="center"
 				>
-					{/* Left Column - Content */}
-					<MotionBox
-						initial={{ opacity: 0, x: -30 }}
-						animate={mounted ? { opacity: 1, x: 0 } : {}}
-						transition={{ duration: 1 }}
-						maxW={!hasImages ? "800px" : "initial"}
-					>
-						<VStack
-							spacing={8}
-							align={{
-								base: "center",
-								lg: hasImages ? "flex-start" : "center",
-							}}
+					{/* Hero Image - Stacked Cards */}
+					{hasImages && (
+						<MotionBox
+							initial={{ opacity: 0, x: -30 }}
+							animate={mounted ? { opacity: 1, x: 0 } : {}}
+							transition={{ duration: 1 }}
+							flex={{ base: "0 0 auto", lg: "0 0 45%" }}
+							maxW={{ base: "100%", md: "500px", lg: "none" }}
+							w="100%"
+							position="relative"
 						>
-							<Box
-								textAlign={{
-									base: "center",
-									lg: hasImages ? "left" : "center",
-								}}
-							>
+							<HeroImage images={heroImages} mounted={mounted} />
+						</MotionBox>
+					)}
+
+					{/* Text Content */}
+					<MotionBox
+						initial={{ opacity: 0, x: 30 }}
+						animate={mounted ? { opacity: 1, x: 0 } : {}}
+						transition={{ duration: 1, delay: 0.2 }}
+						flex={{ base: "0 0 auto", lg: "1" }}
+						maxW={{ base: "100%", lg: "none" }}
+					>
+						<VStack spacing={8} align={{ base: "center", lg: "flex-start" }}>
+							<Box textAlign={{ base: "center", lg: "left" }}>
 								<HeroContent
 									tagline={hero.tagline}
 									coupleNames={getCoupleNames()}
@@ -81,10 +88,7 @@ export default function Hero({ heroImages }: HeroProps) {
 							<CountdownSection mounted={mounted} />
 						</VStack>
 					</MotionBox>
-
-					{/* Right Column - Hero Image (only if images exist) */}
-					{hasImages && <HeroImage images={heroImages} mounted={mounted} />}
-				</Grid>
+				</Box>
 			</Container>
 
 			<ScrollIndicator />
