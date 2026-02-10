@@ -8,20 +8,20 @@ Open `config/wedding.json` and update the couple names and wedding details:
 
 ```json
 {
-  "wedding": {
-    "couple": {
-      "partner1": {
-        "firstName": "YOUR_NAME",
-        "lastName": "YOUR_LAST_NAME"
-      },
-      "partner2": {
-        "firstName": "PARTNER_NAME",
-        "lastName": "PARTNER_LAST_NAME"
-      }
-    },
-    "date": "2026-08-15",
-    "time": "4:00 PM"
-  }
+	"wedding": {
+		"couple": {
+			"partner1": {
+				"firstName": "YOUR_NAME",
+				"lastName": "YOUR_LAST_NAME"
+			},
+			"partner2": {
+				"firstName": "PARTNER_NAME",
+				"lastName": "PARTNER_LAST_NAME"
+			}
+		},
+		"date": "2026-08-15",
+		"time": "4:00 PM"
+	}
 }
 ```
 
@@ -29,17 +29,18 @@ Open `config/wedding.json` and update the couple names and wedding details:
 
 ```json
 {
-  "venue": {
-    "ceremony": {
-      "name": "Your Venue Name",
-      "address": "Full Address",
-      "googleMapsUrl": "https://maps.google.com/?q=your+venue"
-    }
-  }
+	"venue": {
+		"ceremony": {
+			"name": "Your Venue Name",
+			"address": "Full Address",
+			"googleMapsUrl": "https://maps.google.com/?q=your+venue"
+		}
+	}
 }
 ```
 
 **Tip**: Get your Google Maps URL by:
+
 1. Go to Google Maps
 2. Search for your venue
 3. Click "Share"
@@ -51,50 +52,53 @@ Pick your wedding colors. Use a color picker tool to get hex codes:
 
 ```json
 {
-  "theme": {
-    "colors": {
-      "primary": "#8B7355",    // Main brand color
-      "secondary": "#D4A574",  // Accent color
-      "accent": "#E8D5C4",     // Light accent
-      "background": "#FFFAF5", // Page background
-      "foreground": "#2C2C2C"  // Text color
-    }
-  }
+	"theme": {
+		"colors": {
+			"primary": "#8B7355", // Main brand color
+			"secondary": "#D4A574", // Accent color
+			"accent": "#E8D5C4", // Light accent
+			"background": "#FFFAF5", // Page background
+			"foreground": "#2C2C2C" // Text color
+		}
+	}
 }
 ```
 
 ### Popular Color Schemes
 
 **Romantic Blush**
+
 ```json
 {
-  "primary": "#C9A0A0",
-  "secondary": "#F4E1D2",
-  "accent": "#F8EDE3",
-  "background": "#FFFBF7",
-  "foreground": "#3D3D3D"
+	"primary": "#C9A0A0",
+	"secondary": "#F4E1D2",
+	"accent": "#F8EDE3",
+	"background": "#FFFBF7",
+	"foreground": "#3D3D3D"
 }
 ```
 
 **Classic Navy**
+
 ```json
 {
-  "primary": "#2B3E50",
-  "secondary": "#C9B037",
-  "accent": "#E8DDB5",
-  "background": "#FFFFFF",
-  "foreground": "#2C2C2C"
+	"primary": "#2B3E50",
+	"secondary": "#C9B037",
+	"accent": "#E8DDB5",
+	"background": "#FFFFFF",
+	"foreground": "#2C2C2C"
 }
 ```
 
 **Rustic Sage**
+
 ```json
 {
-  "primary": "#8B9A8B",
-  "secondary": "#D4C5A9",
-  "accent": "#F4EEE0",
-  "background": "#FFFEF9",
-  "foreground": "#3A3A3A"
+	"primary": "#8B9A8B",
+	"secondary": "#D4C5A9",
+	"accent": "#F4EEE0",
+	"background": "#FFFEF9",
+	"foreground": "#3A3A3A"
 }
 ```
 
@@ -104,20 +108,20 @@ Update the story section with your unique journey:
 
 ```json
 {
-  "content": {
-    "story": {
-      "enabled": true,
-      "title": "Our Story",
-      "content": "Write your story here...",
-      "timeline": [
-        {
-          "year": "2020",
-          "title": "We Met",
-          "description": "How you met..."
-        }
-      ]
-    }
-  }
+	"content": {
+		"story": {
+			"enabled": true,
+			"title": "Our Story",
+			"content": "Write your story here...",
+			"timeline": [
+				{
+					"year": "2020",
+					"title": "We Met",
+					"description": "How you met..."
+				}
+			]
+		}
+	}
 }
 ```
 
@@ -126,32 +130,30 @@ Update the story section with your unique journey:
 1. Create these folders in `public/`:
    - `public/images/`
    - `public/images/gallery/`
+   - `public/images/hero-album/`
 
 2. Add your photos:
-   - Hero background: `public/images/hero-bg.jpg`
+   - Hero background: `public/images/hero-bg.jpg` (optional, used for page background)
+   - Hero album photos: Simply add images to `public/images/hero-album/` with any filename (e.g., `1.jpg`, `2.jpg`, `engagement.jpg`, etc.)
    - Gallery photos: `public/images/gallery/photo1.jpg`, etc.
 
-3. Update config:
-```json
-{
-  "content": {
-    "hero": {
-      "backgroundImage": "/images/hero-bg.jpg"
-    },
-    "gallery": {
-      "images": [
-        "/images/gallery/photo1.jpg",
-        "/images/gallery/photo2.jpg"
-      ]
-    }
-  }
-}
-```
+**Hero Album Feature** - Automatic Image Loading:
+
+- **Simply add images** to the `public/images/hero-album/` folder
+- All images are **automatically detected** - no configuration needed!
+- Supported formats: JPG, JPEG, PNG, WebP, GIF, AVIF
+- Images are sorted naturally (1.jpg, 2.jpg, 10.jpg, etc.)
+- Visitors can click the image or use arrow buttons to navigate through the album
+- Navigation controls appear automatically when multiple images are present
+- If no images are found in the folder, the hero image section is hidden
 
 **Photo Tips**:
+
 - Use high-quality images (at least 1920px wide for hero)
-- Compress images before uploading
+- Hero album works best with portrait-oriented photos (600x800px or similar)
+- Compress images before uploading to improve load times
 - Use consistent aspect ratios for gallery
+- No limit on the number of hero images - add as many as you like!
 
 ## Step 6: Set Up Schedule
 
@@ -159,17 +161,17 @@ Customize your wedding day timeline:
 
 ```json
 {
-  "content": {
-    "schedule": {
-      "events": [
-        {
-          "time": "3:30 PM",
-          "title": "Guest Arrival",
-          "description": "Please arrive early"
-        }
-      ]
-    }
-  }
+	"content": {
+		"schedule": {
+			"events": [
+				{
+					"time": "3:30 PM",
+					"title": "Guest Arrival",
+					"description": "Please arrive early"
+				}
+			]
+		}
+	}
 }
 ```
 
@@ -179,16 +181,16 @@ Update with your actual registry URLs:
 
 ```json
 {
-  "content": {
-    "registry": {
-      "registries": [
-        {
-          "name": "Amazon",
-          "url": "YOUR_AMAZON_REGISTRY_URL"
-        }
-      ]
-    }
-  }
+	"content": {
+		"registry": {
+			"registries": [
+				{
+					"name": "Amazon",
+					"url": "YOUR_AMAZON_REGISTRY_URL"
+				}
+			]
+		}
+	}
 }
 ```
 
@@ -198,18 +200,19 @@ Configure your RSVP section:
 
 ```json
 {
-  "content": {
-    "rsvp": {
-      "enabled": true,
-      "deadline": "2026-07-15",
-      "formUrl": "YOUR_FORM_URL",
-      "message": "Please RSVP by July 15th"
-    }
-  }
+	"content": {
+		"rsvp": {
+			"enabled": true,
+			"deadline": "2026-07-15",
+			"formUrl": "YOUR_FORM_URL",
+			"message": "Please RSVP by July 15th"
+		}
+	}
 }
 ```
 
 **RSVP Form Options**:
+
 - Google Forms (free)
 - Typeform (beautiful UI)
 - Joy (wedding-specific)
@@ -221,20 +224,21 @@ Add your own questions and answers:
 
 ```json
 {
-  "content": {
-    "faq": {
-      "questions": [
-        {
-          "question": "What should I wear?",
-          "answer": "Your dress code..."
-        }
-      ]
-    }
-  }
+	"content": {
+		"faq": {
+			"questions": [
+				{
+					"question": "What should I wear?",
+					"answer": "Your dress code..."
+				}
+			]
+		}
+	}
 }
 ```
 
 **Common FAQ Topics**:
+
 - Dress code
 - Parking
 - Accommodations
@@ -247,14 +251,14 @@ Add your own questions and answers:
 
 ```json
 {
-  "contact": {
-    "email": "your-email@example.com",
-    "phone": "(555) 123-4567"
-  },
-  "social": {
-    "instagram": "#YourHashtag",
-    "hashtag": "#YourHashtag"
-  }
+	"contact": {
+		"email": "your-email@example.com",
+		"phone": "(555) 123-4567"
+	},
+	"social": {
+		"instagram": "#YourHashtag",
+		"hashtag": "#YourHashtag"
+	}
 }
 ```
 
@@ -264,17 +268,18 @@ Turn sections on or off:
 
 ```json
 {
-  "content": {
-    "hero": { "enabled": true },
-    "story": { "enabled": true },
-    "gallery": { "enabled": false }  // Hide this section
-  }
+	"content": {
+		"hero": { "enabled": true },
+		"story": { "enabled": true },
+		"gallery": { "enabled": false } // Hide this section
+	}
 }
 ```
 
 ## Step 12: Test Your Site
 
 1. Run development server:
+
    ```bash
    npm run dev
    ```

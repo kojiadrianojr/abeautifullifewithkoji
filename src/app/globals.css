@@ -1,8 +1,12 @@
-/* Global Styles for Wedding Website */
+/* Global Styles for Wedding Website - Watercolor Theme */
 
 :root {
   --font-serif: 'Playfair Display', serif;
   --font-sans: 'Inter', sans-serif;
+  --watercolor-lavender: #C3B1E1;
+  --watercolor-blush: #F5CAC3;
+  --watercolor-blue: #A8D8EA;
+  --watercolor-peach: #F4D8B0;
 }
 
 html {
@@ -13,4 +17,87 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans), Arial, sans-serif;
+  background: #FFFAF0;
+}
+
+/* Watercolor texture overlay */
+.watercolor-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.watercolor-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(195, 177, 225, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(245, 202, 195, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(168, 216, 234, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  animation: watercolor-flow 20s ease-in-out infinite;
+}
+
+@keyframes watercolor-flow {
+
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1) rotate(0deg);
+  }
+
+  33% {
+    opacity: 0.9;
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  66% {
+    opacity: 0.6;
+    transform: scale(0.95) rotate(-5deg);
+  }
+}
+
+/* Watercolor brush stroke effect */
+.watercolor-brush {
+  position: relative;
+}
+
+.watercolor-brush::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 8px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(195, 177, 225, 0.3) 25%,
+      rgba(168, 216, 234, 0.4) 50%,
+      rgba(245, 202, 195, 0.3) 75%,
+      transparent 100%);
+  filter: blur(3px);
+  border-radius: 50%;
+}
+
+/* Watercolor section backgrounds */
+.watercolor-section-light {
+  background: linear-gradient(135deg,
+      rgba(255, 250, 240, 0.9) 0%,
+      rgba(195, 177, 225, 0.05) 50%,
+      rgba(168, 216, 234, 0.05) 100%);
+}
+
+.watercolor-section-lavender {
+  background: linear-gradient(135deg,
+      rgba(195, 177, 225, 0.15) 0%,
+      rgba(168, 216, 234, 0.1) 50%,
+      rgba(255, 250, 240, 0.9) 100%);
+}
+
+.watercolor-section-blush {
+  background: linear-gradient(135deg,
+      rgba(245, 202, 195, 0.15) 0%,
+      rgba(244, 216, 176, 0.1) 50%,
+      rgba(255, 250, 240, 0.9) 100%);
 }
