@@ -1,58 +1,93 @@
-'use client';
+"use client";
 
-import { Box, Container } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
-import { getCoupleNames, formatWeddingDate, getWeddingConfig } from '@/lib/config';
-import { useScrollPosition } from '@/hooks/useScrollPosition';
-import { useMounted } from '@/hooks/useMounted';
-import { ParallaxBackground } from '@/components/ui/ParallaxBackground';
-import Countdown from '@/components/Countdown';
-import { HeroContent } from './Hero/HeroContent';
-import { ScrollIndicator } from './Hero/ScrollIndicator';
+import { Box, Container, Grid, VStack } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import {
+	getCoupleNames,
+	formatWeddingDate,
+	getWeddingConfig,
+} from "@/lib/config";
+import { useMounted } from "@/hooks/useMounted";
+import { HeroContent } from "./Hero/HeroContent";
+import { ScrollIndicator } from "./Hero/ScrollIndicator";
+import { HeroBackground } from "./Hero/HeroBackground";
+import { HeroImage } from "./Hero/HeroImage";
+import { CountdownSection } from "./Hero/CountdownSection";
 
 const MotionBox = motion(Box);
 
-export default function Hero() {
-  const config = getWeddingConfig();
-  const { hero } = config.content;
-  const { time, venue } = config.wedding;
-  const { scrollY } = useScrollPosition();
-  const mounted = useMounted();
+interface HeroProps {
+	heroImages: string[];
+}
 
-  return (
-    <Box
-      id="hero"
-      as="section"
-      position="relative"
-      minH="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      overflow="hidden"
-    >
-      <ParallaxBackground imageUrl={hero.backgroundImage} scrollY={scrollY} />
+export default function Hero({ heroImages }: HeroProps) {
+	const config = getWeddingConfig();
+	const { hero } = config.content;
+	const { time, venue } = config.wedding;
+	const mounted = useMounted();
 
-      <Container maxW="7xl" position="relative" zIndex={10} px={4}>
-        <HeroContent
-          tagline={hero.tagline}
-          coupleNames={getCoupleNames()}
-          weddingDate={formatWeddingDate()}
-          weddingTime={time}
-          venueName={venue.ceremony.name}
-          mounted={mounted}
-        />
+	const hasImages = heroImages.length > 0;
 
-        <MotionBox
-          mt={6}
-          initial={{ opacity: 0 }}
-          animate={mounted ? { opacity: 1 } : {}}
-          transition={{ duration: 1.5, delay: 0.4 }}
-        >
-          <Countdown />
-        </MotionBox>
-      </Container>
+	return (
+		<Box
+			id="hero"
+			as="section"
+			position="relative"
+			minH="100vh"
+			display="flex"
+			alignItems="center"
+			justifyContent="center"
+			overflow="hidden"
+		>
+			<HeroBackground />
 
-      <ScrollIndicator />
-    </Box>
-  );
+			<Container maxW="7xl" position="relative" zIndex={10} px={4} py={20}>
+				<Grid
+					templateColumns={{ base: "1fr", lg: hasImages ? "1fr 1fr" : "1fr" }}
+					gap={{ base: 8, lg: 12 }}
+					alignItems="center"
+					justifyItems={!hasImages ? "center" : "initial"}
+				>
+					{/* Left Column - Content */}
+					<MotionBox
+						initial={{ opacity: 0, x: -30 }}
+						animate={mounted ? { opacity: 1, x: 0 } : {}}
+						transition={{ duration: 1 }}
+						maxW={!hasImages ? "800px" : "initial"}
+					>
+						<VStack
+							spacing={8}
+							align={{
+								base: "center",
+								lg: hasImages ? "flex-start" : "center",
+							}}
+						>
+							<Box
+								textAlign={{
+									base: "center",
+									lg: hasImages ? "left" : "center",
+								}}
+							>
+								<HeroContent
+									tagline={hero.tagline}
+									coupleNames={getCoupleNames()}
+									weddingDate={formatWeddingDate()}
+									weddingTime={time}
+									venueName={venue.ceremony.name}
+									mounted={mounted}
+								/>
+							</Box>
+
+							<CountdownSection mounted={mounted} />
+						</VStack>
+					</MotionBox>
+
+					{/* Right Column - Hero Image (only if images exist) */}
+					{hasImages && <HeroImage images={heroImages} mounted={mounted} />}
+				</Grid>
+			</Container>
+
+			<ScrollIndicator />
+		</Box>
+	);
 }
