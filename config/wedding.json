@@ -69,6 +69,18 @@
           "title": "The Wedding",
           "description": "Join us as we celebrate our love and commitment."
         }
+      ],
+      "throwbackPhotos": [
+        "/images/throwback/photo1.jpg",
+        "/images/throwback/photo2.jpg",
+        "/images/throwback/photo3.jpg",
+        "/images/throwback/photo4.jpg"
+      ],
+      "prenupPhotos": [
+        "/images/prenup/photo1.jpg",
+        "/images/prenup/photo2.jpg",
+        "/images/prenup/photo3.jpg",
+        "/images/prenup/photo4.jpg"
       ]
     },
     "gallery": {
