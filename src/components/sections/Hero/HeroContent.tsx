@@ -25,7 +25,7 @@ export function HeroContent({
 	mounted,
 }: HeroContentProps) {
 	return (
-		<VStack spacing={6} textAlign="center">
+		<VStack spacing={6}>
 			<MotionText
 				fontSize={{ base: "lg", md: "xl" }}
 				fontWeight={500}
