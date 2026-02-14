@@ -2,24 +2,26 @@
 
 import { useState } from "react";
 import { Box } from "@chakra-ui/react";
-import Hero from "@/components/sections/Hero";
-import Story from "@/components/sections/Story";
-import Gallery from "@/components/sections/Gallery";
-import Schedule from "@/components/sections/Schedule";
-import Registry from "@/components/sections/Registry";
-import RSVP from "@/components/sections/RSVP";
-import FAQ from "@/components/sections/FAQ";
+import {
+	HeroSection,
+	StorySection,
+	GallerySection,
+	ScheduleSection,
+	RegistrySection,
+	RSVPSection,
+	FAQSection,
+} from "@/components/pages";
 import Footer from "@/components/sections/Footer";
 import Navigation from "@/components/Navigation";
 import SplashScreen from "@/components/SplashScreen";
-import { getWeddingConfig } from "@/lib/config";
+import { ConfigService } from "@/services";
 
 interface HomeContentProps {
 	heroImages: string[];
 }
 
 export default function HomeContent({ heroImages }: HomeContentProps) {
-	const config = getWeddingConfig();
+	const config = ConfigService.getConfig();
 	const { content } = config;
 	const [showSplash, setShowSplash] = useState(
 		content.splashScreen?.enabled !== false,
@@ -36,13 +38,13 @@ export default function HomeContent({ heroImages }: HomeContentProps) {
 			) : (
 				<Box as="main" minH="100vh">
 					<Navigation />
-					{content.hero.enabled && <Hero heroImages={heroImages} />}
-					{content.story.enabled && <Story />}
-					{content.gallery.enabled && <Gallery />}
-					{content.schedule.enabled && <Schedule />}
-					{content.registry.enabled && <Registry />}
-					{content.rsvp.enabled && <RSVP />}
-					{content.faq.enabled && <FAQ />}
+					{content.hero.enabled && <HeroSection heroImages={heroImages} />}
+					{content.story.enabled && <StorySection />}
+					{content.gallery.enabled && <GallerySection />}
+					{content.schedule.enabled && <ScheduleSection />}
+					{content.registry.enabled && <RegistrySection />}
+					{content.rsvp.enabled && <RSVPSection />}
+					{content.faq.enabled && <FAQSection />}
 					<Footer />
 				</Box>
 			)}

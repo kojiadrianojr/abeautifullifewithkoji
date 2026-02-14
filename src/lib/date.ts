@@ -1,25 +1,20 @@
-export function formatDate(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
-  const defaultOptions: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    ...options,
-  };
+/**
+ * @deprecated Use DateService from @/services instead
+ * This file is kept for backward compatibility
+ */
 
-  return dateObj.toLocaleDateString('en-US', defaultOptions);
+import { DateService } from "@/services";
+
+export function formatDate(
+	date: Date | string,
+	options?: Intl.DateTimeFormatOptions,
+): string {
+	return DateService.formatDate(date, options);
 }
 
-export function formatTime(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
-  const defaultOptions: Intl.DateTimeFormatOptions = {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-    ...options,
-  };
-
-  return dateObj.toLocaleTimeString('en-US', defaultOptions);
+export function formatTime(
+	date: Date | string,
+	options?: Intl.DateTimeFormatOptions,
+): string {
+	return DateService.formatTime(date, options);
 }

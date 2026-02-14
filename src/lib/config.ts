@@ -1,33 +1,30 @@
-import weddingConfig from '@/config/wedding.json';
+/**
+ * @deprecated Use ConfigService from @/services instead
+ * This file is kept for backward compatibility
+ */
 
-export type WeddingConfig = typeof weddingConfig;
+import { ConfigService } from "@/services";
+
+export type WeddingConfig = typeof import("@/config/wedding.json");
 
 export function getWeddingConfig(): WeddingConfig {
-  return weddingConfig;
+	return ConfigService.getConfig();
 }
 
 export function getCoupleNames(): string {
-  const { partner1, partner2 } = weddingConfig.wedding.couple;
-  return `${partner1.firstName} & ${partner2.firstName}`;
+	return ConfigService.getCoupleNames();
 }
 
 export function getFullCoupleNames(): string {
-  const { partner1, partner2 } = weddingConfig.wedding.couple;
-  return `${partner1.firstName} ${partner1.lastName} & ${partner2.firstName} ${partner2.lastName}`;
+	return ConfigService.getFullCoupleNames();
 }
 
 export function getWeddingDate(): Date {
-  return new Date(weddingConfig.wedding.date);
+	return ConfigService.getWeddingDate();
 }
 
 export function formatWeddingDate(): string {
-  const date = getWeddingDate();
-  return date.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+	return ConfigService.formatWeddingDate();
 }
 
-export default weddingConfig;
+export default ConfigService.getConfig();

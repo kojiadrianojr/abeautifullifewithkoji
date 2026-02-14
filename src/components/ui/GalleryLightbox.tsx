@@ -32,6 +32,14 @@ export function GalleryLightbox({
 		new Set([initialIndex]),
 	);
 
+	const goToNext = () => {
+		setCurrentIndex((prev) => (prev + 1) % images.length);
+	};
+
+	const goToPrevious = () => {
+		setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+	};
+
 	// Reset to initial index when modal opens
 	useEffect(() => {
 		if (isOpen) {
@@ -43,40 +51,38 @@ export function GalleryLightbox({
 	// Preload adjacent images
 	useEffect(() => {
 		if (isOpen && images.length > 0) {
-			const toLoad = new Set(loadedImages);
+			setLoadedImages((prev) => {
+				const toLoad = new Set(prev);
 
-			// Load current, previous, and next images
-			toLoad.add(currentIndex);
-			if (currentIndex > 0) toLoad.add(currentIndex - 1);
-			if (currentIndex < images.length - 1) toLoad.add(currentIndex + 1);
+				// Load current, previous, and next images
+				toLoad.add(currentIndex);
+				if (currentIndex > 0) toLoad.add(currentIndex - 1);
+				if (currentIndex < images.length - 1) toLoad.add(currentIndex + 1);
 
-			setLoadedImages(toLoad);
+				return toLoad;
+			});
 		}
 	}, [currentIndex, isOpen, images.length]);
 
+	// Add keyboard listener
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (!isOpen) return;
+			if (e.key === "ArrowRight") goToNext();
+			if (e.key === "ArrowLeft") goToPrevious();
+			if (e.key === "Escape") onClose();
+		};
+
+		if (isOpen) {
+			window.addEventListener("keydown", handleKeyDown);
+			return () => window.removeEventListener("keydown", handleKeyDown);
+		}
+	}, [isOpen, currentIndex, images.length, onClose]); // eslint-disable-line react-hooks/exhaustive-deps
+
 	if (!images || images.length === 0) return null;
 
-	const goToNext = () => {
-		setCurrentIndex((prev) => (prev + 1) % images.length);
-	};
-
-	const goToPrevious = () => {
-		setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-	};
-
-	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.key === "ArrowRight") goToNext();
-		if (e.key === "ArrowLeft") goToPrevious();
-	};
-
 	return (
-		<Modal
-			isOpen={isOpen}
-			onClose={onClose}
-			size="6xl"
-			isCentered
-			onKeyDown={handleKeyDown}
-		>
+		<Modal isOpen={isOpen} onClose={onClose} size="6xl" isCentered>
 			<ModalOverlay bg="blackAlpha.900" />
 			<ModalContent bg="transparent" boxShadow="none" maxW="90vw">
 				<ModalCloseButton
