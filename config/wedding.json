@@ -144,9 +144,9 @@
     "rsvp": {
       "enabled": true,
       "title": "RSVP",
-      "deadline": "2026-07-15",
-      "formUrl": "https://forms.google.com/...",
-      "message": "Please RSVP by July 15th, 2026"
+      "deadline": "2026-07-14",
+      "formUrl": "https://docs.google.com/forms/d/e/1FAIpQLScIBZz7pttArN3MfJZFvTrlpvTxqDungeIRVArcTHtLOf3Tkw/viewform?usp=drivesdk&edit_requested=true&usp=embed_facebook",
+      "message": "Please RSVP by July 14th, 2026"
     },
     "faq": {
       "enabled": true,

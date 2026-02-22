@@ -1,0 +1,30 @@
+{
+  "guests": [
+    {
+      "id": "1",
+      "groupName": "The Adriano Couple",
+      "members": ["Koji Adriano", "Bea Adriano"],
+      "allowedSeats": 4
+    },
+    {
+      "id": "2",
+      "groupName": "The Almine Family",
+      "members": ["Dea Almine", "Chay Almine", "Joshua Almine"],
+      "allowedSeats": 3
+    },
+    {
+      "id": "3",
+      "fullName": "Jaako Andes",
+      "allowedSeats": 1
+    },
+    {
+      "id": "4",
+      "fullName": "Maria Santos",
+      "allowedSeats": 2
+    },
+    {
+      "id": "5",
+      "fullName": "Carlos Rodriguez"
+    }
+  ]
+}
