@@ -32,7 +32,7 @@ export function GuestResult({ guest }: GuestResultProps) {
 						textAlign="center"
 						letterSpacing="wide"
 					>
-						You're Invited!
+						You&apos;re Invited!
 					</Text>
 				</HStack>
 

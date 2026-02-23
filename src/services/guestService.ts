@@ -11,6 +11,11 @@ export interface Guest {
 	members?: string[];
 	fullName?: string;
 	allowedSeats?: number;
+	rsvpStatus?: "pending" | "confirmed" | "declined";
+	rsvpCount?: number;
+	rsvpDate?: string | null;
+	dietaryRestrictions?: string | null;
+	notes?: string | null;
 }
 
 export interface GuestsData {
@@ -120,4 +125,72 @@ export class GuestService {
 		const otherMembers = members.slice(0, -1).join(", ");
 		return `${otherMembers}, and ${lastMember}`;
 	}
+
+	/**
+	 * Get all guests who have confirmed attendance
+	 * @returns Array of confirmed guests
+	 */
+	static getConfirmedGuests(): Guest[] {
+		return this.getAllGuests().filter(guest => guest.rsvpStatus === "confirmed");
+	}
+
+	/**
+	 * Get all guests who have declined
+	 * @returns Array of declined guests
+	 */
+	static getDeclinedGuests(): Guest[] {
+		return this.getAllGuests().filter(guest => guest.rsvpStatus === "declined");
+	}
+
+	/**
+	 * Get all guests with pending RSVP
+	 * @returns Array of pending guests
+	 */
+	static getPendingGuests(): Guest[] {
+		return this.getAllGuests().filter(
+			guest => !guest.rsvpStatus || guest.rsvpStatus === "pending"
+		);
+	}
+
+	/**
+	 * Get RSVP statistics
+	 * @returns Object with RSVP counts and totals
+	 */
+	static getRsvpStats() {
+		const guests = this.getAllGuests();
+		const confirmed = this.getConfirmedGuests();
+		const declined = this.getDeclinedGuests();
+		const pending = this.getPendingGuests();
+
+		const totalConfirmedSeats = confirmed.reduce(
+			(sum, guest) => sum + (guest.rsvpCount || 0),
+			0
+		);
+
+		const totalAllowedSeats = guests.reduce(
+			(sum, guest) => sum + (guest.allowedSeats || 1),
+			0
+		);
+
+		return {
+			totalGuests: guests.length,
+			confirmed: confirmed.length,
+			declined: declined.length,
+			pending: pending.length,
+			totalConfirmedSeats,
+			totalAllowedSeats,
+			responseRate: ((confirmed.length + declined.length) / guests.length) * 100,
+		};
+	}
+
+	/**
+	 * Check if a guest has responded to RSVP
+	 * @param guestId - The guest ID
+	 * @returns Boolean indicating if guest has responded
+	 */
+	static hasResponded(guestId: string): boolean {
+		const guest = this.getGuestById(guestId);
+		return guest?.rsvpStatus === "confirmed" || guest?.rsvpStatus === "declined";
+	}
 }
+
