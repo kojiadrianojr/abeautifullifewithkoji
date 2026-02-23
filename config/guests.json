@@ -3,28 +3,61 @@
     {
       "id": "1",
       "groupName": "The Adriano Couple",
-      "members": ["Koji Adriano", "Bea Adriano"],
-      "allowedSeats": 4
+      "members": [
+        "Koji Adriano",
+        "Bea Adriano"
+      ],
+      "allowedSeats": 4,
+      "rsvpStatus": "confirmed",
+      "rsvpCount": 1,
+      "rsvpDate": "2/23/2026 12:35:40",
+      "dietaryRestrictions": "NA",
+      "notes": "Best Wishes"
     },
     {
       "id": "2",
       "groupName": "The Almine Family",
-      "members": ["Dea Almine", "Chay Almine", "Joshua Almine"],
-      "allowedSeats": 3
+      "members": [
+        "Dea Almine",
+        "Chay Almine",
+        "Joshua Almine"
+      ],
+      "allowedSeats": 3,
+      "rsvpStatus": "pending",
+      "rsvpCount": 0,
+      "rsvpDate": null,
+      "dietaryRestrictions": null,
+      "notes": null
     },
     {
       "id": "3",
       "fullName": "Jaako Andes",
-      "allowedSeats": 1
+      "allowedSeats": 1,
+      "rsvpStatus": "pending",
+      "rsvpCount": 0,
+      "rsvpDate": null,
+      "dietaryRestrictions": null,
+      "notes": null
     },
     {
       "id": "4",
       "fullName": "Maria Santos",
-      "allowedSeats": 2
+      "allowedSeats": 2,
+      "rsvpStatus": "pending",
+      "rsvpCount": 0,
+      "rsvpDate": null,
+      "dietaryRestrictions": null,
+      "notes": null
     },
     {
       "id": "5",
-      "fullName": "Carlos Rodriguez"
+      "fullName": "Carlos Rodriguez",
+      "rsvpStatus": "pending",
+      "rsvpCount": 0,
+      "rsvpDate": null,
+      "dietaryRestrictions": null,
+      "notes": null
     }
-  ]
+  ],
+  "lastSyncedAt": "2026-02-23T04:56:56.202Z"
 }

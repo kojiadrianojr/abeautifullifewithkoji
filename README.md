@@ -25,9 +25,16 @@ A beautiful, customizable wedding website template built with Next.js 15, TypeSc
 - **Gallery** - Photo gallery with lightbox
 - **Schedule** - Event timeline for the day
 - **Registry** - Links to gift registries
-- **RSVP** - Call-to-action for guest responses
+- **RSVP** - Call-to-action for guest responses with guest search
 - **FAQ** - Answer common questions
 - **Footer** - Contact information and social links
+
+### Guest Management
+- **Guest List** - Manage your guest list in `config/guests.json`
+- **Guest Search** - Let guests find themselves before RSVP
+- **Google Forms Integration** - Sync RSVP responses from Google Forms
+- **RSVP Tracking** - Track confirmed, declined, and pending responses
+- **Statistics** - Get insights on RSVPs and headcount
 
 ## 🚀 Quick Start
 
@@ -145,6 +152,64 @@ Each section can be toggled on or off:
     }
   }
 }
+```
+
+### Managing Guests and RSVPs
+
+#### Guest List Setup
+
+Edit `config/guests.json` to add your guest list:
+
+```json
+{
+  "guests": [
+    {
+      "id": "1",
+      "fullName": "John Smith",
+      "allowedSeats": 2
+    },
+    {
+      "id": "2",
+      "groupName": "The Johnson Family",
+      "members": ["Mike Johnson", "Sarah Johnson"],
+      "allowedSeats": 4
+    }
+  ]
+}
+```
+
+#### Google Forms RSVP Integration
+
+Automatically sync RSVP responses from Google Forms:
+
+1. **Quick Setup**: See [Google Forms Quick Reference](documentation/GOOGLE_FORMS_QUICK_REFERENCE.md)
+2. **Detailed Guide**: See [Google Forms Setup](documentation/GOOGLE_FORMS_SETUP.md)
+
+**Quick steps:**
+```bash
+# 1. Create Google Form and link to Sheets
+# 2. Setup Google Cloud service account
+# 3. Configure environment variables in .env.local
+# 4. Install dependencies
+npm install
+
+# 5. Sync RSVP responses
+npm run sync-rsvp
+```
+
+The script will:
+- ✅ Fetch responses from Google Sheets
+- ✅ Match responses to your guest list
+- ✅ Update guest RSVP status automatically
+- ✅ Track dietary restrictions and notes
+- ✅ Create backups before updating
+
+**Get RSVP statistics:**
+```typescript
+import { GuestService } from '@/services';
+
+const stats = GuestService.getRsvpStats();
+// { confirmed: 45, declined: 5, pending: 10, responseRate: 83% }
 ```
 
 ## 🐳 Docker Deployment
@@ -329,13 +394,17 @@ For support:
 
 ## 🎯 Roadmap
 
+Completed:
+- [x] RSVP form integration with Google Forms
+- [x] Guest management system with search
+- [x] Automatic RSVP sync from Google Sheets
+
 Future enhancements:
 - [ ] Admin panel for easier customization
-- [ ] RSVP form integration
 - [ ] Multiple theme presets
 - [ ] Animation options
 - [ ] Multi-language support
-- [ ] Guest management system
+- [ ] Email notifications for RSVPs
 
 ## 💝 Credits
 
