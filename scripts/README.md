@@ -67,6 +67,27 @@ npm run test-drive
 🎉 All tests passed! Your Google Drive setup is working correctly.
 ```
 
+### clear-cache.js
+
+Clears the Next.js build cache and public images cache.
+
+**Usage:**
+```bash
+npm run clear-cache
+```
+
+**What it does:**
+- Removes `.next` directory (Next.js build cache)
+- Clears cached images from `public/images/cache/`
+- Helps resolve issues with stale builds or cached images
+- Useful when switching between image providers or updating configuration
+
+**When to use:**
+- After changing environment variables
+- When switching from local images to Google Drive (or vice versa)
+- If images aren't updating after making changes
+- Before creating a fresh production build
+
 ## Creating New Scripts
 
 When adding new utility scripts:
