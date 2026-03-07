@@ -1,0 +1,41 @@
+{
+  "title": "Frequently Asked Questions",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What should I wear?",
+      "answer": "Cocktail attire. We suggest dressy but comfortable shoes for the outdoor ceremony.",
+      "category": "dress-code"
+    },
+    {
+      "id": 2,
+      "question": "Are children welcome?",
+      "answer": "We love your little ones, but this will be an adults-only celebration.",
+      "category": "guests"
+    },
+    {
+      "id": 3,
+      "question": "Is there parking available?",
+      "answer": "Yes, there is ample free parking at the venue.",
+      "category": "venue"
+    },
+    {
+      "id": 4,
+      "question": "Will food be provided?",
+      "answer": "Yes, a full dinner will be served with vegetarian options available.",
+      "category": "food"
+    },
+    {
+      "id": 5,
+      "question": "Can I bring a plus one?",
+      "answer": "Due to venue capacity, we can only accommodate guests formally invited on your invitation.",
+      "category": "guests"
+    },
+    {
+      "id": 6,
+      "question": "What time should I arrive?",
+      "answer": "Please arrive 30 minutes before the ceremony starts to find your seat and get settled.",
+      "category": "schedule"
+    }
+  ]
+}

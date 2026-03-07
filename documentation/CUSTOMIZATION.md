@@ -220,32 +220,46 @@ Configure your RSVP section:
 
 ## Step 9: Customize FAQ
 
-Add your own questions and answers:
+The FAQ section now uses a separate configuration file for better organization. Edit `config/faq.json`:
 
 ```json
 {
-	"content": {
-		"faq": {
-			"questions": [
-				{
-					"question": "What should I wear?",
-					"answer": "Your dress code..."
-				}
-			]
+	"title": "Frequently Asked Questions",
+	"questions": [
+		{
+			"id": 1,
+			"question": "What should I wear?",
+			"answer": "Your dress code...",
+			"category": "dress-code"
+		},
+		{
+			"id": 2,
+			"question": "Where should I park?",
+			"answer": "Parking information...",
+			"category": "venue"
 		}
-	}
+	]
 }
 ```
 
-**Common FAQ Topics**:
+**FAQ Best Practices**:
 
-- Dress code
-- Parking
-- Accommodations
-- Plus ones
-- Children policy
-- Food allergies
-- Gift policy
+- Use unique sequential IDs for each question
+- Group related questions using categories
+- Keep answers concise but informative
+- Cover the most common guest concerns
+
+**Common FAQ Categories**:
+
+- `dress-code` - Attire guidelines
+- `venue` - Parking, location, accessibility
+- `food` - Menu, dietary restrictions
+- `guests` - Plus ones, children policy
+- `schedule` - Timeline, arrival times
+- `accommodations` - Hotel recommendations
+- `gifts` - Registry, gift policy
+
+**Display**: FAQs are shown as interactive cards in a 2-column grid layout with hover animations.
 
 ## Step 10: Update Contact Information
 
