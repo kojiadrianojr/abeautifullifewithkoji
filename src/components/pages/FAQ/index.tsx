@@ -1,30 +1,28 @@
 "use client";
 
-import { Box, Container, Accordion } from "@chakra-ui/react";
-import { ConfigService } from "@/services";
+import { Box, Container, SimpleGrid } from "@chakra-ui/react";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { FAQItem } from "./FAQItem";
+import { FAQCard } from "./FAQCard";
+import faqData from "@/../config/faq.json";
 
 export function FAQSection() {
-	const config = ConfigService.getConfig();
-	const { faq } = config.content;
-
 	return (
 		<Box id="faq" as="section" py={{ base: 16, md: 24 }}>
-			<Container maxW="3xl">
+			<Container maxW="6xl">
 				<SectionTitle color="primary.500" mb={16}>
-					{faq.title}
+					{faqData.title}
 				</SectionTitle>
 
-				<Accordion allowMultiple>
-					{faq.questions.map((item, index) => (
-						<FAQItem
-							key={index}
+				<SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
+					{faqData.questions.map((item, index) => (
+						<FAQCard
+							key={item.id}
 							question={item.question}
 							answer={item.answer}
+							index={index}
 						/>
 					))}
-				</Accordion>
+				</SimpleGrid>
 			</Container>
 		</Box>
 	);
