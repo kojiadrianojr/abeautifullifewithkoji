@@ -147,9 +147,10 @@ async function main() {
 		
 	} catch (error) {
 		console.error('\n❌ Error syncing RSVP responses:');
-		console.error(error.message);
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		console.error(errorMessage);
 		
-		if (error.message.includes('GOOGLE_SERVICE_ACCOUNT_KEY')) {
+		if (errorMessage.includes('GOOGLE_SERVICE_ACCOUNT_KEY')) {
 			console.log('\n💡 To fix this:');
 			console.log('   1. Create a Google Cloud service account');
 			console.log('   2. Enable Google Sheets API');

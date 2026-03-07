@@ -16,6 +16,9 @@ A beautiful, customizable wedding website template built with Next.js 15, TypeSc
 - ⚡ **Modern Stack** - Built with Next.js 15 App Router and TypeScript
 - 🔧 **Modular Components** - Enable/disable sections as needed
 - 🎬 **Smooth Animations** - Elegant transitions and interactions
+- 📸 **Multiple Image Sources** - Local files or Google Drive (with caching)
+- 👥 **Guest Management** - Built-in guest list and RSVP tracking
+- 🔗 **Google Forms Integration** - Automatic RSVP sync from Google Forms
 
 ## 📦 What's Included
 
@@ -135,8 +138,15 @@ Each section can be toggled on or off:
 
 ### Adding Images
 
-1. Place your images in the `public/images` directory
-2. Update the image paths in `config/wedding.json`:
+#### Option 1: Local Images (Default)
+
+1. Place your images in the `public/images` directory:
+   - `public/images/hero-album/` - Hero section background images
+   - `public/images/gallery/` - Gallery section photos
+   - `public/images/throwback/` - Throwback photos
+   - `public/images/prenup/` - Prenup/engagement photos
+
+2. Update image paths in `config/wedding.json`:
 
 ```json
 {
@@ -152,6 +162,29 @@ Each section can be toggled on or off:
     }
   }
 }
+```
+
+#### Option 2: Google Drive Images (New!)
+
+Store and manage your photos directly in Google Drive - no need to redeploy when adding new photos!
+
+**Quick Setup:**
+1. Create folders in Google Drive for your photos
+2. Configure `.env.local` with your folder IDs
+3. Images load automatically from Google Drive
+
+**See detailed guide:** [Image Sources Documentation](documentation/IMAGE_SOURCES.md)
+
+**Benefits:**
+- ✅ Update photos without redeploying
+- ✅ Easy photo management in Google Drive
+- ✅ Automatic caching for better performance
+- ✅ Supports hybrid mode (local + Google Drive)
+
+**Configuration:** 
+```env
+IMAGE_SOURCE_TYPE=google-drive
+GOOGLE_DRIVE_FOLDER_ID=your-folder-id
 ```
 
 ### Managing Guests and RSVPs

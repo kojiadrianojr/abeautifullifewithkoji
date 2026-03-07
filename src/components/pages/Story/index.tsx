@@ -9,7 +9,15 @@ import { StoryText } from "./StoryText";
 import { PhotoAlbums } from "./PhotoAlbums";
 import { DecorativeFlowers } from "./DecorativeFlowers";
 
-export function StorySection() {
+interface StorySectionProps {
+	throwbackPhotos: string[];
+	prenupPhotos: string[];
+}
+
+export function StorySection({
+	throwbackPhotos,
+	prenupPhotos,
+}: StorySectionProps) {
 	const config = ConfigService.getConfig();
 	const { story } = config.content;
 	const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -22,8 +30,9 @@ export function StorySection() {
 		setLightboxOpen(true);
 	};
 
-	const throwbackPhotos = story.throwbackPhotos || [];
-	const prenupPhotos = story.prenupPhotos || [];
+	// Use props instead of config
+	// const throwbackPhotos = story.throwbackPhotos || [];
+	// const prenupPhotos = story.prenupPhotos || [];
 
 	return (
 		<Box

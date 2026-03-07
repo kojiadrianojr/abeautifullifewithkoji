@@ -100,7 +100,7 @@ export function PhotoAlbum({
 					</Box>
 				))}
 			</SimpleGrid>
-			{hasMore && (
+			{/* {hasMore && (
 				<Button
 					onClick={openAllPhotos}
 					w="full"
@@ -115,7 +115,7 @@ export function PhotoAlbum({
 				>
 					View All {photos.length} Photos
 				</Button>
-			)}
+			)} */}
 		</Box>
 	);
 }

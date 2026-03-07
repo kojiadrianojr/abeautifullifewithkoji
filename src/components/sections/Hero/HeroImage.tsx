@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Box, Image, HStack } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface HeroImageProps {
 	images: string[];

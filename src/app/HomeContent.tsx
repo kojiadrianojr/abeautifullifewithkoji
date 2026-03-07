@@ -18,9 +18,17 @@ import { ConfigService } from "@/services";
 
 interface HomeContentProps {
 	heroImages: string[];
+	throwbackPhotos: string[];
+	prenupPhotos: string[];
+	galleryImages: string[];
 }
 
-export default function HomeContent({ heroImages }: HomeContentProps) {
+export default function HomeContent({
+	heroImages,
+	throwbackPhotos,
+	prenupPhotos,
+	galleryImages,
+}: HomeContentProps) {
 	const config = ConfigService.getConfig();
 	const { content } = config;
 	const [showSplash, setShowSplash] = useState(
@@ -39,8 +47,13 @@ export default function HomeContent({ heroImages }: HomeContentProps) {
 				<Box as="main" minH="100vh">
 					<Navigation />
 					{content.hero.enabled && <HeroSection heroImages={heroImages} />}
-					{content.story.enabled && <StorySection />}
-					{content.gallery.enabled && <GallerySection />}
+				{content.story.enabled && (
+					<StorySection
+						throwbackPhotos={throwbackPhotos}
+						prenupPhotos={prenupPhotos}
+					/>
+				)}
+				{content.gallery.enabled && <GallerySection images={galleryImages} />}
 					{content.schedule.enabled && <ScheduleSection />}
 					{content.registry.enabled && <RegistrySection />}
 					{content.rsvp.enabled && <RSVPSection />}

@@ -8,7 +8,6 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { GuestSearchInput } from "./GuestSearchInput";
 import { GuestResult } from "./GuestResult";
 import { NotFoundMessage } from "./NotFoundMessage";
-import { DecorativeDivider } from "./DecorativeDivider";
 
 export interface GuestSearchProps {
 	formUrl: string;

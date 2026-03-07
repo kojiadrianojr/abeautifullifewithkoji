@@ -7,7 +7,11 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { GalleryLightbox } from "@/components/ui/GalleryLightbox";
 import { GalleryGrid } from "./GalleryGrid";
 
-export function GallerySection() {
+interface GallerySectionProps {
+	images: string[];
+}
+
+export function GallerySection({ images }: GallerySectionProps) {
 	const config = ConfigService.getConfig();
 	const { gallery } = config.content;
 	const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -25,11 +29,11 @@ export function GallerySection() {
 					{gallery.title}
 				</SectionTitle>
 
-				<GalleryGrid images={gallery.images} onImageClick={handleImageClick} />
+				<GalleryGrid images={images} onImageClick={handleImageClick} />
 			</Container>
 
 			<GalleryLightbox
-				images={gallery.images}
+				images={images}
 				isOpen={lightboxOpen}
 				onClose={() => setLightboxOpen(false)}
 				initialIndex={selectedImageIndex}

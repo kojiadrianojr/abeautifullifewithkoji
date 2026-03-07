@@ -7,8 +7,8 @@ import Image from 'next/image';
 import { getWeddingConfig } from '@/lib/config';
 import Countdown from '@/components/Countdown';
 
-const MotionBox = motion(Box);
-const MotionVStack = motion(VStack);
+const MotionBox = motion.create(Box);
+const MotionVStack = motion.create(VStack);
 
 interface SplashScreenProps {
   onEnter: () => void;
