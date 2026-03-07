@@ -3,7 +3,7 @@
 import { IconButton, IconButtonProps } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
-const MotionIconButton = motion(IconButton);
+const MotionIconButton = motion.create(IconButton);
 
 export interface AnimatedIconButtonProps extends IconButtonProps {
   animate?: boolean;

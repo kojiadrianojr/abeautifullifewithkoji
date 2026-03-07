@@ -2,6 +2,28 @@
 
 All notable changes to this wedding website template will be documented here.
 
+## [Unreleased]
+
+### Fixed - 2026-03-07
+
+#### Google Drive Image Display Issue ✅
+- **Problem**: Images from Google Drive were not displaying on the website, even though the URLs worked when accessed directly
+- **Cause**: Google Drive API URLs require authentication that browsers cannot provide directly
+- **Solution**: Implemented API proxy endpoint at `/api/images/[fileId]` that:
+  - Authenticates with Google Drive using service account
+  - Fetches and streams images to the browser
+  - Adds 7-day caching for optimal performance
+  - Works seamlessly without requiring files to be publicly shared
+- **Files Changed**:
+  - Created: `src/app/api/images/[fileId]/route.ts`
+  - Updated: `src/services/providers/googleDriveProvider.ts`
+  - Updated: `.env.local.example`
+  - Created: `documentation/API_ROUTES.md`
+  - Updated: `documentation/GOOGLE_DRIVE_SETUP.md`
+  - Updated: `documentation/KNOWN_ISSUES.md`
+- **Migration**: Add `NEXT_PUBLIC_BASE_URL=` to `.env.local` and restart the server
+- **See**: [GOOGLE_DRIVE_FIX.md](GOOGLE_DRIVE_FIX.md) for complete details
+
 ## [2.0.0] - 2026-02-14
 
 ### Major Refactoring 🔄

@@ -3,9 +3,9 @@
 import { VStack, Heading, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
-const MotionVStack = motion(VStack);
-const MotionHeading = motion(Heading);
-const MotionText = motion(Text);
+const MotionVStack = motion.create(VStack);
+const MotionHeading = motion.create(Heading);
+const MotionText = motion.create(Text);
 
 interface HeroContentProps {
 	tagline: string;

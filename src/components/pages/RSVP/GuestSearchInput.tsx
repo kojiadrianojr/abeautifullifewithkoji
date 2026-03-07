@@ -12,7 +12,7 @@ import {
 	FormHelperText,
 } from "@chakra-ui/react";
 import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
-import { useState, ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 
 export interface GuestSearchInputProps {
 	value: string;

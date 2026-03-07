@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import Countdown from "@/components/Countdown";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface CountdownSectionProps {
 	mounted: boolean;

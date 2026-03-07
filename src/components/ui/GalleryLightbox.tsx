@@ -11,6 +11,7 @@ import {
 	Image,
 	Text,
 	Flex,
+	Spinner,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
@@ -31,13 +32,19 @@ export function GalleryLightbox({
 	const [loadedImages, setLoadedImages] = useState<Set<number>>(
 		new Set([initialIndex]),
 	);
+	const [imageLoading, setImageLoading] = useState(true);
+	const [imageError, setImageError] = useState(false);
 
 	const goToNext = () => {
 		setCurrentIndex((prev) => (prev + 1) % images.length);
+		setImageLoading(true);
+		setImageError(false);
 	};
 
 	const goToPrevious = () => {
 		setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+		setImageLoading(true);
+		setImageError(false);
 	};
 
 	// Reset to initial index when modal opens
@@ -45,8 +52,16 @@ export function GalleryLightbox({
 		if (isOpen) {
 			setCurrentIndex(initialIndex);
 			setLoadedImages(new Set([initialIndex]));
+			setImageLoading(true);
+			setImageError(false);
 		}
 	}, [isOpen, initialIndex]);
+
+	// Reset loading state when current index changes
+	useEffect(() => {
+		setImageLoading(true);
+		setImageError(false);
+	}, [currentIndex]);
 
 	// Preload adjacent images
 	useEffect(() => {
@@ -119,24 +134,62 @@ export function GalleryLightbox({
 						bg="blackAlpha.300"
 					>
 						{loadedImages.has(currentIndex) && (
-							<Image
-								src={images[currentIndex]}
-								alt={`Photo ${currentIndex + 1}`}
-								objectFit="contain"
-								w="100%"
-								h="100%"
-								fallback={
+							<>
+								{imageLoading && !imageError && (
 									<Flex
 										w="100%"
 										h="100%"
 										align="center"
 										justify="center"
 										bg="gray.800"
+										position="absolute"
 									>
-										<Text color="white">Loading...</Text>
+										<Flex direction="column" align="center" gap={4}>
+											<Spinner size="xl" color="white" thickness="4px" />
+											<Text color="white">Loading image...</Text>
+										</Flex>
 									</Flex>
-								}
-							/>
+								)}
+								{imageError && (
+									<Flex
+										w="100%"
+										h="100%"
+										align="center"
+										justify="center"
+										bg="gray.800"
+										position="absolute"
+									>
+										<Flex direction="column" align="center" gap={2}>
+											<Text color="white" fontSize="3xl">
+												⚠️
+											</Text>
+											<Text color="white" fontSize="lg">
+												Failed to load image
+											</Text>
+											<Text color="gray.400" fontSize="sm">
+												{images[currentIndex]}
+											</Text>
+										</Flex>
+									</Flex>
+								)}
+								<Image
+									src={images[currentIndex]}
+									alt={`Photo ${currentIndex + 1}`}
+									objectFit="contain"
+									w="100%"
+									h="100%"
+									opacity={imageLoading || imageError ? 0 : 1}
+									transition="opacity 0.3s"
+									onLoad={() => {
+										setImageLoading(false);
+										setImageError(false);
+									}}
+									onError={() => {
+										setImageLoading(false);
+										setImageError(true);
+									}}
+								/>
+							</>
 						)}
 					</Box>
 

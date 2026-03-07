@@ -17,7 +17,7 @@ import { MobileNav } from "./Navigation/MobileNav";
 import { DesktopNav } from "./Navigation/DesktopNav";
 import { BackToTopButton } from "./Navigation/BackToTopButton";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 export default function Navigation() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

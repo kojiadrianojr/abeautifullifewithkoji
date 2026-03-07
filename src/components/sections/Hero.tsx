@@ -14,7 +14,7 @@ import { HeroBackground } from "./Hero/HeroBackground";
 import { HeroImage } from "./Hero/HeroImage";
 import { CountdownSection } from "./Hero/CountdownSection";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface HeroProps {
 	heroImages: string[];

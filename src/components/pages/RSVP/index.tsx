@@ -1,14 +1,13 @@
 "use client";
 
 import { Box, Container, Text, VStack } from "@chakra-ui/react";
-import { ConfigService, DateService } from "@/services";
+import { ConfigService } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { GuestSearch } from "./GuestSearch";
 
 export function RSVPSection() {
 	const config = ConfigService.getConfig();
 	const { rsvp } = config.content;
-	const formattedDeadline = DateService.formatDate(rsvp.deadline);
 
 	return (
 		<Box

@@ -6,16 +6,15 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { ImageNavigator } from "@/components/ui/ImageNavigator";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface StackedImageGalleryProps {
 	images: string[];
-	mounted: boolean;
+	mounted?: boolean; // Made optional and not used directly
 }
 
 export function StackedImageGallery({
 	images,
-	mounted,
 }: StackedImageGalleryProps) {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 

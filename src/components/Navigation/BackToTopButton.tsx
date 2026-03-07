@@ -5,7 +5,7 @@ import { ChevronUpIcon } from '@chakra-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedIconButton } from '@/components/ui/AnimatedIconButton';
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface BackToTopButtonProps {
   show: boolean;

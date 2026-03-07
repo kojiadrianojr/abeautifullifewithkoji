@@ -46,8 +46,7 @@
     },
     "hero": {
       "enabled": true,
-      "tagline": "Join Us In Celebrating Our Love",
-      "backgroundImage": "/images/hero-bg.jpg"
+      "tagline": "Join Us In Celebrating Our Love"
     },
     "story": {
       "enabled": true,
@@ -69,31 +68,11 @@
           "title": "The Wedding",
           "description": "Join us as we celebrate our love and commitment."
         }
-      ],
-      "throwbackPhotos": [
-        "/images/throwback/photo1.jpg",
-        "/images/throwback/photo2.jpg",
-        "/images/throwback/photo3.jpg",
-        "/images/throwback/photo4.jpg"
-      ],
-      "prenupPhotos": [
-        "/images/prenup/photo1.jpg",
-        "/images/prenup/photo2.jpg",
-        "/images/prenup/photo3.jpg",
-        "/images/prenup/photo4.jpg"
       ]
     },
     "gallery": {
       "enabled": true,
-      "title": "Our Journey",
-      "images": [
-        "/images/gallery/photo1.jpg",
-        "/images/gallery/photo2.jpg",
-        "/images/gallery/photo3.jpg",
-        "/images/gallery/photo4.jpg",
-        "/images/gallery/photo5.jpg",
-        "/images/gallery/photo6.jpg"
-      ]
+      "title": "Our Journey"
     },
     "schedule": {
       "enabled": true,
@@ -172,11 +151,9 @@
     }
   },
   "contact": {
-    "email": "kojiandbea2026@gmail.com",
-    "phone": ""
+    "email": "kojiandbea2026@gmail.com"
   },
   "social": {
-    "instagram": "#aBEAutifullifewithKOJI",
     "hashtag": "#aBEAutifullifewithKOJI"
   }
 }
