@@ -18,10 +18,10 @@ const CACHE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days in seconds
 
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { fileId: string } }
+	{ params }: { params: Promise<{ fileId: string }> }
 ) {
 	try {
-		const fileId = params.fileId;
+		const { fileId } = await params;
 		const searchParams = request.nextUrl.searchParams;
 		const isThumbnail = searchParams.get("thumbnail") === "true";
 
