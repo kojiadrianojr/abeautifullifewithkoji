@@ -5,6 +5,7 @@ import {
 	GoogleDriveProviderConfig,
 	createLocalProvider,
 	createGoogleDriveProvider,
+	createDirectGoogleDriveProvider,
 	createHybridProvider,
 } from "@/services/providers";
 
@@ -20,7 +21,7 @@ let defaultProvider: IImageProvider | null = null;
  * Image source configuration from environment
  */
 interface ImageSourceConfig {
-	type: "local" | "google-drive" | "hybrid";
+	type: "local" | "google-drive" | "direct-google-drive" | "hybrid";
 	googleDrive?: {
 		folderId: string;
 		serviceAccountKey?: string;
@@ -33,14 +34,14 @@ interface ImageSourceConfig {
  */
 function getImageSourceConfig(): ImageSourceConfig {
 	const sourceType =
-		(process.env.IMAGE_SOURCE_TYPE as "local" | "google-drive" | "hybrid") ||
+		(process.env.IMAGE_SOURCE_TYPE as "local" | "google-drive" | "direct-google-drive" | "hybrid") ||
 		"local";
 
 	const config: ImageSourceConfig = {
 		type: sourceType,
 	};
 
-	if (sourceType === "google-drive" || sourceType === "hybrid") {
+	if (sourceType === "google-drive" || sourceType === "direct-google-drive" || sourceType === "hybrid") {
 		config.googleDrive = {
 			folderId: process.env.GOOGLE_DRIVE_FOLDER_ID || "",
 			serviceAccountKey: process.env.GOOGLE_SERVICE_ACCOUNT_KEY,
@@ -104,6 +105,29 @@ function initializeDefaultProvider(): IImageProvider {
 			}
 			break;
 
+		case "direct-google-drive":
+			if (!config.googleDrive?.folderId) {
+				console.warn(
+					"Google Drive folder ID not configured. Falling back to local provider."
+				);
+				defaultProvider = createLocalProvider("");
+			} else {
+				// Read cache configuration from environment
+				const cacheEnabled = process.env.IMAGE_CACHE_ENABLED !== "false";
+				const cacheDuration = process.env.IMAGE_CACHE_DURATION
+					? parseInt(process.env.IMAGE_CACHE_DURATION, 10)
+					: 5 * 60 * 1000; // 5 minutes default
+
+				defaultProvider = createDirectGoogleDriveProvider({
+					folderId: config.googleDrive.folderId,
+					serviceAccountKey: config.googleDrive.serviceAccountKey,
+					includeSubfolders: false,
+					cacheEnabled: cacheEnabled,
+					cacheDuration: cacheDuration,
+				});
+			}
+			break;
+
 		case "hybrid":
 			const providers: Array<LocalProviderConfig | GoogleDriveProviderConfig> = [
 				{
@@ -152,8 +176,8 @@ function getProviderForCollection(collectionName: string): IImageProvider {
 		return initializeDefaultProvider();
 	}
 
-	// For google-drive type, check if there's a specific folder for this collection
-	if (config.type === "google-drive" && config.googleDrive) {
+	// For google-drive or direct-google-drive type, check if there's a specific folder for this collection
+	if ((config.type === "google-drive" || config.type === "direct-google-drive") && config.googleDrive) {
 		const specificFolderId =
 			config.googleDrive.folders?.[collectionName] ||
 			config.googleDrive.folderId;
@@ -165,13 +189,24 @@ function getProviderForCollection(collectionName: string): IImageProvider {
 				? parseInt(process.env.IMAGE_CACHE_DURATION, 10)
 				: 5 * 60 * 1000; // 5 minutes default
 
-			return createGoogleDriveProvider({
-				folderId: specificFolderId,
-				serviceAccountKey: config.googleDrive.serviceAccountKey,
-				includeSubfolders: false,
-				cacheEnabled: cacheEnabled,
-				cacheDuration: cacheDuration,
-			});
+			// Use the appropriate provider based on type
+			if (config.type === "direct-google-drive") {
+				return createDirectGoogleDriveProvider({
+					folderId: specificFolderId,
+					serviceAccountKey: config.googleDrive.serviceAccountKey,
+					includeSubfolders: false,
+					cacheEnabled: cacheEnabled,
+					cacheDuration: cacheDuration,
+				});
+			} else {
+				return createGoogleDriveProvider({
+					folderId: specificFolderId,
+					serviceAccountKey: config.googleDrive.serviceAccountKey,
+					includeSubfolders: false,
+					cacheEnabled: cacheEnabled,
+					cacheDuration: cacheDuration,
+				});
+			}
 		}
 	}
 

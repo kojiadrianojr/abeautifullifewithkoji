@@ -6,7 +6,7 @@
 /**
  * Configuration for image source
  */
-export type ImageSourceType = "local" | "google-drive" | "hybrid";
+export type ImageSourceType = "local" | "google-drive" | "direct-google-drive" | "hybrid";
 
 /**
  * Image metadata
@@ -41,7 +41,7 @@ export interface LocalProviderConfig extends ImageProviderConfig {
  * Google Drive provider configuration
  */
 export interface GoogleDriveProviderConfig extends ImageProviderConfig {
-	type: "google-drive";
+	type: "google-drive" | "direct-google-drive";
 	folderId: string;
 	serviceAccountKey?: string; // If not provided, will use env variable
 	includeSubfolders?: boolean;
