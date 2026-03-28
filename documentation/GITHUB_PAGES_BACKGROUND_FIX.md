@@ -52,7 +52,28 @@ After pushing to GitHub, the workflow will automatically build and deploy with t
 - **Next.js Image Component**: The `<Image>` component from `next/image` automatically handles basePath, so it doesn't need the utility function.
 - **CSS Background Images**: Must use the `getAssetPath()` utility for proper path handling.
 - **Inline Styles**: Any inline styles with `backgroundImage` should use `getAssetPath()`.
-- **Other Deployments**: For custom domains without a basePath (e.g., `yourwedding.com`), leave `NEXT_PUBLIC_BASE_PATH` empty or unset.
+- **Custom Domains**: For custom domains (e.g., `yourwedding.com`), leave `NEXT_PUBLIC_BASE_PATH` empty or unset.
+- **Subdirectory Deployment**: For subdirectory deployment (e.g., `username.github.io/website`), set `NEXT_PUBLIC_BASE_PATH=/website`.
+
+⚠️ **IMPORTANT**: The `getAssetPath()` function no longer has a hardcoded fallback. Always explicitly set or leave empty `NEXT_PUBLIC_BASE_PATH` based on your deployment type.
+
+## Fix Applied (March 2026)
+
+**Issue**: Assets not loading on custom domains due to hardcoded basePath fallback
+
+**Solution**: Removed the hardcoded fallback `/abeautifullifewithkoji` from `getAssetPath()` function. Now defaults to empty string, making custom domain deployments work correctly.
+
+**Before**:
+```typescript
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/abeautifullifewithkoji'; // ❌ Wrong for custom domains
+```
+
+**After**:
+```typescript
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''; // ✅ Correct for custom domains
+```
+
+📖 **See**: [Custom Domain Setup Guide](CUSTOM_DOMAIN_SETUP.md) for detailed configuration instructions.
 
 ## Related Files
 - `/src/lib/asset-path.ts` - The utility function

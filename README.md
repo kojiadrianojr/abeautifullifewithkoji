@@ -294,7 +294,8 @@ docker-compose down
 
 📖 **[Complete GitHub Pages Guide](documentation/DEPLOYMENT_READY.md)**  
 📋 **[Deployment Checklist](documentation/GITHUB_PAGES_CHECKLIST.md)**  
-🌐 **[DNS Configuration Guide](documentation/DNS_CONFIGURATION.md)**
+🌐 **[DNS Configuration Guide](documentation/DNS_CONFIGURATION.md)**  
+🔧 **[Custom Domain Setup (Troubleshooting)](documentation/CUSTOM_DOMAIN_SETUP.md)**
 
 **Cost:** $0/month | **Difficulty:** ⭐ Easy | **Time:** 2 hours (mostly DNS waiting)
 
