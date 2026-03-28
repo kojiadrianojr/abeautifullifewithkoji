@@ -2,52 +2,58 @@
 
 This document tracks known issues, deprecation warnings, and their status.
 
-## Current Warnings
+## Resolved Issues
 
-### 1. DeprecationWarning: `url.parse()` (Node.js)
+### 1. Next.js 15 Async Params Error - ✅ RESOLVED
 
-**Status**: External dependency issue - Cannot fix directly
+**Status**: FIXED - Updated API route to use Promise-based params
 
-**Warning Message**:
+**Previous Error Message**:
+```
+Error: Route "/api/images/[fileId]" used `params.fileId`. `params` should be awaited 
+before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+```
+
+**Source**: Next.js 15 breaking change - dynamic route params are now asynchronous.
+
+**Resolution**:
+- Updated `/api/images/[fileId]/route.ts` to await params (March 28, 2026)
+- Changed `params: { fileId: string }` to `params: Promise<{ fileId: string }>`
+- Changed `params.fileId` to `await params` then destructuring
+- No functional changes to API behavior
+
+**Impact**: 
+- Issue completely resolved
+- API route works correctly with Next.js 15
+- No more console errors
+
+### 2. DeprecationWarning: `url.parse()` (Node.js) - ✅ RESOLVED
+
+**Status**: FIXED - Updated googleapis to v171.4.0
+
+**Previous Warning Message**:
 ```
 DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors 
 that have security implications. Use the WHATWG URL API instead. CVEs are not issued 
 for `url.parse()` vulnerabilities.
 ```
 
-**Source**: This warning comes from the `googleapis` package or its dependencies, not from our application code.
+**Source**: This warning came from the `googleapis` package v144.0.0 or its dependencies.
+
+**Resolution**:
+- Updated `googleapis` from v144.0.0 to v171.4.0 (March 28, 2026)
+- The newer version uses WHATWG URL API instead of deprecated url.parse()
+- Warning no longer appears in console
+- No code changes required
 
 **Impact**: 
-- No functional impact on the application
-- Node.js deprecation warning (will display in console)
-- Does not affect runtime behavior
+- Issue completely resolved
+- No functional changes to application behavior
+- Cleaner console output during development
 
-**Resolution Options**:
+## Current Warnings
 
-1. **Wait for upstream fix** (Recommended):
-   - The `googleapis` package maintainers need to update their code
-   - This is a known issue tracked in the googleapis repository
-   - Future versions will migrate to WHATWG URL API
-
-2. **Suppress the warning** (Development only):
-   ```bash
-   # Add to package.json scripts
-   "dev": "NODE_NO_DEPRECATION=1 next dev"
-   ```
-   
-   **Note**: This only hides the warning, doesn't fix the underlying issue.
-
-3. **Use an alternative authentication method**:
-   - If not using Google Drive/Forms integration, remove `googleapis` dependency
-   - For production, consider using OAuth2 instead of service accounts
-
-**Tracking**:
-- Issue opened: https://github.com/googleapis/google-api-nodejs-client/issues
-- Expected fix: When googleapis updates to use WHATWG URL API
-- Last checked: March 2026
-
-**Security Note**:
-While the warning mentions security implications, using `googleapis` with service accounts is still considered secure for our use case. The deprecation is about Node.js API modernization, not a critical vulnerability in googleapis itself.
+No known warnings at this time.
 
 ---
 
