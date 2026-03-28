@@ -1,9 +1,9 @@
 import type { NextConfig } from 'next';
 
-// Use NEXT_PUBLIC_BASE_PATH from environment or default to '/abeautifullifewithkoji' for production
-const basePath = process.env.NODE_ENV === 'production' 
-  ? (process.env.NEXT_PUBLIC_BASE_PATH || '/abeautifullifewithkoji')
-  : '';
+// Only use basePath if explicitly set via environment variable
+// For custom domains: don't set NEXT_PUBLIC_BASE_PATH (or set to empty string)
+// For GitHub Pages subdirectory: set NEXT_PUBLIC_BASE_PATH=/abeautifullifewithkoji
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
     unoptimized: true, // Required for static export
     formats: ['image/webp', 'image/avif'],
   },
-  // Required for GitHub Pages deployment at https://kojiadrianojr.github.io/abeautifullifewithkoji/
   basePath,
   assetPrefix: basePath,
 };
