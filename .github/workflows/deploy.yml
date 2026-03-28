@@ -52,6 +52,8 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          # Base path for GitHub Pages (e.g., /abeautifullifewithkoji for username.github.io/abeautifullifewithkoji)
+          NEXT_PUBLIC_BASE_PATH: ${{ secrets.NEXT_PUBLIC_BASE_PATH }}
           # Base URL for the application (used in API routes and image serving)
           NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
           

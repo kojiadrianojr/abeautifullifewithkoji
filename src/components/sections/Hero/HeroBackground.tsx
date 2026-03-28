@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/react";
+import { getAssetPath } from "@/lib/asset-path";
 
 interface HeroBackgroundProps {
 	backgroundImage?: string;
@@ -7,13 +8,14 @@ interface HeroBackgroundProps {
 export function HeroBackground({
 	backgroundImage = "/images/hero-bg.jpg",
 }: HeroBackgroundProps) {
+	const bgImagePath = getAssetPath(backgroundImage);
 	return (
 		<>
 			{/* Hero background image */}
 			<Box
 				position="absolute"
 				inset={0}
-				bgImage={`url(${backgroundImage})`}
+				bgImage={`url(${bgImagePath})`}
 				bgSize="cover"
 				bgPosition="center"
 				bgRepeat="no-repeat"
