@@ -1,11 +1,25 @@
 # 💒 Wedding Website Template
 
-A beautiful, customizable wedding website template built with Next.js 15, TypeScript, and Tailwind CSS. Designed to be easily deployed with Docker and customized through a simple JSON configuration file.
+A beautiful, customizable wedding website template built with Next.js 15, TypeScript, and Tailwind CSS. Deploy for **FREE on GitHub Pages** or use Docker for self-hosting.
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Ready-success)
+
+## 🎉 NEW: GitHub Pages Deployment Ready!
+
+This template is now **fully configured** for FREE deployment on GitHub Pages with custom domain support!
+
+📖 **[Quick Start: Deploy to GitHub Pages](documentation/DEPLOYMENT_READY.md)**
+
+**Features:**
+- ✅ Zero cost hosting
+- ✅ Free SSL certificate
+- ✅ Custom domain support (abeautifullifewithkoji.com)
+- ✅ Automatic deployments via GitHub Actions
+- ✅ Global CDN delivery
 
 ## ✨ Features
 
@@ -269,20 +283,41 @@ docker-compose down
 
 ## 📤 Deployment Options
 
-### Vercel (Recommended)
+### GitHub Pages (FREE - Recommended) 🌟
+
+**Zero-cost hosting with custom domain support!**
+
+1. Push your code to GitHub
+2. Enable GitHub Pages with GitHub Actions
+3. Configure your custom domain DNS
+4. Automatic deployments on every push
+
+📖 **[Complete GitHub Pages Guide](documentation/DEPLOYMENT_READY.md)**  
+📋 **[Deployment Checklist](documentation/GITHUB_PAGES_CHECKLIST.md)**  
+🌐 **[DNS Configuration Guide](documentation/DNS_CONFIGURATION.md)**
+
+**Cost:** $0/month | **Difficulty:** ⭐ Easy | **Time:** 2 hours (mostly DNS waiting)
+
+---
+
+### Vercel
 
 1. Push your code to GitHub
 2. Import project on [Vercel](https://vercel.com)
 3. Deploy automatically
+
+**Cost:** Free tier available | **Difficulty:** ⭐ Easy
 
 ### Netlify
 
 1. Push your code to GitHub
 2. Connect to [Netlify](https://netlify.com)
 3. Set build command: `npm run build`
-4. Set publish directory: `.next`
+4. Set publish directory: `out`
 
-### Self-Hosted
+**Cost:** Free tier available | **Difficulty:** ⭐ Easy
+
+### Self-Hosted (Docker)
 
 Use Docker Compose on any server with Docker installed:
 
@@ -291,6 +326,10 @@ git clone your-repo
 cd wedding-website
 docker-compose up -d
 ```
+
+**Cost:** $5-20/month (VPS) | **Difficulty:** ⭐⭐⭐ Advanced
+
+📖 **[View All Deployment Options](documentation/DEPLOYMENT.md)**
 
 ## 🎯 Product Features for Selling
 
