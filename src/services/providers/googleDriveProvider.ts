@@ -210,10 +210,13 @@ export class GoogleDriveImageProvider implements IImageProvider {
 
 	/**
 	 * Get image URL that works well for embedding in HTML img tags
+	 * Uses the API proxy route to handle authentication with Google Drive
 	 */
 	private getImageUrl(fileId: string): string {
-		// Use drive.usercontent.google.com with export=view for better browser compatibility
-		return `https://drive.usercontent.google.com/download?id=${fileId}&export=view&authuser=0`;
+		// Use the API proxy route which handles service account authentication
+		// This allows the images to be loaded in the browser without CORS issues
+		const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
+		return `${baseUrl}/api/images/${fileId}`;
 	}
 
 	/**
@@ -223,20 +226,18 @@ export class GoogleDriveImageProvider implements IImageProvider {
 		fileId: string,
 		thumbnailLink?: string | null
 	): string {
-		if (thumbnailLink) {
-			// Replace the size parameter for higher quality (e.g., s220 -> s2000)
-			return thumbnailLink.replace(/=s\d+$/, "=s2000");
-		}
-		// Fallback to regular image URL
-		return this.getImageUrl(fileId);
+		// Use the API proxy route with thumbnail parameter
+		const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
+		return `${baseUrl}/api/images/${fileId}?thumbnail=true`;
 	}
 
 	/**
 	 * Get direct download URL for a Google Drive file (legacy method)
 	 */
 	private getDirectDownloadUrl(fileId: string): string {
-		// Use the download pattern that works with public files
-		return `https://drive.google.com/uc?export=download&id=${fileId}`;
+		// Use the API proxy route for downloads as well
+		const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
+		return `${baseUrl}/api/images/${fileId}`;
 	}
 
 	/**
