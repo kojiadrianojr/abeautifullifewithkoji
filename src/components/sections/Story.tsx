@@ -140,9 +140,8 @@ export default function Story() {
 		setLightboxOpen(true);
 	};
 
-	type StoryWithPhotos = typeof story & { throwbackPhotos?: string[]; prenupPhotos?: string[] };
+	type StoryWithPhotos = typeof story & { throwbackPhotos?: string[] };
 	const throwbackPhotos = (story as StoryWithPhotos).throwbackPhotos || [];
-	const prenupPhotos = (story as StoryWithPhotos).prenupPhotos || [];
 
 	return (
 		<Box
@@ -221,20 +220,10 @@ export default function Story() {
 					{/* Right Column - Photo Albums */}
 					<Box>
 						{/* Throwback Photos */}
-						<Box mb={12}>
-							<PhotoAlbum
-								title="Throwback Memories"
-								photos={throwbackPhotos}
-								gradientColors="linear(to-r, purple.500, orange.400)"
-								onOpenLightbox={openLightbox}
-							/>
-						</Box>
-
-						{/* Prenup Photos */}
 						<PhotoAlbum
-							title="Prenup Photos"
-							photos={prenupPhotos}
-							gradientColors="linear(to-r, pink.500, orange.400)"
+							title="Throwback Memories"
+							photos={throwbackPhotos}
+							gradientColors="linear(to-r, purple.500, orange.400)"
 							onOpenLightbox={openLightbox}
 						/>
 					</Box>

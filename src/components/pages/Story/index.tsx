@@ -77,7 +77,6 @@ export function StorySection({
 					{/* Right Column - Photo Albums */}
 					<PhotoAlbums
 						throwbackPhotos={throwbackPhotos}
-						prenupPhotos={prenupPhotos}
 						onOpenLightbox={openLightbox}
 					/>
 				</Grid>
