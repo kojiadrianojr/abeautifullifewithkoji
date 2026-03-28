@@ -331,6 +331,45 @@ docker-compose up -d
 
 📖 **[View All Deployment Options](documentation/DEPLOYMENT.md)**
 
+## 🔐 Environment Variables & GitHub Secrets
+
+This template supports environment variables for sensitive configuration like API keys and Google integrations.
+
+### Local Development
+
+Create a `.env.local` file for local development:
+
+```bash
+# Copy the example file
+cp .env.example .env.local
+
+# Edit with your values
+nano .env.local
+```
+
+### GitHub Pages Deployment with Secrets
+
+For automatic deployments with GitHub Actions, use GitHub Secrets to securely store environment variables:
+
+1. **Navigate to**: Repository Settings → Secrets and variables → Actions
+2. **Add secrets** for your configuration (Google Forms, Google Drive, etc.)
+3. **Push to main** - GitHub Actions will automatically inject secrets during build
+
+**Common secrets you might need:**
+- `GOOGLE_SERVICE_ACCOUNT_KEY` - For Google Forms/Drive integration
+- `GOOGLE_FORMS_SPREADSHEET_ID` - For RSVP sync
+- `IMAGE_SOURCE_TYPE` - To use Google Drive images
+- `GOOGLE_DRIVE_FOLDER_ID` - Your Google Drive folder
+- `NEXT_PUBLIC_BASE_URL` - Your custom domain URL
+
+📖 **[Complete GitHub Secrets Setup Guide](documentation/GITHUB_SECRETS_SETUP.md)**
+
+**Features:**
+- ✅ Secure storage of API keys and credentials
+- ✅ Automatic injection during CI/CD builds
+- ✅ No secrets exposed in your code
+- ✅ Easy to update without redeploying code
+
 ## 🎯 Product Features for Selling
 
 This template is designed to be sold as a product. Key selling points:

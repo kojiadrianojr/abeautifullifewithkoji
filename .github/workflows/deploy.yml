@@ -51,10 +51,26 @@ jobs:
       - name: Build with Next.js
         run: npm run build
         env:
-          # Add any environment variables your build needs here
-          # Example:
-          # NEXT_PUBLIC_API_URL: ${{ secrets.API_URL }}
           NODE_ENV: production
+          # Base URL for the application (used in API routes and image serving)
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+          
+          # Google Forms Integration (Optional - only needed if syncing RSVPs)
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          GOOGLE_FORMS_SPREADSHEET_ID: ${{ secrets.GOOGLE_FORMS_SPREADSHEET_ID }}
+          
+          # Image Source Configuration (Optional - for Google Drive images)
+          IMAGE_SOURCE_TYPE: ${{ secrets.IMAGE_SOURCE_TYPE }}
+          GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+          GOOGLE_DRIVE_HERO_ALBUM_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_HERO_ALBUM_FOLDER_ID }}
+          GOOGLE_DRIVE_GALLERY_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_GALLERY_FOLDER_ID }}
+          GOOGLE_DRIVE_THROWBACK_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_THROWBACK_FOLDER_ID }}
+          GOOGLE_DRIVE_PRENUP_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_PRENUP_FOLDER_ID }}
+          
+          # Image Cache Configuration (Optional)
+          IMAGE_CACHE_ENABLED: ${{ secrets.IMAGE_CACHE_ENABLED }}
+          IMAGE_CACHE_DURATION: ${{ secrets.IMAGE_CACHE_DURATION }}
+          CACHE_CLEAR_SECRET: ${{ secrets.CACHE_CLEAR_SECRET }}
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
