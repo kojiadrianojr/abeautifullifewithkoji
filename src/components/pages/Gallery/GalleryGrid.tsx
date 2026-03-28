@@ -14,6 +14,7 @@ export function GalleryGrid({ images, onImageClick }: GalleryGridProps) {
 			{images.map((image, index) => (
 				<GalleryImage
 					key={index}
+					src={image}
 					index={index}
 					onClick={() => onImageClick(index)}
 				/>

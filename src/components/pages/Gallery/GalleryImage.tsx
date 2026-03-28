@@ -1,13 +1,14 @@
 "use client";
 
-import { Box } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 
 interface GalleryImageProps {
+	src: string;
 	index: number;
 	onClick: () => void;
 }
 
-export function GalleryImage({ index, onClick }: GalleryImageProps) {
+export function GalleryImage({ src, index, onClick }: GalleryImageProps) {
 	return (
 		<Box
 			aspectRatio={1}
@@ -22,18 +23,14 @@ export function GalleryImage({ index, onClick }: GalleryImageProps) {
 			}}
 			onClick={onClick}
 		>
-			<Box
+			<Image
+				src={src}
+				alt={`Gallery image ${index + 1}`}
 				w="full"
 				h="full"
-				bg="gray.300"
-				display="flex"
-				alignItems="center"
-				justifyContent="center"
-				color="gray.600"
-				fontSize="lg"
-			>
-				Photo {index + 1}
-			</Box>
+				objectFit="cover"
+				loading="lazy"
+			/>
 		</Box>
 	);
 }

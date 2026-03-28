@@ -20,14 +20,12 @@ interface HomeContentProps {
 	heroImages: string[];
 	throwbackPhotos: string[];
 	prenupPhotos: string[];
-	galleryImages: string[];
 }
 
 export default function HomeContent({
 	heroImages,
 	throwbackPhotos,
 	prenupPhotos,
-	galleryImages,
 }: HomeContentProps) {
 	const config = ConfigService.getConfig();
 	const { content } = config;
@@ -53,7 +51,7 @@ export default function HomeContent({
 						prenupPhotos={prenupPhotos}
 					/>
 				)}
-				{content.gallery.enabled && <GallerySection images={galleryImages} />}
+				{content.gallery.enabled && <GallerySection images={prenupPhotos} />}
 					{content.schedule.enabled && <ScheduleSection />}
 					{content.registry.enabled && <RegistrySection />}
 					{content.rsvp.enabled && <RSVPSection />}
