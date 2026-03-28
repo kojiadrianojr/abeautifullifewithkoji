@@ -224,7 +224,7 @@ export class GoogleDriveImageProvider implements IImageProvider {
 	 */
 	private getThumbnailUrl(
 		fileId: string,
-		thumbnailLink?: string | null
+		_thumbnailLink?: string | null
 	): string {
 		// Use the API proxy route with thumbnail parameter
 		const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";

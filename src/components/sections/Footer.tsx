@@ -39,14 +39,14 @@ export default function Footer() {
                 {contact.email}
               </Link>
             )}
-            {contact.phone && (
+            {(contact as { email?: string; phone?: string }).phone && (
               <Link
-                href={`tel:${contact.phone}`}
+                href={`tel:${(contact as { email?: string; phone?: string }).phone}`}
                 color="whiteAlpha.900"
                 _hover={{ color: 'secondary.400' }}
                 transition="color 0.3s"
               >
-                {contact.phone}
+                {(contact as { email?: string; phone?: string }).phone}
               </Link>
             )}
           </VStack>

@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "export": "next build",
     "sync-rsvp": "tsx scripts/sync-rsvp.ts",
     "test-drive": "tsx scripts/test-google-drive.ts",
     "clear-cache": "node scripts/clear-cache.js"

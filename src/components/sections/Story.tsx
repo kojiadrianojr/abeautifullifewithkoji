@@ -140,8 +140,9 @@ export default function Story() {
 		setLightboxOpen(true);
 	};
 
-	const throwbackPhotos = story.throwbackPhotos || [];
-	const prenupPhotos = story.prenupPhotos || [];
+	type StoryWithPhotos = typeof story & { throwbackPhotos?: string[]; prenupPhotos?: string[] };
+	const throwbackPhotos = (story as StoryWithPhotos).throwbackPhotos || [];
+	const prenupPhotos = (story as StoryWithPhotos).prenupPhotos || [];
 
 	return (
 		<Box

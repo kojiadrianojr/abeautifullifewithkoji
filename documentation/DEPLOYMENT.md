@@ -2,7 +2,42 @@
 
 This guide covers various deployment options for your wedding website.
 
-## Option 1: Vercel (Recommended - Easiest)
+## Option 1: GitHub Pages (Free & Simple)
+
+**✨ This project is pre-configured for GitHub Pages deployment!**
+
+GitHub Pages offers free hosting with custom domain support, SSL, and automated deployments.
+
+### Quick Start:
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Deploy to GitHub Pages"
+   git push origin main
+   ```
+
+2. **Enable GitHub Pages**
+   - Go to repository **Settings** → **Pages**
+   - Under **Build and deployment**, select **GitHub Actions**
+
+3. **Configure Custom Domain** (abeautifullifewithkoji.com)
+   - Add domain in GitHub Pages settings
+   - Configure DNS A records:
+     ```
+     185.199.108.153
+     185.199.109.153
+     185.199.110.153
+     185.199.111.153
+     ```
+
+**📚 Full Guide:** See [GITHUB_PAGES_DEPLOYMENT.md](./GITHUB_PAGES_DEPLOYMENT.md) for complete instructions.
+
+**Cost**: **FREE** (including custom domain & SSL)
+
+---
+
+## Option 2: Vercel (Excellent for Next.js)
 
 Vercel offers the simplest deployment for Next.js applications with automatic SSL and global CDN.
 
@@ -30,7 +65,7 @@ Vercel offers the simplest deployment for Next.js applications with automatic SS
 
 **Cost**: Free for personal projects
 
-## Option 2: Netlify
+## Option 3: Netlify
 
 Similar to Vercel, great for static sites with easy continuous deployment.
 
@@ -178,6 +213,7 @@ If you have traditional web hosting, you can build and upload the static files.
 
 | Option | Best For | Difficulty | Cost |
 |--------|----------|------------|------|
+| **GitHub Pages** | **Free hosting** | ⭐ **Easy** | **FREE** |
 | Vercel | Most users | ⭐ Easy | Free |
 | Netlify | Static sites | ⭐ Easy | Free |
 | Docker | Full control | ⭐⭐⭐ Advanced | $5-20/mo |
