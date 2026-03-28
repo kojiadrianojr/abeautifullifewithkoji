@@ -7,6 +7,10 @@ export {
 	GoogleDriveImageProvider,
 	createGoogleDriveProvider,
 } from "./googleDriveProvider";
+export {
+	DirectGoogleDriveImageProvider,
+	createDirectGoogleDriveProvider,
+} from "./directGoogleDriveProvider";
 export { HybridImageProvider, createHybridProvider } from "./hybridProvider";
 
 // Re-export types
