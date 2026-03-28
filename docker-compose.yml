@@ -7,7 +7,26 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    env_file:
+      - .env  # Load environment variables from .env file
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-production}
+      - NEXT_TELEMETRY_DISABLED=${NEXT_TELEMETRY_DISABLED:-1}
+      # Application settings
+      - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+      # Google Forms Integration (optional)
+      - GOOGLE_SERVICE_ACCOUNT_KEY=${GOOGLE_SERVICE_ACCOUNT_KEY}
+      - GOOGLE_FORMS_SPREADSHEET_ID=${GOOGLE_FORMS_SPREADSHEET_ID}
+      # Image Source Configuration (optional)
+      - IMAGE_SOURCE_TYPE=${IMAGE_SOURCE_TYPE:-local}
+      - GOOGLE_DRIVE_FOLDER_ID=${GOOGLE_DRIVE_FOLDER_ID}
+      - GOOGLE_DRIVE_HERO_ALBUM_FOLDER_ID=${GOOGLE_DRIVE_HERO_ALBUM_FOLDER_ID}
+      - GOOGLE_DRIVE_GALLERY_FOLDER_ID=${GOOGLE_DRIVE_GALLERY_FOLDER_ID}
+      - GOOGLE_DRIVE_THROWBACK_FOLDER_ID=${GOOGLE_DRIVE_THROWBACK_FOLDER_ID}
+      - GOOGLE_DRIVE_PRENUP_FOLDER_ID=${GOOGLE_DRIVE_PRENUP_FOLDER_ID}
+      # Image Cache Configuration (optional)
+      - IMAGE_CACHE_ENABLED=${IMAGE_CACHE_ENABLED:-true}
+      - IMAGE_CACHE_DURATION=${IMAGE_CACHE_DURATION:-300000}
+      - CACHE_CLEAR_SECRET=${CACHE_CLEAR_SECRET}
     restart: unless-stopped
     container_name: wedding-website
