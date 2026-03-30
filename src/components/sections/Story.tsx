@@ -17,6 +17,19 @@ import { TimelineCard } from "@/components/ui/TimelineCard";
 import { useState } from "react";
 import { GalleryLightbox } from "@/components/ui/GalleryLightbox";
 
+interface TimelineItem {
+	year: string;
+	title: string;
+	description: string;
+}
+
+interface StoryConfig {
+	title: string;
+	content: string;
+	timeline: TimelineItem[];
+	throwbackPhotos?: string[];
+}
+
 interface PhotoAlbumProps {
 	title: string;
 	photos: string[];
@@ -130,8 +143,8 @@ function PhotoAlbum({
 export default function Story() {
 	const config = getWeddingConfig();
 	// Story section is optional in config - provide defaults if not present
-	const story = 'story' in config.content 
-		? (config.content as typeof config.content & { story: { title: string; content: string; timeline: { year: string; title: string; description: string; }[]; throwbackPhotos?: string[] } }).story
+	const story: StoryConfig = 'story' in config.content 
+		? (config.content as typeof config.content & { story: StoryConfig }).story
 		: {
 			title: "Our Story",
 			content: "Coming soon...",

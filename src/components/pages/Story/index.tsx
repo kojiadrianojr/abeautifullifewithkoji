@@ -15,6 +15,12 @@ interface TimelineItem {
 	description: string;
 }
 
+interface StoryConfig {
+	title: string;
+	content: string;
+	timeline: TimelineItem[];
+}
+
 interface StorySectionProps {
 	throwbackPhotos: string[];
 	prenupPhotos: string[];
@@ -26,12 +32,12 @@ export function StorySection({
 }: StorySectionProps) {
 	const config = ConfigService.getConfig();
 	// Story section is optional in config - provide defaults if not present
-	const story = 'story' in config.content 
-		? (config.content as WeddingConfig['content'] & { story: { title: string; content: string; timeline: TimelineItem[] } }).story
+	const story: StoryConfig = 'story' in config.content 
+		? (config.content as WeddingConfig['content'] & { story: StoryConfig }).story
 		: {
 			title: "Our Story",
 			content: "Coming soon...",
-			timeline: [] as TimelineItem[]
+			timeline: []
 		};
 	const [lightboxOpen, setLightboxOpen] = useState(false);
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
