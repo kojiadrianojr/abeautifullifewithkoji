@@ -1,21 +1,7 @@
 import type { Metadata } from "next";
-import { Great_Vibes, Inter } from "next/font/google";
 import "./globals.css";
 import { getCoupleNames, getWeddingConfig } from "@/lib/config";
 import ThemeProvider from "@/components/ThemeProvider";
-
-const greatVibes = Great_Vibes({
-	weight: "400",
-	subsets: ["latin"],
-	variable: "--font-serif",
-	display: "swap",
-});
-
-const inter = Inter({
-	subsets: ["latin"],
-	variable: "--font-sans",
-	display: "swap",
-});
 
 const config = getWeddingConfig();
 
@@ -33,7 +19,15 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className={`${greatVibes.variable} ${inter.variable}`}>
+		<html lang="en">
+			<head>
+				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+				<link
+					href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;600;700&display=swap"
+					rel="stylesheet"
+				/>
+			</head>
 			<body>
 				<ThemeProvider theme={config.theme}>{children}</ThemeProvider>
 			</body>
