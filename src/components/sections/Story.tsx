@@ -129,7 +129,15 @@ function PhotoAlbum({
 
 export default function Story() {
 	const config = getWeddingConfig();
-	const { story } = config.content;
+	// Story section is optional in config - provide defaults if not present
+	const story = 'story' in config.content 
+		? (config.content as typeof config.content & { story: { title: string; content: string; timeline: { year: string; title: string; description: string; }[]; throwbackPhotos?: string[] } }).story
+		: {
+			title: "Our Story",
+			content: "Coming soon...",
+			timeline: [],
+			throwbackPhotos: []
+		};
 	const [lightboxOpen, setLightboxOpen] = useState(false);
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 	const [currentAlbum, setCurrentAlbum] = useState<string[]>([]);
@@ -140,8 +148,7 @@ export default function Story() {
 		setLightboxOpen(true);
 	};
 
-	type StoryWithPhotos = typeof story & { throwbackPhotos?: string[] };
-	const throwbackPhotos = (story as StoryWithPhotos).throwbackPhotos || [];
+	const throwbackPhotos = story.throwbackPhotos || [];
 
 	return (
 		<Box
