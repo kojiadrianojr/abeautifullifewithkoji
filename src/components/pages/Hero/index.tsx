@@ -44,25 +44,13 @@ export function HeroSection({ heroImages }: HeroSectionProps) {
 					alignItems="center"
 					justifyContent="center"
 				>
-					{/* Hero Image - Stacked Cards */}
-					{hasImages && (
-						<FadeIn delay={0} duration={1} direction="left" mounted={mounted}>
-							<Box
-								flex={{ base: "0 0 auto", lg: "0 0 45%" }}
-								maxW={{ base: "100%", md: "500px", lg: "none" }}
-								w="100%"
-								position="relative"
-							>
-								<StackedImageGallery images={heroImages} mounted={mounted} />
-							</Box>
-						</FadeIn>
-					)}
-
 					{/* Text Content */}
-					<FadeIn delay={0.2} duration={1} direction="right" mounted={mounted}>
+					<FadeIn delay={0} duration={1} direction="left" mounted={mounted}>
 						<Box
 							flex={{ base: "0 0 auto", lg: "1" }}
 							maxW={{ base: "100%", lg: "none" }}
+							position="relative"
+							zIndex={2}
 						>
 							<VStack spacing={8} align={{ base: "center", lg: "flex-start" }}>
 								<Box textAlign={{ base: "center", lg: "left" }}>
@@ -80,6 +68,21 @@ export function HeroSection({ heroImages }: HeroSectionProps) {
 							</VStack>
 						</Box>
 					</FadeIn>
+
+					{/* Hero Image - Stacked Cards */}
+					{hasImages && (
+						<FadeIn delay={0.2} duration={1} direction="right" mounted={mounted}>
+							<Box
+								flex={{ base: "0 0 auto", lg: "0 0 45%" }}
+								maxW={{ base: "100%", md: "500px", lg: "none" }}
+								w="100%"
+								position="relative"
+								zIndex={1}
+							>
+								<StackedImageGallery images={heroImages} mounted={mounted} />
+							</Box>
+						</FadeIn>
+					)}
 				</Box>
 			</Container>
 
