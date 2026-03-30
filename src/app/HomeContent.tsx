@@ -7,6 +7,7 @@ import {
 	MilestonesSection,
 	GallerySection,
 	ScheduleSection,
+	DetailsSection,
 	RegistrySection,
 	RSVPSection,
 	FAQSection,
@@ -52,6 +53,7 @@ export default function HomeContent({
 				)}
 				{content.gallery.enabled && <GallerySection images={prenupPhotos} />}
 					{content.schedule.enabled && <ScheduleSection />}
+					{content.details?.enabled && <DetailsSection />}
 					{content.registry.enabled && <RegistrySection />}
 					{content.faq.enabled && <FAQSection />}
 					{content.rsvp.enabled && <RSVPSection />}
