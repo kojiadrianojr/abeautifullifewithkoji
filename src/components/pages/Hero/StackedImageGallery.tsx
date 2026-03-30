@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import { motion, PanInfo } from "framer-motion";
 import Image from "next/image";
 import { ImageNavigator } from "@/components/ui/ImageNavigator";
 
@@ -17,6 +17,25 @@ export function StackedImageGallery({
 	images,
 }: StackedImageGalleryProps) {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
+	const [isDragging, setIsDragging] = useState(false);
+
+	// Handle swipe gestures
+	const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+		const swipeThreshold = 50; // minimum distance for a swipe
+		const swipeVelocity = 500; // minimum velocity for a swipe
+
+		// Detect horizontal swipe based on offset and velocity
+		if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > swipeVelocity) {
+			if (info.offset.x > 0) {
+				// Swiped right - go to previous image
+				setCurrentImageIndex((prev) => Math.max(0, prev - 1));
+			} else {
+				// Swiped left - go to next image
+				setCurrentImageIndex((prev) => Math.min(images.length - 1, prev + 1));
+			}
+		}
+		setIsDragging(false);
+	};
 
 	const getCardTransform = (index: number) => {
 		const position = index - currentImageIndex;
@@ -75,7 +94,7 @@ export function StackedImageGallery({
 			display="flex"
 			alignItems="center"
 			justifyContent="center"
-			pb={20}
+			pb={10}
 		>
 			{/* Card Stack Container */}
 			<Box
@@ -84,6 +103,11 @@ export function StackedImageGallery({
 				maxW="600px"
 				h={{ base: "400px", sm: "500px", md: "550px" }}
 				style={{ perspective: "1500px" }}
+				// Prevent text selection during drag
+				sx={{
+					userSelect: isDragging ? "none" : "auto",
+					WebkitUserSelect: isDragging ? "none" : "auto",
+				}}
 			>
 				{images.map((image, index) => {
 					const cardTransform = getCardTransform(index);
@@ -97,8 +121,14 @@ export function StackedImageGallery({
 							left="50%"
 							w="90%"
 							h="90%"
-							cursor="pointer"
-							onClick={() => setCurrentImageIndex(index)}
+							cursor={isDragging ? "grabbing" : "grab"}
+							onClick={() => !isDragging && setCurrentImageIndex(index)}
+							// Drag configuration for swipe gestures
+							drag="x"
+							dragConstraints={{ left: 0, right: 0 }}
+							dragElastic={0.7}
+							onDragStart={() => setIsDragging(true)}
+							onDragEnd={handleDragEnd}
 							initial={{
 								x: "-50%",
 								y: "-50%",
@@ -121,11 +151,15 @@ export function StackedImageGallery({
 								stiffness: 260,
 								damping: 25,
 							}}
-							whileHover={{
-								scale: cardTransform.scale * 1.03,
-								y: `calc(-50% + ${cardTransform.yOffset - 5}px)`,
-								transition: { duration: 0.2 },
-							}}
+							whileHover={
+								!isDragging
+									? {
+											scale: cardTransform.scale * 1.03,
+											y: `calc(-50% + ${cardTransform.yOffset - 5}px)`,
+											transition: { duration: 0.2 },
+										}
+									: {}
+							}
 						>
 							{/* White Card with Padding */}
 							<Box
@@ -208,11 +242,11 @@ export function StackedImageGallery({
 			</Box>
 
 			{/* Navigation Controls */}
-			<ImageNavigator
+			{/* <ImageNavigator
 				totalImages={images.length}
 				currentIndex={currentImageIndex}
 				onSelectImage={setCurrentImageIndex}
-			/>
+			/> */}
 		</Box>
 	);
 }

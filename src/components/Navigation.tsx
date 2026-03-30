@@ -23,6 +23,8 @@ export default function Navigation() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isNavHovered, setIsNavHovered] = useState(false);
 	const [touchStartY, setTouchStartY] = useState(0);
+	const [swipeDistance, setSwipeDistance] = useState(0);
+	const [isSwipeActive, setIsSwipeActive] = useState(false);
 
 	const mounted = useMounted();
 	const { isScrolled: trigger } = useScrollPosition({ threshold: 30 });
@@ -51,24 +53,45 @@ export default function Navigation() {
 	};
 
 	const handleTouchStart = (e: React.TouchEvent) => {
-		if (isMobile) {
-			setTouchStartY(e.touches[0].clientY);
+		if (isMobile && window.scrollY > 50) {
+			const touchY = e.touches[0].clientY;
+			// Only activate swipe if touch starts near the top of the screen
+			if (touchY < 100) {
+				setTouchStartY(touchY);
+				setIsSwipeActive(true);
+			}
 		}
 	};
 
 	const handleTouchMove = (e: React.TouchEvent) => {
-		if (isMobile && touchStartY < 100) {
+		if (isMobile && isSwipeActive && touchStartY > 0) {
 			const touchY = e.touches[0].clientY;
 			const deltaY = touchY - touchStartY;
-			if (deltaY > 40) {
-				setIsNavHovered(true);
+			
+			// Only show navbar if swiping down and past threshold
+			if (deltaY > 0) {
+				setSwipeDistance(deltaY);
+				// Show navbar when user has swiped down at least 30px
+				if (deltaY > 30) {
+					setIsNavHovered(true);
+				}
 			}
 		}
 	};
 
 	const handleTouchEnd = () => {
-		if (isMobile && !isMobileMenuOpen) {
-			setTimeout(() => setIsNavHovered(false), 3000);
+		if (isMobile) {
+			// If swipe was significant, keep navbar visible for 3 seconds
+			if (swipeDistance > 50 && !isMobileMenuOpen) {
+				setTimeout(() => setIsNavHovered(false), 3000);
+			} else if (swipeDistance < 30) {
+				// If swipe was too small, hide navbar immediately
+				setIsNavHovered(false);
+			}
+			// Reset swipe state
+			setSwipeDistance(0);
+			setIsSwipeActive(false);
+			setTouchStartY(0);
 		}
 	};
 
@@ -92,6 +115,35 @@ export default function Navigation() {
 		<>
 			<BackToTopButton show={showBackToTop} onClick={scrollToTop} />
 
+			{/* Swipe indicator for mobile - shows when user is near top */}
+			{isMobile && trigger && !shouldShowNav && (
+				<MotionBox
+					initial={{ opacity: 0 }}
+					animate={{ opacity: isSwipeActive && swipeDistance > 10 ? 0.6 : 0 }}
+					transition={{ duration: 0.2 }}
+					position="fixed"
+					top={0}
+					left="50%"
+					transform="translateX(-50%)"
+					zIndex={1098}
+					pointerEvents="none"
+				>
+					<Box
+						mt={2}
+						px={4}
+						py={1}
+						bg="primary.500"
+						color="white"
+						borderRadius="full"
+						fontSize="xs"
+						fontWeight="medium"
+						boxShadow="md"
+					>
+						↓ Swipe down to show menu
+					</Box>
+				</MotionBox>
+			)}
+
 			{/* Hover trigger area - always present at top */}
 			<Box
 				position="fixed"
@@ -103,17 +155,24 @@ export default function Navigation() {
 				pointerEvents="auto"
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
+				onTouchStart={handleTouchStart}
+				onTouchMove={handleTouchMove}
+				onTouchEnd={handleTouchEnd}
 			/>
 
 			<MotionBox
 				initial={{ y: -100, opacity: 0 }}
 				animate={{ y: shouldShowNav ? 0 : -70, opacity: 1 }}
-				transition={{ duration: 0.3, ease: "easeOut" }}
+				transition={{ 
+					duration: 0.3, 
+					ease: "easeOut",
+					// Add slight bounce when showing
+					type: swipeDistance > 0 ? "spring" : "tween",
+					stiffness: 200,
+					damping: 20,
+				}}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
-				onTouchStart={handleTouchStart}
-				onTouchMove={handleTouchMove}
-				onTouchEnd={handleTouchEnd}
 				position="fixed"
 				top={0}
 				left={0}
