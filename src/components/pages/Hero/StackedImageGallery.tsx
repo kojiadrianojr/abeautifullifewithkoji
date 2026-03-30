@@ -18,11 +18,12 @@ export function StackedImageGallery({
 }: StackedImageGalleryProps) {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [isDragging, setIsDragging] = useState(false);
+	const [hasDragged, setHasDragged] = useState(false);
 
-	// Handle swipe gestures
+	// Handle swipe gestures with optimized thresholds for touch devices
 	const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-		const swipeThreshold = 50; // minimum distance for a swipe
-		const swipeVelocity = 500; // minimum velocity for a swipe
+		const swipeThreshold = 30; // Reduced for better touch sensitivity
+		const swipeVelocity = 300; // Reduced for easier swipes on touch devices
 
 		// Detect horizontal swipe based on offset and velocity
 		if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > swipeVelocity) {
@@ -33,8 +34,27 @@ export function StackedImageGallery({
 				// Swiped left - go to next image
 				setCurrentImageIndex((prev) => Math.min(images.length - 1, prev + 1));
 			}
+			setHasDragged(true);
+		} else {
+			setHasDragged(false);
 		}
+		
 		setIsDragging(false);
+	};
+
+	// Handle tap/click to select image
+	const handleImageSelect = (index: number) => {
+		// Only change image if user didn't drag (clicked/tapped)
+		if (!hasDragged) {
+			setCurrentImageIndex(index);
+		}
+		// Reset drag flag
+		setHasDragged(false);
+	};
+
+	const handleDragStart = () => {
+		setIsDragging(true);
+		setHasDragged(false);
 	};
 
 	const getCardTransform = (index: number) => {
@@ -122,13 +142,19 @@ export function StackedImageGallery({
 							w="90%"
 							h="90%"
 							cursor={isDragging ? "grabbing" : "grab"}
-							onClick={() => !isDragging && setCurrentImageIndex(index)}
+							onClick={() => handleImageSelect(index)}
 							// Drag configuration for swipe gestures
 							drag="x"
 							dragConstraints={{ left: 0, right: 0 }}
 							dragElastic={0.7}
-							onDragStart={() => setIsDragging(true)}
+							onDragStart={handleDragStart}
 							onDragEnd={handleDragEnd}
+							// Enable touch events
+							whileTap={
+								!isActive && !isDragging
+									? { scale: cardTransform.scale * 0.98 }
+									: {}
+							}
 							initial={{
 								x: "-50%",
 								y: "-50%",
@@ -145,6 +171,7 @@ export function StackedImageGallery({
 							}}
 							style={{
 								transformOrigin: "center center",
+
 							}}
 							transition={{
 								type: "spring",
@@ -239,6 +266,26 @@ export function StackedImageGallery({
 						</MotionBox>
 					);
 				})}
+			</Box>
+
+			{/* Swipe Hint Indicator for Touch Devices */}
+			<Box
+				position="absolute"
+				bottom={2}
+				left="50%"
+				transform="translateX(-50%)"
+				display={{ base: "flex", md: "none" }} // Show only on mobile/touch devices
+				alignItems="center"
+				gap={2}
+				fontSize="xs"
+				color="gray.500"
+				opacity={currentImageIndex === 0 ? 0.7 : 0.4}
+				transition="opacity 0.3s"
+				pointerEvents="none"
+			>
+				<Box as="span">←</Box>
+				<Box as="span">Swipe or tap to navigate</Box>
+				<Box as="span">→</Box>
 			</Box>
 
 			{/* Navigation Controls */}
