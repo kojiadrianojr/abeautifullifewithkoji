@@ -1,41 +1,55 @@
 {
   "title": "Frequently Asked Questions",
   "questions": [
-    {
-      "id": 1,
-      "question": "What should I wear?",
-      "answer": "Cocktail attire. We suggest dressy but comfortable shoes for the outdoor ceremony.",
-      "category": "dress-code"
-    },
-    {
-      "id": 2,
-      "question": "Are children welcome?",
-      "answer": "We love your little ones, but this will be an adults-only celebration.",
-      "category": "guests"
-    },
-    {
-      "id": 3,
-      "question": "Is there parking available?",
-      "answer": "Yes, there is ample free parking at the venue.",
-      "category": "venue"
-    },
-    {
-      "id": 4,
-      "question": "Will food be provided?",
-      "answer": "Yes, a full dinner will be served with vegetarian options available.",
-      "category": "food"
-    },
-    {
-      "id": 5,
-      "question": "Can I bring a plus one?",
-      "answer": "Due to venue capacity, we can only accommodate guests formally invited on your invitation.",
-      "category": "guests"
-    },
-    {
-      "id": 6,
-      "question": "What time should I arrive?",
-      "answer": "Please arrive 30 minutes before the ceremony starts to find your seat and get settled.",
-      "category": "schedule"
-    }
-  ]
+        {
+          "id": 1,
+          "question": "Where is the venue & how do I get there?",
+          "answer": "Our ceremony will take place at St. John the Evangelist Metropolitan Cathedral and reception will take place at Solaya.\n\nYou may follow these links for directions:\nCeremony: https://maps.app.goo.gl/UVkaUAx9VbH4vxvF7\nReception: https://maps.app.goo.gl/6tSLyeMAJXPsesRRA"
+        },
+        {
+          "id": 2,
+          "question": "What should I wear?",
+          "answer": "Our dress code is Garden Formal. Ladies may wear long gowns or dresses, while gentlemen may opt for suits or long-sleeved shirts. We kindly ask all guests to follow the provided color palette as it has been thoughtfully chosen to complement the overall theme of our celebration. We encourage bright colors and patterned attire—feel free to have fun with it! \n\nYou may also refer to our mood board for inspiration: [Insert Canva Link]. \n\nKindly note: with respect, we ask guests to reserve shades of red (men) and white (ladies) for the bride and groom."
+        },
+        {
+            "id": 3,
+          "question": "When should I RSVP?",
+          "answer": "Please RSVP on or before July 14, 2026. Kindly note that only confirmed RSVPs will be accommodated. If we do not receive a response, we will regretfully assume you won’t be able to attend, and no seat will be reserved. As much as we would love to host everyone, finalizing our seating arrangement requires confirmed attendance. Thank you for understanding."
+        },
+        {
+          "id": 4,
+          "question": "Can I bring a plus one?",
+          "answer": "Our invitation is strictly for the named guest(s) only. Unless an additional seat is clearly indicated on your invitation, we kindly ask that no extra guests be brought. If a plus one has been allotted to you, please share their name with us in advance so we may prepare their place card."
+        },
+        {
+          "id": 5,
+          "question": "Are kids allowed?",
+          "answer": "While we adore the joy children bring, this will be an adults-only celebration. Only children from the couple’s immediate families and entourage will be present. We appreciate your understanding."
+        },
+        {
+          "id": 6,
+          "question": "What about gifts?",
+          "answer": "Your presence is truly the greatest gift to us. However, if you wish to bless us further, a cash gift would be sincerely appreciated as we begin building our future home together."
+        },
+        {
+          "id": 7,
+          "question": "Is parking available?",
+          "answer": "Yes, there is ample parking space available at both the ceremony and reception venues."
+        },
+        {
+          "id": 8,
+          "question": "Can I choose my own seat?",
+          "answer": "We’ve thoughtfully arranged the seating plan with your comfort in mind. Rest assured, you’ll be seated with friends and guests you’ll enjoy being with. Our coordinators will be happy to assist you in finding your seat."
+        },
+        {
+          "id": 9,
+          "question": "Will there be food?",
+          "answer": "We truly appreciate our lovely guests for taking the time out of their busy schedules to celebrate with us. Food and drinks will be served during cocktail hour and dinner—rest assured, you won't be going home on an empty stomach."
+        },
+        {
+          "id": 10,
+          "question": "Will there be an after-party?",
+          "answer": "Yes! For those who’d like to keep the celebration going, we’d love for you to join us at our after-party. More details will be shared during the reception—see you on the dance floor!"
+        }
+      ]
 }
