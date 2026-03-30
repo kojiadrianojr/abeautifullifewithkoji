@@ -2,12 +2,24 @@
 
 import { useState } from "react";
 import { Box, Container, Divider, Grid } from "@chakra-ui/react";
-import { ConfigService } from "@/services";
+import { ConfigService, type WeddingConfig } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { GalleryLightbox } from "@/components/ui/GalleryLightbox";
 import { StoryText } from "./StoryText";
 import { PhotoAlbums } from "./PhotoAlbums";
 import { DecorativeFlowers } from "./DecorativeFlowers";
+
+interface TimelineItem {
+	year: string;
+	title: string;
+	description: string;
+}
+
+interface StoryConfig {
+	title: string;
+	content: string;
+	timeline: TimelineItem[];
+}
 
 interface StorySectionProps {
 	throwbackPhotos: string[];
@@ -19,7 +31,14 @@ export function StorySection({
 	prenupPhotos,
 }: StorySectionProps) {
 	const config = ConfigService.getConfig();
-	const { story } = config.content;
+	// Story section is optional in config - provide defaults if not present
+	const story: StoryConfig = 'story' in config.content 
+		? (config.content as WeddingConfig['content'] & { story: StoryConfig }).story
+		: {
+			title: "Our Story",
+			content: "Coming soon...",
+			timeline: []
+		};
 	const [lightboxOpen, setLightboxOpen] = useState(false);
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 	const [currentAlbum, setCurrentAlbum] = useState<string[]>([]);
