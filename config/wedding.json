@@ -127,6 +127,10 @@
         }
       ]
     },
+    "details": {
+      "enabled": true,
+      "title": "Venue Details"
+    },
     "registry": {
       "enabled": true,
       "title": "Registry",
