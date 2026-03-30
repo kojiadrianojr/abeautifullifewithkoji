@@ -51,10 +51,10 @@
     "story": {
       "enabled": true,
       "title": "Our Story",
-      "content": "We met in the spring of 2020, and it was love at first sight. After years of adventures together, we're ready to start our next chapter.",
+      "content": "We met in the winter of 2021, and it was love at first sight. After years of adventures together, we're ready to start our next chapter.",
       "timeline": [
         {
-          "year": "2020",
+          "year": "2021",
           "title": "We Met",
           "description": "A chance encounter at a coffee shop changed everything."
         },
@@ -79,22 +79,22 @@
       "title": "Schedule",
       "events": [
         {
-          "time": "3:30 PM",
+          "time": "1:00 PM",
           "title": "Guest Arrival",
           "description": "Please arrive early to find your seat"
         },
         {
-          "time": "4:00 PM",
+          "time": "1:30 PM",
           "title": "Ceremony",
           "description": "Join us as we exchange vows"
         },
         {
-          "time": "5:00 PM",
+          "time": "4:00 PM",
           "title": "Cocktail Hour",
           "description": "Enjoy drinks and hors d'oeuvres"
         },
         {
-          "time": "6:00 PM",
+          "time": "5:00 PM",
           "title": "Reception",
           "description": "Dinner, dancing, and celebration"
         },
@@ -108,15 +108,15 @@
     "registry": {
       "enabled": true,
       "title": "Registry",
-      "message": "Your presence is the greatest gift, but if you wish to honor us with a gift, we've registered at the following:",
+      "message": "Your presence is the greatest gift, but if you wish to honor us with a gift, we appreciate your generosity.",
       "registries": [
         {
-          "name": "Amazon",
-          "url": "https://www.amazon.com/wedding/registry/..."
+          "name": "Shopee",
+          "url": "https://shopee.ph"
         },
         {
-          "name": "Target",
-          "url": "https://www.target.com/gift-registry/..."
+          "name": "Lazada",
+          "url": "https://www.lazada.com.ph"
         }
       ]
     },
