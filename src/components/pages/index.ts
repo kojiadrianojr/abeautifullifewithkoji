@@ -3,7 +3,7 @@
  */
 
 export { HeroSection } from "./Hero";
-export { StorySection } from "./Story";
+export { MilestonesSection } from "./Milestones";
 export { GallerySection } from "./Gallery";
 export { ScheduleSection } from "./Schedule";
 export { RegistrySection } from "./Registry";
