@@ -17,6 +17,19 @@ import { TimelineCard } from "@/components/ui/TimelineCard";
 import { useState } from "react";
 import { GalleryLightbox } from "@/components/ui/GalleryLightbox";
 
+interface TimelineItem {
+	year: string;
+	title: string;
+	description: string;
+}
+
+interface StoryConfig {
+	title: string;
+	content: string;
+	timeline: TimelineItem[];
+	throwbackPhotos?: string[];
+}
+
 interface PhotoAlbumProps {
 	title: string;
 	photos: string[];
@@ -129,7 +142,15 @@ function PhotoAlbum({
 
 export default function Story() {
 	const config = getWeddingConfig();
-	const { story } = config.content;
+	// Story section is optional in config - provide defaults if not present
+	const story: StoryConfig = 'story' in config.content 
+		? (config.content as typeof config.content & { story: StoryConfig }).story
+		: {
+			title: "Our Story",
+			content: "Coming soon...",
+			timeline: [],
+			throwbackPhotos: []
+		};
 	const [lightboxOpen, setLightboxOpen] = useState(false);
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 	const [currentAlbum, setCurrentAlbum] = useState<string[]>([]);
@@ -140,8 +161,7 @@ export default function Story() {
 		setLightboxOpen(true);
 	};
 
-	type StoryWithPhotos = typeof story & { throwbackPhotos?: string[] };
-	const throwbackPhotos = (story as StoryWithPhotos).throwbackPhotos || [];
+	const throwbackPhotos = story.throwbackPhotos || [];
 
 	return (
 		<Box
