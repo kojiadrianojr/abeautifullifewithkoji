@@ -9,12 +9,10 @@ export function linkifyText(text: string): React.ReactNode[] {
   if (!text) return [text];
 
   const elements: React.ReactNode[] = [];
-  let lastIndex = 0;
   let key = 0;
 
   // First, handle markdown-style links [text](url)
   const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
 
   // Store markdown link positions to avoid double-processing
   const markdownLinks: Array<{ start: number; end: number; text: string; url: string }> = [];

@@ -39,7 +39,7 @@ export function VenueCard({
 				isClosable: true,
 				position: "top",
 			});
-		} catch (error) {
+		} catch {
 			toast({
 				title: "Failed to copy",
 				description: "Please copy the address manually.",

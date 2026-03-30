@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Container, Divider, Grid, VStack } from "@chakra-ui/react";
+import { Box, Container, Divider, VStack } from "@chakra-ui/react";
 import { ConfigService } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { GalleryLightbox } from "@/components/ui/GalleryLightbox";

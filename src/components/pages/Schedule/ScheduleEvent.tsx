@@ -45,7 +45,6 @@ export function ScheduleEvent({
 	time,
 	title,
 	description,
-	isFirst = false,
 	isLast = false,
 	index,
 }: ScheduleEventProps) {

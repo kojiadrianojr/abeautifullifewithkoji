@@ -4,7 +4,7 @@ export interface FAQQuestion {
 	id: number;
 	question: string;
 	answer: string;
-	category: string;
+	category?: string;
 }
 
 export interface FAQData {
@@ -24,16 +24,18 @@ export class FAQService {
 	 * Get FAQs by category
 	 */
 	static getFAQsByCategory(category: string): FAQQuestion[] {
-		return faqData.questions.filter(
+		return (faqData.questions as FAQQuestion[]).filter(
 			(q) => q.category === category,
-		) as FAQQuestion[];
+		);
 	}
 
 	/**
 	 * Get all unique categories
 	 */
 	static getCategories(): string[] {
-		const categories = faqData.questions.map((q) => q.category);
+		const categories = (faqData.questions as FAQQuestion[])
+			.map((q) => q.category)
+			.filter((c): c is string => c !== undefined);
 		return Array.from(new Set(categories));
 	}
 
