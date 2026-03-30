@@ -53,11 +53,107 @@ for `url.parse()` vulnerabilities.
 
 ## Current Warnings
 
-No known warnings at this time.
+### 1. Font Loading Warning (Minor)
+
+**Status**: KNOWN LIMITATION - Not blocking build
+
+**Warning Message**:
+```
+Custom fonts not added in `pages/_document.js` will only load for a single page. 
+This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font
+```
+
+**Context**: 
+- Changed from `next/font/google` to `<link>` tag approach for Google Fonts
+- This was necessary because `next/font/google` requires internet access at build time
+- For CI/CD environments without internet access, using `<link>` tags is the practical solution
+
+**Impact**: 
+- Fonts load correctly at runtime via Google Fonts CDN
+- Slight potential for FOUT (Flash of Unstyled Text) on slow connections
+- Not a functional issue - website works perfectly
+
+**Alternative**: To eliminate this warning, you could:
+1. Self-host fonts by downloading them and placing in `/public/fonts`
+2. Use a build environment with internet access
+3. Ignore the warning (recommended for most use cases)
+
+### 2. Unused Variables (Minor)
+
+**Status**: ACCEPTABLE - Code cleanup can be done later
+
+These are non-critical linting warnings about unused imports:
+- `ImageNavigator` in StackedImageGallery.tsx
+- `Grid` in Milestones/index.tsx
+- `Button` in Story/PhotoAlbum.tsx
+- `prenupPhotos` in Story/index.tsx
+- `_thumbnailLink` in googleDriveProvider.ts
+
+**Impact**: None - These don't affect functionality or build
 
 ---
 
 ## Fixed Issues
+
+### ✅ Build Failure Due to Google Fonts (Fixed: March 30, 2026)
+
+**Issue**: Build fails when `next/font/google` cannot access fonts.googleapis.com
+
+**Error Messages**:
+```
+getaddrinfo ENOTFOUND fonts.googleapis.com
+Failed to fetch `Great Vibes` from Google Fonts.
+Failed to fetch `Inter` from Google Fonts.
+```
+
+**Cause**: 
+- `next/font/google` downloads and optimizes fonts at build time
+- Requires internet access to fonts.googleapis.com during build
+- CI/CD environments may not have internet access or may block external domains
+
+**Resolution**:
+- Changed font loading from `next/font/google` to `<link>` tags in layout.tsx
+- Fonts now load from Google Fonts CDN at runtime instead of build time
+- Updated CSS variables to reference the correct font families
+- Build now works in offline/restricted environments
+
+**Files Changed**:
+- `src/app/layout.tsx` - Switched to `<link>` tag approach
+- `src/app/globals.css` - Updated font family names
+
+**Trade-offs**:
+- ✅ Build works in restricted environments
+- ✅ Fonts still load perfectly at runtime
+- ⚠️ Next.js warning about custom fonts (see Current Warnings)
+- ⚠️ Slight loss of automatic font optimization
+
+### ✅ Missing Story Config (Fixed: March 30, 2026)
+
+**Issue**: TypeScript build errors for Story components accessing undefined config section
+
+**Error Message**:
+```
+Property 'story' does not exist on type '{ splashScreen: {...}; hero: {...}; ... }'
+```
+
+**Cause**: 
+- Story components expected a `story` section in wedding.json config
+- This section was not defined in the configuration
+- Story components are not currently used in the main application
+
+**Resolution**:
+- Updated Story components to gracefully handle missing config
+- Provided sensible defaults when story section is absent
+- Used type-safe approach without `any` types
+
+**Files Changed**:
+- `src/components/pages/Story/index.tsx`
+- `src/components/sections/Story.tsx`
+
+**Impact**: 
+- Build now succeeds
+- Story components can be used in future if needed
+- No functional changes to current application (Story section not enabled)
 
 ### ✅ Google Drive Images Not Displaying in Browser (Fixed: March 7, 2026)
 
@@ -179,4 +275,4 @@ This document is updated whenever:
 - Workarounds are found
 - Issues are resolved
 
-**Last Updated**: March 7, 2026
+**Last Updated**: March 30, 2026
