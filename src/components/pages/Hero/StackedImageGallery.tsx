@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { motion, PanInfo } from "framer-motion";
 import Image from "next/image";
-import { ImageNavigator } from "@/components/ui/ImageNavigator";
 
 const MotionBox = motion.create(Box);
 

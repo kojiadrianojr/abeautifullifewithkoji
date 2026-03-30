@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Box, SimpleGrid, Text, VStack, HStack, Icon } from "@chakra-ui/react";
+import { Box, SimpleGrid, Text, VStack, Icon } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { QuestionIcon, InfoIcon } from "@chakra-ui/icons";
 

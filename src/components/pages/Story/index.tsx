@@ -28,7 +28,6 @@ interface StorySectionProps {
 
 export function StorySection({
 	throwbackPhotos,
-	prenupPhotos,
 }: StorySectionProps) {
 	const config = ConfigService.getConfig();
 	// Story section is optional in config - provide defaults if not present
