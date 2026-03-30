@@ -2,6 +2,7 @@
 
 import { Box, Heading, Text, Card } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { linkifyText } from "@/lib/linkify";
 
 const MotionCard = motion.create(Card);
 
@@ -43,8 +44,8 @@ export function FAQCard({ question, answer, index }: FAQCardProps) {
         >
           {question}
         </Heading>
-        <Text color="gray.600" fontSize="md" lineHeight="tall">
-          {answer}
+        <Text color="gray.600" fontSize="md" lineHeight="tall" whiteSpace="pre-line">
+          {linkifyText(answer)}
         </Text>
       </Box>
     </MotionCard>

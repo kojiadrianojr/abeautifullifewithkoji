@@ -53,8 +53,8 @@ export default function HomeContent({
 				{content.gallery.enabled && <GallerySection images={prenupPhotos} />}
 					{content.schedule.enabled && <ScheduleSection />}
 					{content.registry.enabled && <RegistrySection />}
-					{content.rsvp.enabled && <RSVPSection />}
 					{content.faq.enabled && <FAQSection />}
+					{content.rsvp.enabled && <RSVPSection />}
 					<Footer />
 				</Box>
 			)}
