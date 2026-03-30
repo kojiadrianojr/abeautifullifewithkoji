@@ -48,10 +48,9 @@
       "enabled": true,
       "tagline": "Join Us In Celebrating Our Love"
     },
-    "story": {
+    "milestones": {
       "enabled": true,
-      "title": "Our Story",
-      "content": "We met in the winter of 2021, and it was love at first sight. After years of adventures together, we're ready to start our next chapter.",
+      "title": "Milestones + Q&A + Moments We Love",
       "timeline": [
         {
           "year": "2021",
@@ -67,6 +66,24 @@
           "year": "2026",
           "title": "The Wedding",
           "description": "Join us as we celebrate our love and commitment."
+        }
+      ],
+      "qa": [
+        {
+          "question": "How did you two meet?",
+          "answer": "We met at a coffee shop in the winter of 2021. It was love at first sight!"
+        },
+        {
+          "question": "What's your favorite memory together?",
+          "answer": "Our trip to Hawaii where we got engaged under the stars on the beach."
+        },
+        {
+          "question": "What do you love most about each other?",
+          "answer": "We love each other's sense of humor, kindness, and unwavering support through all of life's adventures."
+        },
+        {
+          "question": "Where do you see yourselves in 5 years?",
+          "answer": "Building our dream home, starting a family, and continuing to explore the world together."
         }
       ]
     },

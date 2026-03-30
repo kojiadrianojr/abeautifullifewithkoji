@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import {
 	HeroSection,
-	StorySection,
+	MilestonesSection,
 	GallerySection,
 	ScheduleSection,
 	RegistrySection,
@@ -45,10 +45,9 @@ export default function HomeContent({
 				<Box as="main" minH="100vh">
 					<Navigation />
 					{content.hero.enabled && <HeroSection heroImages={heroImages} />}
-				{content.story.enabled && (
-					<StorySection
+				{content.milestones.enabled && (
+					<MilestonesSection
 						throwbackPhotos={throwbackPhotos}
-						prenupPhotos={prenupPhotos}
 					/>
 				)}
 				{content.gallery.enabled && <GallerySection images={prenupPhotos} />}
