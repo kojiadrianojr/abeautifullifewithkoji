@@ -26,8 +26,9 @@ export function HeroTitle({ tagline, coupleNames, mounted }: HeroTitleProps) {
 
 			<ScaleIn delay={0} duration={1.2} mounted={mounted}>
 				<Heading
+					textAlign={'center'}
 					as="h1"
-					fontSize={{ base: "5xl", sm: "6xl", md: "7xl", lg: "8xl" }}
+					fontSize={{ base: "3xl", sm: "4xl", md: "5xl", lg: "7xl" }}
 					fontWeight="bold"
 					letterSpacing="tight"
 					color="gray.800"

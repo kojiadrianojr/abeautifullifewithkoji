@@ -2,12 +2,12 @@
   "wedding": {
     "couple": {
       "partner1": {
-        "firstName": "Koji",
+        "firstName": "Rolando Koji",
         "lastName": "Adriano"
       },
       "partner2": {
-        "firstName": "Bea",
-        "lastName": "Almine"
+        "firstName": "Mary Beatrix",
+        "lastName": "Almiñe"
       }
     },
     "date": "2026-08-14",
@@ -21,7 +21,7 @@
       },
       "reception": {
         "name": "Solaya",
-        "address": "Naga City, Camarines Sur, Philippines",
+        "address": "Pacol, Naga City, Camarines Sur, Philippines",
         "googleMapsUrl": "https://maps.app.goo.gl/?q=8pMUZ4RLAgFq7YsN8"
       }
     }
@@ -50,40 +50,45 @@
     },
     "milestones": {
       "enabled": true,
-      "title": "Milestones + Q&A + Moments We Love",
+      "title": "Milestones + Fun Facts + Moments We Love",
       "timeline": [
         {
           "year": "2021",
-          "title": "We Met",
-          "description": "A chance encounter at a coffee shop changed everything."
+          "title": "A Chance Encounter",
+          "description": "Out of billions of people in the world, our paths crossed in the most unexpected way—as co-workers. What began as casual conversations turned into shared laughter, late nights, and friendly video games with friends. Neither of us knew then that something meaningful was quietly beginning."
         },
         {
-          "year": "2023",
-          "title": "The Proposal",
-          "description": "Under the stars on a beach in Hawaii, the question was asked."
+          "year": "2022",
+          "title": "From Friends to More",
+          "description": "What started as friendship slowly blossomed into something deeper. Ours was a gentle, slow-burn kind of love—built on comfort, trust, and countless moments spent together. From simple dates to heartfelt conversations, we found ourselves no longer just friends, but partners."
+        },
+        {
+          "year": "2023-2026",
+          "title": "Growing Together, Apart",
+          "description": "Life led us on different paths, yet never away from each other. Through distance and time, we made it work—finding ways to meet, to connect, to stay close. As we pursued our careers and grew as individuals, our love remained steady, growing stronger with every challenge and every reunion."
         },
         {
           "year": "2026",
-          "title": "The Wedding",
-          "description": "Join us as we celebrate our love and commitment."
+          "title": "The Beginning of Always",
+          "description": "On a quiet night, in a church that once held our wedding plans, a different kind of promise was made. Though life had other plans for where we would marry, it remained a place close to our hearts. And so, it became the perfect place to begin always—with a proposal that marked the start of our next chapter."
         }
       ],
       "qa": [
         {
-          "question": "How did you two meet?",
-          "answer": "We met at a coffee shop in the winter of 2021. It was love at first sight!"
+          "question": "How did you meet?",
+          "answer": "We met in the most unromantic yet meaningful way—at work."
         },
         {
           "question": "What's your favorite memory together?",
-          "answer": "Our trip to Hawaii where we got engaged under the stars on the beach."
+          "answer": "Some of our most cherished moments are the spontaneous ones—especially our travels and impulsive road trips to anywhere we feel like going, often ending up at the beach."
         },
         {
-          "question": "What do you love most about each other?",
-          "answer": "We love each other's sense of humor, kindness, and unwavering support through all of life's adventures."
+          "question": "What do you love to do together?",
+          "answer": "We enjoy simply being in each other’s company. Whether pursuing our own hobbies in the same room or going out to explore new cafes, restaurants, and places, we find joy in both the little everyday moments and shared adventures. We also love traveling and watching movies together."
         },
         {
-          "question": "Where do you see yourselves in 5 years?",
-          "answer": "Building our dream home, starting a family, and continuing to explore the world together."
+          "question": "What made you realize you were meant for each other?",
+          "answer": "We realized that love isn’t always loud or grand—it can also be found in quiet moments. Our love is peaceful, comfortable, and steady, the kind that doesn’t need to be shouted to be felt, yet is deeply certain in its own way."
         }
       ]
     },
@@ -98,37 +103,37 @@
         {
           "time": "1:00 PM",
           "title": "Guest Arrival",
-          "description": "Please arrive early to find your seat"
+          "description": "Please arrive on time to find a comfortable seat"
         },
         {
           "time": "1:30 PM",
           "title": "Ceremony",
-          "description": "Join us as we exchange vows"
+          "description": "Join us and witness our love as we exchange vows"
         },
         {
           "time": "4:00 PM",
           "title": "Cocktail Hour",
-          "description": "Enjoy drinks and hors d'oeuvres"
+          "description": "Enjoy the drinks and the booths we have prepared"
         },
         {
           "time": "5:00 PM",
           "title": "Reception",
-          "description": "Dinner, dancing, and celebration"
+          "description": "Dinner, dancing, and celebration, join us for all the fun"
         },
         {
-          "time": "10:00 PM",
+          "time": "9:00 PM",
           "title": "Last Dance",
-          "description": "Send us off with love"
+          "description": "Send us off with love, and join us for the after party!"
         }
       ]
     },
     "registry": {
       "enabled": true,
       "title": "Registry",
-      "message": "Your presence is the greatest gift, but if you wish to honor us with a gift, we appreciate your generosity.",
+      "message": "Your presence is the greatest gift, but if you wish to bless us further, a cash gift would be sincerely appreciated as we begin building our future home together.",
       "registries": [
         {
-          "name": "Shopee",
+          "name": "BDO QR Code",
           "url": "https://shopee.ph"
         },
         {
@@ -149,20 +154,44 @@
       "title": "FAQ",
       "questions": [
         {
+          "question": "Where is the venue & how do I get there?",
+          "answer": "Our ceremony will take place at St. John the Evangelist Metropolitan Cathedral and reception will take place at Solaya. You may follow this link for directions: Ceremony: [Insert Map Link] Reception: [Insert Map Link]"
+        },
+        {
           "question": "What should I wear?",
-          "answer": "Cocktail attire. We suggest dressy but comfortable shoes for the outdoor ceremony."
+          "answer": "Our dress code is Garden Formal. Ladies may wear long gowns or dresses, while gentlemen may opt for suits or long-sleeved shirts. We kindly ask all guests to follow the provided color palette as it has been thoughtfully chosen to complement the overall theme of our celebration. We encourage bright colors and patterned attire—feel free to have fun with it! You may also refer to our mood board for inspiration: [Insert Canva Link]. Kindly note: with respect, we ask guests to reserve shades of red (men) and white (ladies) for the bride and groom."
         },
         {
-          "question": "Are children welcome?",
-          "answer": "We love your little ones, but this will be an adults-only celebration."
+          "question": "When should I RSVP?",
+          "answer": "Please RSVP on or before July 14, 2026. Kindly note that only confirmed RSVPs will be accommodated. If we do not receive a response, we will regretfully assume you won’t be able to attend, and no seat will be reserved. As much as we would love to host everyone, finalizing our seating arrangement requires confirmed attendance. Thank you for understanding."
         },
         {
-          "question": "Is there parking available?",
-          "answer": "Yes, there is ample free parking at the venue."
+          "question": "Can I bring a plus one?",
+          "answer": "Our invitation is strictly for the named guest(s) only. Unless an additional seat is clearly indicated on your invitation, we kindly ask that no extra guests be brought. If a plus one has been allotted to you, please share their name with us in advance so we may prepare their place card."
         },
         {
-          "question": "Will food be provided?",
-          "answer": "Yes, a full dinner will be served with vegetarian options available."
+          "question": "Are kids allowed?",
+          "answer": "While we adore the joy children bring, this will be an adults-only celebration. Only children from the couple’s immediate families and entourage will be present. We appreciate your understanding."
+        },
+        {
+          "question": "What about gifts?",
+          "answer": "Your presence is truly the greatest gift to us. However, if you wish to bless us further, a cash gift would be sincerely appreciated as we begin building our future home together."
+        },
+        {
+          "question": "Is parking available?",
+          "answer": "Yes, there is ample parking space available at both the ceremony and reception venues."
+        },
+        {
+          "question": "Can I choose my own seat?",
+          "answer": "We’ve thoughtfully arranged the seating plan with your comfort in mind. Rest assured, you’ll be seated with friends and guests you’ll enjoy being with. Our coordinators will be happy to assist you in finding your seat."
+        },
+        {
+          "question": "Will there be food?",
+          "answer": "We truly appreciate our lovely guests for taking the time out of their busy schedules to celebrate with us. Food and drinks will be served during cocktail hour and dinner—rest assured, you won't be going home on an empty stomach."
+        },
+        {
+          "question": "Will there be an after-party?",
+          "answer": "Yes! For those who’d like to keep the celebration going, we’d love for you to join us at our after-party. More details will be shared during the reception—see you on the dance floor!"
         }
       ]
     }
