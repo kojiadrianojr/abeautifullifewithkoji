@@ -10,7 +10,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { NavItem } from '@/lib/navigation';
+import { NavItem } from '@/services';
 import { AnimatedIconButton } from '@/components/ui/AnimatedIconButton';
 
 interface MobileNavProps {

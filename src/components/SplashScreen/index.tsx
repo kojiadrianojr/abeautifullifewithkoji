@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Container, Text, VStack } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getWeddingConfig } from '@/lib/config';
+import { ConfigService } from "@/services";
 
 const MotionBox = motion.create(Box);
 const MotionVStack = motion.create(VStack);
@@ -14,7 +14,7 @@ interface SplashScreenProps {
 }
 
 export default function SplashScreen({ onEnter }: SplashScreenProps) {
-  const config = getWeddingConfig();
+  const config = ConfigService.getConfig();
   const { wedding, theme } = config;
   const [isReady, setIsReady] = useState(false);
 

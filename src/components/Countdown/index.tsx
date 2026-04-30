@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Countdown from "react-countdown";
 import { Box, Text, Flex, VStack, Icon, Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton } from "@chakra-ui/react";
-import { getWeddingConfig } from "@/lib/config";
+import { ConfigService } from "@/services";
 import { FiMaximize2 } from "react-icons/fi";
 
 function CountdownComponent() {
@@ -41,7 +41,7 @@ function CountdownComponent() {
 		<>
 			<Box>
 				<Countdown
-					date={new Date(getWeddingConfig().wedding.datetime).getTime()}
+					date={new Date(ConfigService.getConfig().wedding.datetime).getTime()}
 					renderer={(props) => renderer(props, openFullScreen, false)}
 				/>
 				<Flex justifyContent="center" mt={3}>
@@ -100,7 +100,7 @@ function CountdownComponent() {
 					>
 						<Box textAlign="center" w="full">
 							<Countdown
-								date={new Date(getWeddingConfig().wedding.datetime).getTime()}
+								date={new Date(ConfigService.getConfig().wedding.datetime).getTime()}
 								renderer={(props) => renderer(props, closeFullScreen, true)}
 							/>
 						</Box>

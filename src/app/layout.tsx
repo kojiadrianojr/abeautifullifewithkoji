@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { getCoupleNames, getWeddingConfig } from "@/lib/config";
+import { ConfigService } from "@/services";
 import ThemeProvider from "@/components/ThemeProvider";
 
-const config = getWeddingConfig();
+const config = ConfigService.getConfig();
 
 export const metadata: Metadata = {
-	title: `${getCoupleNames()} - Wedding`,
-	description: `Join us for the wedding celebration of ${getCoupleNames()}`,
+	title: `${ConfigService.getCoupleNames()} - Wedding`,
+	description: `Join us for the wedding celebration of ${ConfigService.getCoupleNames()}`,
 	icons: {
 		icon: "/images/favicon.ico",
 	},

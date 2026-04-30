@@ -2,10 +2,10 @@
 
 import { Box, Container, Heading, Text, Link, Divider, VStack, Flex } from '@chakra-ui/react';
 import { FiHeart } from 'react-icons/fi';
-import { getCoupleNames, getWeddingConfig } from '@/lib/config';
+import { ConfigService } from "@/services";
 
 export default function Footer() {
-  const config = getWeddingConfig();
+  const config = ConfigService.getConfig();
   const { contact, social } = config;
   const currentYear = new Date().getFullYear();
 
@@ -19,13 +19,13 @@ export default function Footer() {
             fontFamily="heading"
             fontWeight="bold"
           >
-            {getCoupleNames()}
+            {ConfigService.getCoupleNames()}
           </Heading>
 
           {social.hashtag && (
-            <Heading as="h3" size="lg" color="secondary.500">
+            <Text as="h3" fontSize="lg" color="secondary.500">
               {social.hashtag}
-            </Heading>
+            </Text>
           )}
 
           <VStack spacing={2}>
@@ -55,7 +55,7 @@ export default function Footer() {
 
           <VStack spacing={2}>
             <Text fontSize="sm" color="gray.400">
-              © {currentYear} {getCoupleNames()}. All rights reserved.
+              © {currentYear} {ConfigService.getCoupleNames()}. All rights reserved.
             </Text>
             <Flex align="center" gap={2} color="gray.500" fontSize="xs">
               <Text>Made with</Text>

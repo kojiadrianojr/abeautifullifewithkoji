@@ -1,7 +1,7 @@
 'use client';
 
 import { Flex, Button } from '@chakra-ui/react';
-import { NavItem } from '@/lib/navigation';
+import { NavItem } from '@/services';
 
 interface DesktopNavProps {
   items: NavItem[];

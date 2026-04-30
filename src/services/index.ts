@@ -16,6 +16,7 @@ export { FAQService } from "./faqService";
 // Import them directly from imageService when needed in server components
 export type { WeddingConfig } from "./configService";
 export type { NavItem } from "./navigationService";
+export { NAV_ITEMS } from "./navigationService";
 export type { Guest, GuestsData } from "./guestService";
 export type { FAQQuestion, FAQData } from "./faqService";
 

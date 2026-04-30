@@ -9,7 +9,7 @@ import {
 	useBreakpointValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { NAV_ITEMS, smoothScrollTo, scrollToTop } from "@/lib/navigation";
+import { NAV_ITEMS, smoothScrollTo, scrollToTop } from "@/services/navigationService";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useMounted } from "@/hooks/useMounted";

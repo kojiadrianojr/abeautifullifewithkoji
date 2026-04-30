@@ -7,6 +7,16 @@ export interface NavItem {
 	href: string;
 }
 
+export const NAV_ITEMS: NavItem[] = [
+	{ label: "Milestones", href: "#milestones" },
+	{ label: "Gallery", href: "#gallery" },
+	{ label: "Schedule", href: "#schedule" },
+	{ label: "Details", href: "#details" },
+	{ label: "Dress Code", href: "#dress-code" },
+	{ label: "RSVP", href: "#rsvp" },
+	{ label: "FAQ", href: "#faq" },
+];
+
 export class NavigationService {
 	/**
 	 * Smooth scroll to a specific section
@@ -109,4 +119,12 @@ export class NavigationService {
 			if (timeoutId) clearTimeout(timeoutId);
 		};
 	}
+}
+
+export function smoothScrollTo(targetId: string): void {
+	NavigationService.smoothScrollTo(targetId);
+}
+
+export function scrollToTop(): void {
+	NavigationService.scrollToTop();
 }
