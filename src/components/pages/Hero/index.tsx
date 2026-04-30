@@ -8,7 +8,7 @@ import { HeroContent } from "./HeroContent";
 import { CountdownBox } from "./CountdownBox";
 import { HeroBackground } from "./HeroBackground";
 import { StackedImageGallery } from "./StackedImageGallery";
-import { ScrollIndicator } from "@/components/sections/Hero/ScrollIndicator";
+import { ScrollIndicator } from "./ScrollIndicator";
 
 interface HeroSectionProps {
 	heroImages: string[];
