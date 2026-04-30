@@ -35,7 +35,7 @@ export function FAQCard({ question, answer, index }: FAQCardProps) {
       }}
     >
       <Box>
-        <Heading
+        <Text
           as="h3"
           size="md"
           fontWeight="semibold"
@@ -43,7 +43,7 @@ export function FAQCard({ question, answer, index }: FAQCardProps) {
           mb={4}
         >
           {question}
-        </Heading>
+        </Text>
         <Text color="gray.600" fontSize="md" lineHeight="tall" whiteSpace="pre-line">
           {linkifyText(answer)}
         </Text>

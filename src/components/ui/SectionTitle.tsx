@@ -11,7 +11,8 @@ export function SectionTitle({ children, ...props }: SectionTitleProps) {
     <Heading
       as="h2"
       fontSize={{ base: '3xl', md: '5xl' }}
-      fontWeight="bold"
+      fontFamily="heading"
+      fontWeight="normal"
       textAlign="center"
       mb={8}
       {...props}

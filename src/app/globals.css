@@ -1,6 +1,7 @@
 /* Global Styles for Wedding Website - Watercolor Theme */
 
 :root {
+  --font-heading: 'Great Vibes', cursive;
   --font-serif: 'Great Vibes', cursive;
   --font-sans: 'Inter', sans-serif;
   --watercolor-lavender: #C3B1E1;
