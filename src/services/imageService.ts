@@ -62,6 +62,10 @@ function getImageSourceConfig(): ImageSourceConfig {
 					process.env.GOOGLE_DRIVE_PRENUP_FOLDER_ID ||
 					process.env.GOOGLE_DRIVE_FOLDER_ID ||
 					"",
+				"dress-code":
+					process.env.GOOGLE_DRIVE_DRESS_CODE_FOLDER_ID ||
+					process.env.GOOGLE_DRIVE_FOLDER_ID ||
+					"",
 			},
 		};
 	}
@@ -321,6 +325,28 @@ export async function getThrowbackPhotosMetadata(): Promise<ImageMetadata[]> {
 export async function getPrenupPhotosMetadata(): Promise<ImageMetadata[]> {
 	const provider = getProviderForCollection("prenup");
 	return await provider.getImagesFromDirectory("prenup");
+}
+
+/**
+ * Get dress code photos
+ */
+export async function getDressCodePhotos(): Promise<string[]> {
+	const provider = getProviderForCollection("dress-code");
+	const images = await provider.getImagesFromDirectory("dress-code");
+	return metadataToUrls(images);
+}
+
+/**
+ * Get dress code photos with full metadata (name field required for category grouping)
+ */
+export async function getDressCodePhotosMetadata(): Promise<ImageMetadata[]> {
+	try {
+		const provider = getProviderForCollection("dress-code");
+		return await provider.getImagesFromDirectory("dress-code");
+	} catch (error) {
+		console.error("Error reading dress-code images:", error);
+		return [];
+	}
 }
 
 /**

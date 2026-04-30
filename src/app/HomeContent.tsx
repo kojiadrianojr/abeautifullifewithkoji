@@ -8,7 +8,7 @@ import {
 	GallerySection,
 	ScheduleSection,
 	DetailsSection,
-	RegistrySection,
+	DressCodeSection,
 	RSVPSection,
 	FAQSection,
 } from "@/components/pages";
@@ -17,16 +17,20 @@ import Navigation from "@/components/Navigation";
 import SplashScreen from "@/components/SplashScreen";
 import { ConfigService } from "@/services";
 
+import type { ImageMetadata } from "@/types/imageProvider";
+
 interface HomeContentProps {
 	heroImages: string[];
 	throwbackPhotos: string[];
 	prenupPhotos: string[];
+	dressCodePhotos: ImageMetadata[];
 }
 
 export default function HomeContent({
 	heroImages,
 	throwbackPhotos,
 	prenupPhotos,
+	dressCodePhotos,
 }: HomeContentProps) {
 	const config = ConfigService.getConfig();
 	const { content } = config;
@@ -46,15 +50,15 @@ export default function HomeContent({
 				<Box as="main" minH="100vh">
 					<Navigation />
 					{content.hero.enabled && <HeroSection heroImages={heroImages} />}
-				{content.milestones.enabled && (
-					<MilestonesSection
-						throwbackPhotos={throwbackPhotos}
-					/>
-				)}
-				{content.gallery.enabled && <GallerySection images={prenupPhotos} />}
+					{content.milestones.enabled && (
+						<MilestonesSection throwbackPhotos={throwbackPhotos} />
+					)}
+					{content.gallery.enabled && <GallerySection images={prenupPhotos} />}
 					{content.schedule.enabled && <ScheduleSection />}
 					{content.details?.enabled && <DetailsSection />}
-					{content.registry.enabled && <RegistrySection />}
+					{content.dressCode?.enabled && (
+						<DressCodeSection images={dressCodePhotos} />
+					)}
 					{content.faq.enabled && <FAQSection />}
 					{content.rsvp.enabled && <RSVPSection />}
 					<Footer />

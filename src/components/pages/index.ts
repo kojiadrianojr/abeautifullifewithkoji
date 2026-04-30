@@ -7,6 +7,6 @@ export { MilestonesSection } from "./Milestones";
 export { GallerySection } from "./Gallery";
 export { ScheduleSection } from "./Schedule";
 export { DetailsSection } from "./Details";
-export { RegistrySection } from "./Registry";
+export { DressCodeSection } from "./DressCode";
 export { RSVPSection } from "./RSVP";
 export { FAQSection } from "./FAQ";
