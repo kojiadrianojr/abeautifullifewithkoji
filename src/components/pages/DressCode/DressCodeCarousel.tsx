@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Flex, Icon, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { LuZoomIn } from "react-icons/lu";
 import { GalleryLightbox } from "@/components/ui/GalleryLightbox";
 import type { ImageMetadata } from "@/types/imageProvider";
 
@@ -120,98 +119,10 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
                   whileHover={{ scale: 1.03 }}
                   transition={{ duration: 0.4, ease: "easeOut" } as never}
                   onClick={() =>
-                    openLightbox([active.main, active.detailed], 0)
+                    openLightbox([active.main], 0)
                   }
                 />
               </Box>
-            )}
-
-            {/* Detailed image — always-visible inset overlay with clear indicator */}
-            {active.detailed && (
-              <MotionBox
-                position="absolute"
-                top={4}
-                right={4}
-                borderRadius="xl"
-                overflow="visible"
-                cursor="pointer"
-                animate={{
-                  width: detailedHovered ? "44%" : "30%",
-                }}
-                transition={{ duration: 0.3, ease: "easeOut" } as never}
-                style={{ maxWidth: "320px" }}
-                onHoverStart={() => setDetailedHovered(true)}
-                onHoverEnd={() => setDetailedHovered(false)}
-                onClick={() =>
-                  openLightbox([active.main, active.detailed], 1)
-                }
-              >
-                {/* Pulsing ring to draw attention */}
-                {!detailedHovered && (
-                  <MotionBox
-                    position="absolute"
-                    inset="-4px"
-                    borderRadius="xl"
-                    border="2px solid"
-                    borderColor="primary.300"
-                    animate={{ opacity: [0.3, 0.9, 0.3], scale: [1, 1.03, 1] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    } as never}
-                    pointerEvents="none"
-                    zIndex={2}
-                  />
-                )}
-
-                {/* Image container */}
-                <Box
-                  borderRadius="xl"
-                  overflow="hidden"
-                  boxShadow="xl"
-                  border="2px solid"
-                  borderColor={detailedHovered ? "primary.400" : "primary.200"}
-                  transition="border-color 0.2s"
-                >
-                  <MotionImage
-                    src={active.detailed.url}
-                    alt={`${active.label} detailed`}
-                    w="full"
-                    h="auto"
-                    objectFit="contain"
-                    display="block"
-                    animate={{ scale: detailedHovered ? 1.04 : 1 }}
-                    transition={{ duration: 0.3 } as never}
-                  />
-                </Box>
-
-                {/* "Detail" badge pinned to top-left corner of overlay */}
-                <Box
-                  position="absolute"
-                  bottom="-10px"
-                  left="50%"
-                  transform="translateX(-50%)"
-                  bg="primary.400"
-                  px={3}
-                  py={0.5}
-                  borderRadius="full"
-                  boxShadow="md"
-                  zIndex={3}
-                  pointerEvents="none"
-                >
-                  <Text
-                    fontSize="2xs"
-                    color="white"
-                    fontWeight="bold"
-                    letterSpacing="wider"
-                    textTransform="uppercase"
-                    whiteSpace="nowrap"
-                  >
-                    View Detail
-                  </Text>
-                </Box>
-              </MotionBox>
             )}
           </MotionBox>
         </AnimatePresence>

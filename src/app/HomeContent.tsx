@@ -11,6 +11,7 @@ import {
 	DressCodeSection,
 	RSVPSection,
 	FAQSection,
+	EntourageSection,
 } from "@/components/pages";
 import Footer from "@/components/sections/Footer";
 import Navigation from "@/components/Navigation";
@@ -59,6 +60,7 @@ export default function HomeContent({
 					{content.dressCode?.enabled && (
 						<DressCodeSection images={dressCodePhotos} />
 					)}
+					{content.entourage?.enabled && <EntourageSection />}
 					{content.faq.enabled && <FAQSection />}
 					{content.rsvp.enabled && <RSVPSection />}
 					<Footer />
