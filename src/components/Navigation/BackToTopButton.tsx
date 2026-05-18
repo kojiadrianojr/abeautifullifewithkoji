@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '@chakra-ui/react';
+import { Box, useBreakpointValue } from '@chakra-ui/react';
 import { ChevronUpIcon } from '@chakra-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedIconButton } from '@/components/ui/AnimatedIconButton';
@@ -13,9 +13,11 @@ interface BackToTopButtonProps {
 }
 
 export function BackToTopButton({ show, onClick }: BackToTopButtonProps) {
+  const isMobile = useBreakpointValue({ base: true, md: false }, { ssr: false });
+
   return (
     <AnimatePresence>
-      {show && (
+      {show && !isMobile && (
         <MotionBox
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
