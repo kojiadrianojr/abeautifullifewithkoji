@@ -73,6 +73,10 @@ jobs:
           IMAGE_CACHE_ENABLED: ${{ secrets.IMAGE_CACHE_ENABLED }}
           IMAGE_CACHE_DURATION: ${{ secrets.IMAGE_CACHE_DURATION }}
           CACHE_CLEAR_SECRET: ${{ secrets.CACHE_CLEAR_SECRET }}
+          
+          # Maintenance Mode (Optional)
+          NEXT_PUBLIC_MAINTENANCE_MODE: ${{ secrets.NEXT_PUBLIC_MAINTENANCE_MODE }}
+          NEXT_PUBLIC_MAINTENANCE_TOKEN: ${{ secrets.NEXT_PUBLIC_MAINTENANCE_TOKEN }}
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
