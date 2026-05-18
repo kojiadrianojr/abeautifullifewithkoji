@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ConfigService } from "@/services";
 import ThemeProvider from "@/components/ThemeProvider";
+import MaintenanceGate from "@/components/MaintenanceGate";
 
 const config = ConfigService.getConfig();
 
@@ -29,7 +30,9 @@ export default function RootLayout({
 				/>
 			</head>
 			<body>
-				<ThemeProvider theme={config.theme}>{children}</ThemeProvider>
+				<ThemeProvider theme={config.theme}>
+					<MaintenanceGate>{children}</MaintenanceGate>
+				</ThemeProvider>
 			</body>
 		</html>
 	);
