@@ -1,9 +1,9 @@
 /* Global Styles for Wedding Website - Watercolor Theme */
 
+/* Font CSS variables (--font-heading, --font-body) are injected dynamically
+   from config/wedding.json via layout.tsx at server render time. */
+
 :root {
-  --font-heading: 'Great Vibes', cursive;
-  --font-serif: 'Great Vibes', cursive;
-  --font-sans: 'Inter', sans-serif;
   --watercolor-lavender: #C3B1E1;
   --watercolor-blush: #F5CAC3;
   --watercolor-blue: #A8D8EA;
@@ -17,7 +17,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-sans), Arial, sans-serif;
+  font-family: var(--font-body), Arial, sans-serif;
   background: #FFFAF0;
 }
 

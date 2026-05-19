@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Container } from "@chakra-ui/react";
+import { Box, Button, Container } from "@chakra-ui/react";
 import { ConfigService } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { GalleryLightbox } from "@/components/ui/GalleryLightbox";
-import { GalleryGrid } from "./GalleryGrid";
+import { PinterestMasonryGrid } from "./PinterestMasonryGrid";
+import { GalleryAllPhotosModal } from "./GalleryAllPhotosModal";
 
 interface GallerySectionProps {
 	images: string[];
@@ -14,30 +14,48 @@ interface GallerySectionProps {
 export function GallerySection({ images }: GallerySectionProps) {
 	const config = ConfigService.getConfig();
 	const { gallery } = config.content;
-	const [lightboxOpen, setLightboxOpen] = useState(false);
-	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+	const [modalOpen, setModalOpen] = useState(false);
 
-	const handleImageClick = (index: number) => {
-		setSelectedImageIndex(index);
-		setLightboxOpen(true);
-	};
+	if (images.length === 0) return null;
 
 	return (
 		<Box id="gallery" as="section" py={{ base: 16, md: 24 }} bg="gray.100">
 			<Container maxW="7xl">
-				<SectionTitle color="primary.500" mb={16}>
+				<SectionTitle color="primary.500" mb={10}>
 					{gallery.title}
 				</SectionTitle>
 
-				<GalleryGrid images={images} onImageClick={handleImageClick} />
+				{/* Auto-rotating Pinterest collage preview */}
+				<PinterestMasonryGrid
+					images={images}
+					onImageClick={() => setModalOpen(true)}
+				/>
+
+				{/* See all CTA */}
+				<Box mt={8} textAlign="center">
+					<Button
+						size="lg"
+						variant="outline"
+						colorScheme="primary"
+						borderRadius="full"
+						px={10}
+						fontWeight="semibold"
+						onClick={() => setModalOpen(true)}
+						_hover={{ bg: "primary.50" }}
+					>
+						See All Photos ({images.length})
+					</Button>
+				</Box>
 			</Container>
 
-			<GalleryLightbox
+			<GalleryAllPhotosModal
 				images={images}
-				isOpen={lightboxOpen}
-				onClose={() => setLightboxOpen(false)}
-				initialIndex={selectedImageIndex}
+				isOpen={modalOpen}
+				onClose={() => setModalOpen(false)}
 			/>
 		</Box>
 	);
 }
+
+
+

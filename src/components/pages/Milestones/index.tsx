@@ -73,7 +73,7 @@ export function MilestonesSection({
 					{milestones.qa && milestones.qa.length > 0 && (
 						<Box>
 							<SectionTitle fontSize="3xl" mb={8} color="primary.500">
-								Q&A
+								Questions & Answers
 							</SectionTitle>
 							<QASection questions={milestones.qa} />
 						</Box>

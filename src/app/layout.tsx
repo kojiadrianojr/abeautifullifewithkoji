@@ -3,6 +3,7 @@ import "./globals.css";
 import { ConfigService } from "@/services";
 import ThemeProvider from "@/components/ThemeProvider";
 import MaintenanceGate from "@/components/MaintenanceGate";
+import { buildGoogleFontsUrl } from "@/lib/fonts";
 
 const config = ConfigService.getConfig();
 
@@ -19,15 +20,22 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const { heading, body, display } = config.theme.fonts;
+	const googleFontsUrl = buildGoogleFontsUrl(heading, body, display);
+
 	return (
 		<html lang="en">
 			<head>
 				<link rel="preconnect" href="https://fonts.googleapis.com" />
 				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-				<link
-					href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&display=swap"
-					rel="stylesheet"
-				/>
+				<link href={googleFontsUrl} rel="stylesheet" />
+				<style>{`
+					:root {
+						--font-heading: '${heading}', cursive;
+						--font-display: '${display ?? body}', Georgia, serif;
+						--font-body: '${body}', sans-serif;
+					}
+				`}</style>
 			</head>
 			<body>
 				<ThemeProvider theme={config.theme}>

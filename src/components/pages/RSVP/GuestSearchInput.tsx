@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	Box,
 	Input,
 	InputGroup,
 	InputLeftElement,
@@ -48,89 +47,73 @@ export function GuestSearchInput({
 	return (
 		<FormControl>
 			<FormLabel
-				fontSize={{ base: "md", md: "lg" }}
+				fontSize={{ base: "sm", md: "md" }}
 				fontWeight="semibold"
-				color="gray.800"
+				color="primary.600"
 				textAlign="left"
-				letterSpacing="wide"
+				letterSpacing="widest"
 				textTransform="uppercase"
-				mb={4}
+				mb={3}
 			>
 				Find Your Invitation
 			</FormLabel>
-			
-			<Box position="relative">
-				{/* Decorative outer border */}
-				<Box
-					position="absolute"
-					top="-3px"
-					left="-3px"
-					right="-3px"
-					bottom="-3px"
-					border="1px solid"
-					borderColor="gold.200"
+
+			<InputGroup size={{ base: "md", md: "lg" }}>
+				<InputLeftElement pointerEvents="none" height="100%">
+					<SearchIcon color="primary.400" boxSize={4} />
+				</InputLeftElement>
+				<Input
+					value={value}
+					onChange={handleChange}
+					onKeyPress={handleKeyPress}
+					placeholder={placeholder}
+					bg="white"
+					color="gray.800"
+					border="1.5px solid"
+					borderColor="gray.200"
 					borderRadius="xl"
-					pointerEvents="none"
+					_hover={{
+						borderColor: "primary.300",
+					}}
+					_focus={{
+						borderColor: "primary.400",
+						boxShadow: "0 0 0 3px rgba(195,177,225,0.35)",
+					}}
+					fontSize={{ base: "md", md: "lg" }}
+					px={12}
+					py={{ base: 6, md: 7 }}
+					disabled={isLoading}
+					fontWeight="medium"
+					boxShadow="0 2px 12px rgba(0,0,0,0.06)"
+					_placeholder={{
+						color: "gray.400",
+						fontStyle: "italic",
+					}}
 				/>
-				
-				<InputGroup 
-					size={{ base: "md", md: "lg" }}
-					boxShadow="0 8px 32px rgba(0,0,0,0.2)"
-				>
-					<InputLeftElement pointerEvents="none" height="100%">
-						<SearchIcon color="gold.500" boxSize={5} />
-					</InputLeftElement>
-					<Input
-						value={value}
-						onChange={handleChange}
-						onKeyPress={handleKeyPress}
-						placeholder={placeholder}
-						bg="white"
-						color="gray.800"
-						border="2px solid"
-						borderColor="gold.300"
-						_hover={{ 
-							borderColor: "gold.400",
-							boxShadow: "0 0 0 1px var(--chakra-colors-gold-400)"
-						}}
-						_focus={{
-							borderColor: "gold.500",
-							boxShadow: "0 0 0 3px rgba(212,175,55,0.2)",
-						}}
-						fontSize={{ base: "md", md: "lg" }}
-						px={12}
-						py={{ base: 6, md: 7 }}
-						disabled={isLoading}
-						fontWeight="medium"
-						_placeholder={{
-							color: "gray.400",
-							fontStyle: "italic"
-						}}
-					/>
-					{value && (
-						<InputRightElement height="100%" paddingRight={2}>
-							<IconButton
-								aria-label="Clear search"
-								icon={<CloseIcon />}
-								size="sm"
-								variant="ghost"
-								onClick={handleClear}
-								colorScheme="gray"
-								disabled={isLoading}
-								_hover={{ bg: "gray.100" }}
-							/>
-						</InputRightElement>
-					)}
-				</InputGroup>
-			</Box>
-			
+				{value && (
+					<InputRightElement height="100%" paddingRight={2}>
+						<IconButton
+							aria-label="Clear search"
+							icon={<CloseIcon />}
+							size="sm"
+							variant="ghost"
+							onClick={handleClear}
+							colorScheme="gray"
+							disabled={isLoading}
+							_hover={{ bg: "gray.100" }}
+						/>
+					</InputRightElement>
+				)}
+			</InputGroup>
+
 			{helperText && (
-				<FormHelperText 
-					color="gray.600" 
-					fontSize="sm" 
-					mt={3}
+				<FormHelperText
+					color="gray.700"
+					fontSize="xs"
+					mt={2}
 					textAlign="center"
 					fontStyle="italic"
+					textShadow="0 1px 3px rgba(255,255,255,0.6)"
 				>
 					{helperText}
 				</FormHelperText>

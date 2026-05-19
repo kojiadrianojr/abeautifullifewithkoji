@@ -1,3 +1,4 @@
+import { fontStyles } from '@/lib/fontStyles';
 import { ConfigService } from '@/services';
 
 export default function MaintenancePage() {
@@ -12,7 +13,7 @@ export default function MaintenancePage() {
 				alignItems: 'center',
 				justifyContent: 'center',
 				background: 'linear-gradient(135deg, #FFFAF0 0%, rgba(195, 177, 225, 0.12) 40%, rgba(245, 202, 195, 0.12) 100%)',
-				fontFamily: "'Inter', Arial, sans-serif",
+				...fontStyles.body,
 				padding: '2rem',
 				textAlign: 'center',
 				position: 'relative',
@@ -82,7 +83,7 @@ export default function MaintenancePage() {
 				{/* Couple names in script font */}
 				<h1
 					style={{
-						fontFamily: "'Great Vibes', cursive",
+						...fontStyles.heading,
 						fontSize: 'clamp(2.8rem, 8vw, 4.5rem)',
 						fontWeight: 400,
 						color: '#6B4E71',
@@ -106,7 +107,7 @@ export default function MaintenancePage() {
 				{/* Main message */}
 				<h2
 					style={{
-						fontFamily: "'Cormorant Garamond', Georgia, serif",
+						...fontStyles.display,
 						fontSize: 'clamp(1.4rem, 4vw, 2rem)',
 						fontWeight: 500,
 						color: '#4A3F5C',
@@ -120,7 +121,7 @@ export default function MaintenancePage() {
 				{/* Subtext */}
 				<p
 					style={{
-						fontFamily: "'Inter', Arial, sans-serif",
+						...fontStyles.body,
 						fontSize: '1rem',
 						color: '#7A6E8A',
 						margin: '0 0 2rem',

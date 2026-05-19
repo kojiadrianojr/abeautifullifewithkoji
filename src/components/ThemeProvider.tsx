@@ -17,6 +17,7 @@ interface ThemeProviderProps {
     fonts: {
       heading: string;
       body: string;
+      display?: string;
     };
   };
 }
@@ -64,7 +65,8 @@ export default function ThemeProvider({ children, theme }: ThemeProviderProps) {
           },
         },
         fonts: {
-          heading: `var(--font-heading), ${theme.fonts.heading}, Georgia, serif`,
+          heading: `var(--font-heading), ${theme.fonts.heading}, cursive`,
+          display: `var(--font-display), ${theme.fonts.display ?? theme.fonts.body}, Georgia, serif`,
           body: `var(--font-body), ${theme.fonts.body}, Arial, sans-serif`,
         },
         styles: {

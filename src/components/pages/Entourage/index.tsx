@@ -54,8 +54,12 @@ export function EntourageSection() {
 				</SectionTitle>
 				<Text
 					textAlign="center"
-					color="gray.500"
-					fontSize={{ base: "sm", md: "md" }}
+					color="primary.600"
+					fontSize={{ base: "xl", md: "lg" }}
+					fontFamily="display"
+					fontStyle="italic"
+					fontWeight="400"
+					letterSpacing="wide"
 					mb={16}
 				>
 					{entourage.description}
@@ -66,12 +70,12 @@ export function EntourageSection() {
 					<SectionGroupHeading>Parents</SectionGroupHeading>
 					<SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
 						<EntourageGroup
-							title="Parents of the Bride"
-							members={entourage.parents.bride}
-						/>
-						<EntourageGroup
 							title="Parents of the Groom"
 							members={entourage.parents.groom}
+						/>
+						<EntourageGroup
+							title="Parents of the Bride"
+							members={entourage.parents.bride}
 						/>
 					</SimpleGrid>
 				</Box>
@@ -171,7 +175,7 @@ function SectionGroupHeading({ children }: { children: React.ReactNode }) {
 		<Heading
 			as="h3"
 			fontSize={{ base: "2xl", md: "3xl" }}
-			fontFamily="'Cormorant Garamond', Georgia, serif"
+			fontFamily="display"
 			fontStyle="italic"
 			fontWeight="500"
 			textAlign="center"

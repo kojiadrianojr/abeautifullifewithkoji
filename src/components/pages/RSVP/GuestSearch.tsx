@@ -79,81 +79,61 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 						<VStack spacing={5} w="100%">
 							<GuestResult guest={foundGuest} />
 
-							{/* Simple Divider */}
-							<Box height="1px" bg="gold.300" opacity={0.4} w="60%" />
-
-							{/* RSVP Button - Royal Style */}
-							<Box position="relative" w="100%">
-								{/* Decorative background */}
-								<Box
-									position="absolute"
-									top="-4px"
-									left="-4px"
-									right="-4px"
-									bottom="-4px"
-									bg="gold.200"
-									opacity={0.3}
-									borderRadius="xl"
-									filter="blur(8px)"
-								/>
-								
-								<Link
-									href={formUrl}
-									target="_blank"
-									rel="noopener noreferrer"
-									_hover={{ textDecoration: "none" }}
-									w="100%"
-								>
-									<AnimatedButton
-										size="lg"
-										variant="solid"
-										bg="white"
-										color="primary.500"
-										leftIcon={<EditIcon />}
-										px={{ base: 8, md: 10 }}
-										py={{ base: 6, md: 7 }}
-										fontSize={{ base: "md", md: "lg" }}
-										fontWeight="bold"
-										w="100%"
-										border="2px solid"
-										borderColor="gold.400"
-										boxShadow="0 8px 32px rgba(0,0,0,0.2)"
-										position="relative"
-										_hover={{
-											bg: "gold.50",
-											borderColor: "gold.500",
-											boxShadow: "0 12px 40px rgba(212,175,55,0.3)",
-											transform: "translateY(-2px)",
-										}}
-										_before={{
-											content: '""',
-											position: "absolute",
-											top: 0,
-											left: 0,
-											right: 0,
-											bottom: 0,
-											background: "linear-gradient(135deg, rgba(212,175,55,0.1) 0%, transparent 50%, rgba(212,175,55,0.1) 100%)",
-											borderRadius: "inherit",
-										}}
-									>
-										<Text position="relative" zIndex={1}>
-											Proceed to RSVP Form
-										</Text>
-									</AnimatedButton>
-								</Link>
+							{/* Soft divider */}
+							<Box
+								display="flex"
+								alignItems="center"
+								w="60%"
+								gap={3}
+							>
+								<Box flex={1} height="1px" bg="gray.200" />
+								<Text fontSize="xs" color="gray.300" lineHeight={1}>♡</Text>
+								<Box flex={1} height="1px" bg="gray.200" />
 							</Box>
+
+							{/* RSVP Button */}
+							<Link
+								href={formUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								_hover={{ textDecoration: "none" }}
+								w="100%"
+							>
+								<AnimatedButton
+									size="lg"
+									variant="solid"
+									bg="primary.500"
+									color="white"
+									leftIcon={<EditIcon />}
+									px={{ base: 8, md: 10 }}
+									py={{ base: 6, md: 7 }}
+									fontSize={{ base: "md", md: "lg" }}
+									fontWeight="semibold"
+									w="100%"
+									borderRadius="xl"
+									boxShadow="0 4px 16px rgba(195,177,225,0.4)"
+									_hover={{
+										bg: "primary.600",
+										boxShadow: "0 6px 24px rgba(195,177,225,0.5)",
+										transform: "translateY(-2px)",
+									}}
+								>
+									Proceed to RSVP Form
+								</AnimatedButton>
+							</Link>
 
 							{/* Try Another Name */}
 							<Text
 								fontSize="xs"
-								color="gray.600"
+								color="gray.700"
 								textAlign="center"
 								cursor="pointer"
 								textDecoration="underline"
 								onClick={handleReset}
-								_hover={{ color: "gray.800" }}
+								_hover={{ color: "gray.900" }}
 								fontStyle="italic"
 								mt={-2}
+								textShadow="0 1px 3px rgba(255,255,255,0.6)"
 							>
 								Search for another guest
 							</Text>
@@ -166,18 +146,18 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 							<AnimatedButton
 								size="md"
 								variant="outline"
-								bg="white"
 								color="primary.500"
-								borderColor="gold.400"
-								border="2px solid"
+								borderColor="primary.300"
+								border="1.5px solid"
 								px={8}
 								py={5}
 								fontSize="sm"
 								fontWeight="semibold"
+								borderRadius="xl"
 								onClick={handleReset}
 								_hover={{
-									bg: "gold.50",
-									borderColor: "gold.500",
+									bg: "purple.50",
+									borderColor: "primary.400",
 								}}
 							>
 								Try Again

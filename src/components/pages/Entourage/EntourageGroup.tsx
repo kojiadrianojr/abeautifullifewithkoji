@@ -31,7 +31,7 @@ export function EntourageGroup({
 			<Heading
 				as="h3"
 				fontSize={{ base: "sm", md: "md" }}
-				fontFamily="'Cormorant Garamond', Georgia, serif"
+				fontFamily="display"
 				fontStyle="italic"
 				fontWeight="600"
 				letterSpacing="wide"

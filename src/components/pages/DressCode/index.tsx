@@ -7,6 +7,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { DressCodeCarousel } from "./DressCodeCarousel";
 import type { ImageMetadata } from "@/types/imageProvider";
 
+const MotionBox = motion.create(Box);
 const MotionText = motion.create(Text);
 
 interface DressCodeSectionProps {
@@ -29,21 +30,56 @@ export function DressCodeSection({ images }: DressCodeSectionProps) {
 					{dressCode.title}
 				</SectionTitle>
 
-				<MotionText
+				<MotionBox
 					initial={{ opacity: 0, y: 10 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true }}
 					transition={{ duration: 0.5, delay: 0.1 }}
 					textAlign="center"
-					fontSize={{ base: "lg", md: "xl" }}
-					fontWeight="semibold"
-					color="primary.400"
-					letterSpacing="widest"
-					textTransform="uppercase"
-					mb={4}
+					mb={6}
 				>
-					{dressCode.subtitle}
-				</MotionText>
+					<Box
+						display="inline-flex"
+						alignItems="center"
+						gap={3}
+						px={6}
+						py={2}
+						borderRadius="full"
+						bg="white"
+						border="1.5px solid"
+						borderColor="primary.300"
+						boxShadow="sm"
+					>
+						<Box
+							as="span"
+							display="inline-block"
+							w="6px"
+							h="6px"
+							borderRadius="full"
+							bg="primary.400"
+							flexShrink={0}
+						/>
+						<Text
+							as="span"
+							fontSize={{ base: "sm", md: "md" }}
+							fontWeight="bold"
+							color="primary.700"
+							letterSpacing="widest"
+							textTransform="uppercase"
+						>
+							{dressCode.subtitle}
+						</Text>
+						<Box
+							as="span"
+							display="inline-block"
+							w="6px"
+							h="6px"
+							borderRadius="full"
+							bg="primary.400"
+							flexShrink={0}
+						/>
+					</Box>
+				</MotionBox>
 
 				<MotionText
 					initial={{ opacity: 0, y: 10 }}
