@@ -9,6 +9,10 @@ interface PinterestMasonryGridProps {
 	onImageClick: (index: number) => void;
 	/** Override max columns (default: 4 desktop / 3 tablet / 2 mobile) */
 	maxColumns?: 2 | 3 | 4;
+	/** Alt text prefix for each tile image. Defaults to "Photo". */
+	altText?: string;
+	/** aria-label for the grid wrapper. */
+	ariaLabel?: string;
 }
 
 // Aspect ratio patterns that cycle across tiles — creates the organic Pinterest look
@@ -31,52 +35,71 @@ interface TileState {
 	isFading: boolean;
 }
 
-function getRandomIndex(length: number, exclude?: number): number {
-	if (length <= 1) return 0;
-	let next: number;
-	do {
-		next = Math.floor(Math.random() * length);
-	} while (next === exclude);
-	return next;
+/** Pick a random index from `candidates`. Returns -1 if the array is empty. */
+function pickFromCandidates(candidates: number[]): number {
+	if (candidates.length === 0) return -1;
+	return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
 export function PinterestMasonryGrid({
 	images,
 	onImageClick,
 	maxColumns,
+	altText = "Photo",
+	ariaLabel = "Photo collage",
 }: PinterestMasonryGridProps) {
 	const effectiveCols = {
 		base: Math.min(COLUMN_COUNTS.base, maxColumns ?? COLUMN_COUNTS.base),
 		sm: Math.min(COLUMN_COUNTS.sm, maxColumns ?? COLUMN_COUNTS.sm),
 		md: Math.min(COLUMN_COUNTS.md, maxColumns ?? COLUMN_COUNTS.md),
 	};
-	const TILE_COUNT = effectiveCols.md * 4; // 4 tiles per column at max breakpoint
-	const tilesPerColumn = Array(effectiveCols.md).fill(4);
+
+	// Cap tile count so we never repeat images on initial render
+	const MAX_TILE_COUNT = effectiveCols.md * 4;
+	const TILE_COUNT = Math.min(images.length, MAX_TILE_COUNT);
+
+	// Distribute tiles as evenly as possible across columns
+	const basePerCol = Math.floor(TILE_COUNT / effectiveCols.md);
+	const remainder = TILE_COUNT % effectiveCols.md;
+	const tilesPerColumn = Array.from(
+		{ length: effectiveCols.md },
+		(_, i) => (i < remainder ? basePerCol + 1 : basePerCol)
+	);
 
 	const initialTiles = useCallback((): TileState[] => {
 		return Array.from({ length: TILE_COUNT }, (_, i) => ({
-			imageIndex: i % images.length,
+			imageIndex: i, // unique index — TILE_COUNT is always ≤ images.length
 			isFading: false,
 		}));
-	}, [images.length]);
+	}, [TILE_COUNT]);
 
 	const [tiles, setTiles] = useState<TileState[]>(initialTiles);
 	const pendingImageRef = useRef<Map<number, number>>(new Map());
 
-	// Auto-rotate: every interval, pick a random tile to swap
+	// Auto-rotate: every interval, pick a random tile to swap.
+	// Only enabled when there are more images than tiles (otherwise every swap
+	// would duplicate an image that's already visible).
 	useEffect(() => {
-		if (images.length < 2) return;
+		if (images.length <= TILE_COUNT) return;
 
 		const interval = setInterval(() => {
 			const tileIndex = Math.floor(Math.random() * TILE_COUNT);
 
 			setTiles((prev) => {
-				const newImageIndex = getRandomIndex(
-					images.length,
-					prev[tileIndex].imageIndex
+				// Build the set of image indices currently visible in other tiles
+				const occupied = new Set(
+					prev.filter((_, i) => i !== tileIndex).map((t) => t.imageIndex)
 				);
-				pendingImageRef.current.set(tileIndex, newImageIndex);
+				// Pick only from images that are NOT already on screen
+				const available = Array.from(
+					{ length: images.length },
+					(_, i) => i
+				).filter((i) => !occupied.has(i));
 
+				const newImageIndex = pickFromCandidates(available);
+				if (newImageIndex === -1) return prev; // no spare image, skip
+
+				pendingImageRef.current.set(tileIndex, newImageIndex);
 				return prev.map((tile, i) =>
 					i === tileIndex ? { ...tile, isFading: true } : tile
 				);
@@ -84,7 +107,7 @@ export function PinterestMasonryGrid({
 		}, SWAP_INTERVAL_MS);
 
 		return () => clearInterval(interval);
-	}, [images.length]);
+	}, [images.length, TILE_COUNT]);
 
 	// After fade-out, swap the image and fade back in
 	useEffect(() => {
@@ -126,7 +149,7 @@ export function PinterestMasonryGrid({
 				md: `repeat(${effectiveCols.md}, 1fr)`,
 			}}
 			gap={3}
-			aria-label="Prenup photo collage"
+			aria-label={ariaLabel}
 		>
 			{columns.map((columnTiles, colIndex) => {
 				// Hide columns beyond the responsive breakpoint
@@ -174,7 +197,7 @@ export function PinterestMasonryGrid({
 									>
 										<Image
 											src={src}
-											alt={`Prenup photo ${tile.imageIndex + 1}`}
+											alt={`${altText} ${tile.imageIndex + 1}`}
 											fill
 											style={{ objectFit: "cover" }}
 											sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"

@@ -29,23 +29,27 @@ export function GallerySection({ images }: GallerySectionProps) {
 				<PinterestMasonryGrid
 					images={images}
 					onImageClick={() => setModalOpen(true)}
+					altText="Prenup photo"
+					ariaLabel="Prenup photo collage"
 				/>
 
-				{/* See all CTA */}
-				<Box mt={8} textAlign="center">
-					<Button
-						size="lg"
-						variant="outline"
-						colorScheme="primary"
-						borderRadius="full"
-						px={10}
-						fontWeight="semibold"
-						onClick={() => setModalOpen(true)}
-						_hover={{ bg: "primary.50" }}
-					>
-						See All Photos ({images.length})
-					</Button>
-				</Box>
+				{/* See all CTA — only shown when there are enough photos to warrant a modal */}
+				{images.length >= 5 && (
+					<Box mt={8} textAlign="center">
+						<Button
+							size="lg"
+							variant="outline"
+							colorScheme="primary"
+							borderRadius="full"
+							px={10}
+							fontWeight="semibold"
+							onClick={() => setModalOpen(true)}
+							_hover={{ bg: "primary.50" }}
+						>
+							See All Photos ({images.length})
+						</Button>
+					</Box>
+				)}
 			</Container>
 
 			<GalleryAllPhotosModal

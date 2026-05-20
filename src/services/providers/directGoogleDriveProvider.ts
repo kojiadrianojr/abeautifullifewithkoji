@@ -215,21 +215,20 @@ export class DirectGoogleDriveImageProvider implements IImageProvider {
 	}
 
 	/**
-	 * Get direct public URL for Google Drive file
-	 * Uses Google's CDN which works for publicly shared files
+	 * Get direct public URL for Google Drive file.
+	 * Uses the official Drive thumbnail endpoint which is reliable for publicly
+	 * shared files and avoids the inconsistencies of lh3.googleusercontent.com.
+	 * sz=w1600 provides high enough quality for full-display use.
 	 */
 	private getDirectUrl(fileId: string): string {
-		// Use Google's CDN URL - works for publicly shared files
-		return `https://lh3.googleusercontent.com/d/${fileId}`;
+		return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
 	}
 
 	/**
-	 * Get direct thumbnail URL
-	 * Uses Google Drive thumbnail with size parameter
+	 * Get direct thumbnail URL for Google Drive file.
+	 * Uses a smaller size parameter suitable for grid/list thumbnails.
 	 */
 	private getDirectThumbnailUrl(fileId: string): string {
-		// Alternative: use drive.google.com with thumbnail parameter
-		// This returns a smaller version suitable for thumbnails
 		return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
 	}
 

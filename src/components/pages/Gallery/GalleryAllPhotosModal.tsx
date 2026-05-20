@@ -31,12 +31,18 @@ interface GalleryAllPhotosModalProps {
 	images: string[];
 	isOpen: boolean;
 	onClose: () => void;
+	/** Modal header title. Defaults to "All Photos". */
+	title?: string;
+	/** Alt text prefix for each image. Defaults to "Prenup photo". */
+	altPrefix?: string;
 }
 
 export function GalleryAllPhotosModal({
 	images,
 	isOpen,
 	onClose,
+	title = "All Photos",
+	altPrefix = "Prenup photo",
 }: GalleryAllPhotosModalProps) {
 	const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
@@ -102,7 +108,7 @@ export function GalleryAllPhotosModal({
 							<Box position="absolute" inset={0}>
 								<Image
 									src={images[imageIndex]}
-									alt={`Prenup photo ${imageIndex + 1}`}
+									alt={`${altPrefix} ${imageIndex + 1}`}
 									fill
 									style={{ objectFit: "cover" }}
 									sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
@@ -156,7 +162,7 @@ export function GalleryAllPhotosModal({
 					py={4}
 					px={6}
 				>
-					All Photos
+					{title}
 					<Text as="span" color="gray.400" fontWeight="normal" fontSize="sm" ml={2}>
 						({images.length} photos)
 					</Text>

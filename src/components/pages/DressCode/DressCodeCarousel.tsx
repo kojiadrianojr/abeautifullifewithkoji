@@ -87,27 +87,57 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
   return (
     <Box w="full">
       {/* Main display area */}
-      <Box
-        position="relative"
-        borderRadius="2xl"
-        overflow="hidden"
-        bg="pink.50"
-        boxShadow="lg"
-        mb={6}
-      >
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <MotionBox
-            key={activeIdx}
-            custom={direction}
-            initial={{ x: direction * 60, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direction * -60, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            position="relative"
-          >
-            {/* Main image with hover zoom */}
-            {active.main && (
-              <Box overflow="hidden" cursor="pointer">
+      <Box mb={6}>
+        {/* Badge in normal flow above the image */}
+        <Box px={1} mb={3}>
+          <AnimatePresence mode="wait">
+            <MotionBox
+              key={active.label}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.25 } as never}
+              display="inline-block"
+              bg="whiteAlpha.900"
+              backdropFilter="blur(6px)"
+              px={4}
+              py={1}
+              borderRadius="full"
+              boxShadow="sm"
+            >
+              <Text
+                fontSize="sm"
+                fontWeight="semibold"
+                color="primary.500"
+                letterSpacing="wider"
+                textTransform="uppercase"
+              >
+                {active.label}
+              </Text>
+            </MotionBox>
+          </AnimatePresence>
+        </Box>
+
+        {/* Image card */}
+        <Box
+          position="relative"
+          borderRadius="2xl"
+          overflow="hidden"
+          bg="pink.50"
+          boxShadow="lg"
+          cursor="pointer"
+          onClick={() => openLightbox([active.main], 0)}
+        >
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <MotionBox
+              key={activeIdx}
+              custom={direction}
+              initial={{ x: direction * 60, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: direction * -60, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              {active.main && (
                 <MotionImage
                   src={active.main.url}
                   alt={active.label}
@@ -118,38 +148,10 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
                   display="block"
                   whileHover={{ scale: 1.03 }}
                   transition={{ duration: 0.4, ease: "easeOut" } as never}
-                  onClick={() =>
-                    openLightbox([active.main], 0)
-                  }
                 />
-              </Box>
-            )}
-          </MotionBox>
-        </AnimatePresence>
-
-        {/* Category label badge */}
-        <Box
-          position="absolute"
-          top={4}
-          left={4}
-          bg="whiteAlpha.900"
-          backdropFilter="blur(6px)"
-          px={4}
-          py={1}
-          borderRadius="full"
-          boxShadow="sm"
-          zIndex={1}
-          pointerEvents="none"
-        >
-          <Text
-            fontSize="sm"
-            fontWeight="semibold"
-            color="primary.500"
-            letterSpacing="wider"
-            textTransform="uppercase"
-          >
-            {active.label}
-          </Text>
+              )}
+            </MotionBox>
+          </AnimatePresence>
         </Box>
       </Box>
 

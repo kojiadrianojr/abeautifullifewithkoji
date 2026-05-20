@@ -32,6 +32,14 @@ yarn-error.log*
 # Google Cloud credentials
 service-account-key.json
 
+# Downloaded Google Drive images (synced at build time via scripts/sync-images.ts)
+# These are regenerated on every build — do not commit them
+/public/images/hero-album/
+/public/images/gallery/
+/public/images/throwback/
+/public/images/prenup/
+/public/images/dress-code/
+
 # Guest list backups
 config/guests.backup.*.json
 

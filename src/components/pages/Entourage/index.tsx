@@ -147,6 +147,15 @@ export function EntourageSection() {
 					<SimpleGrid
 						columns={{ base: 2, sm: 3, md: 5 }}
 						gap={4}
+						sx={{
+							"@media (max-width: 479px)": {
+								"& > *:last-of-type:nth-of-type(odd)": {
+									gridColumn: "1 / -1",
+									maxWidth: "50%",
+									marginInline: "auto",
+								},
+							},
+						}}
 					>
 						{littleOnes.map((person) => (
 							<Box

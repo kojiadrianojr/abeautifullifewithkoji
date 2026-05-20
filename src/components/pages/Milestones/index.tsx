@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Container, Divider, VStack } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, VStack } from "@chakra-ui/react";
 import { ConfigService } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { GalleryLightbox } from "@/components/ui/GalleryLightbox";
+import { PinterestMasonryGrid } from "@/components/pages/Gallery/PinterestMasonryGrid";
+import { GalleryAllPhotosModal } from "@/components/pages/Gallery/GalleryAllPhotosModal";
 import { MilestonesTimeline } from "./MilestonesTimeline";
 import { QASection } from "./QASection";
-import { MomentsGrid } from "./MomentsGrid";
 import { DecorativeFlowers } from "./DecorativeFlowers";
 
 interface MilestonesSectionProps {
@@ -20,10 +20,8 @@ export function MilestonesSection({
 	const config = ConfigService.getConfig();
 	const { milestones } = config.content;
 	const [lightboxOpen, setLightboxOpen] = useState(false);
-	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-	const openLightbox = (index: number) => {
-		setSelectedImageIndex(index);
+	const openLightbox = () => {
 		setLightboxOpen(true);
 	};
 
@@ -85,18 +83,40 @@ export function MilestonesSection({
 							<SectionTitle fontSize="3xl" mb={8} color="primary.500">
 								Moments We Love
 							</SectionTitle>
-							<MomentsGrid photos={throwbackPhotos} onOpenLightbox={openLightbox} />
+							<PinterestMasonryGrid
+								images={throwbackPhotos}
+								onImageClick={() => openLightbox()}
+								altText="Throwback moment"
+								ariaLabel="Moments we love collage"
+							/>
+							{throwbackPhotos.length >= 5 && (
+								<Box mt={8} textAlign="center">
+									<Button
+										size="lg"
+										variant="outline"
+										colorScheme="primary"
+										borderRadius="full"
+										px={10}
+										fontWeight="semibold"
+										onClick={() => openLightbox()}
+										_hover={{ bg: "primary.50" }}
+									>
+										See All Moments ({throwbackPhotos.length})
+									</Button>
+								</Box>
+							)}
 						</Box>
 					)}
 				</VStack>
 			</Container>
 
-			{/* Lightbox */}
-			<GalleryLightbox
+			{/* Moments modal */}
+			<GalleryAllPhotosModal
 				images={throwbackPhotos}
 				isOpen={lightboxOpen}
 				onClose={() => setLightboxOpen(false)}
-				initialIndex={selectedImageIndex}
+				title="Moments We Love"
+				altPrefix="Throwback moment"
 			/>
 		</Box>
 	);

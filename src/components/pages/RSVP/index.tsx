@@ -38,35 +38,44 @@ export function RSVPSection() {
 			/>
 
 			<Container maxW="2xl" position="relative" zIndex={1}>
-				<VStack spacing={5}>
-					<SectionTitle color="primary.600">{rsvp.title}</SectionTitle>
-					<Text
-						fontSize={{ base: "lg", md: "xl" }}
-						textAlign="center"
-						fontWeight={400}
-						color="gray.700"
-						fontStyle="italic"
-						maxW="lg"
-					>
-						{rsvp.message}
-					</Text>
+				<Box
+					bg="rgba(255, 255, 255, 0.55)"
+					backdropFilter="blur(10px)"
+					borderRadius="3xl"
+					boxShadow="0 4px 32px rgba(195,177,225,0.15), 0 1px 8px rgba(0,0,0,0.05)"
+					border="1px solid rgba(255,255,255,0.7)"
+					px={{ base: 6, md: 10 }}
+					py={{ base: 8, md: 12 }}
+				>
+					<VStack spacing={5}>
+						<SectionTitle color="primary.600">{rsvp.title}</SectionTitle>
+						<Text
+							fontSize={{ base: "lg", md: "xl" }}
+							textAlign="center"
+							fontWeight={400}
+							color="gray.700"
+							fontStyle="italic"
+							maxW="lg"
+						>
+							{rsvp.message}
+						</Text>
 
-					{/* Guest Search Component */}
-					<Box w="100%" pt={3}>
-						<GuestSearch formUrl={rsvp.formUrl} />
-					</Box>
+						{/* Guest Search Component */}
+						<Box w="100%" pt={3}>
+							<GuestSearch formUrl={rsvp.formUrl} />
+						</Box>
 
-					<Text
-						fontSize="xs"
-						textAlign="center"
-						color="gray.700"
-						fontStyle="italic"
-						textShadow="0 1px 3px rgba(255,255,255,0.6)"
-						textDecor="underline"
-					>
-						Can&apos;t make it? Please let us know so we can plan accordingly.
-					</Text>
-				</VStack>
+						<Text
+							fontSize="xs"
+							textAlign="center"
+							color="gray.700"
+							fontStyle="italic"
+							textDecor="underline"
+						>
+							Can&apos;t make it? Please let us know so we can plan accordingly.
+						</Text>
+					</VStack>
+				</Box>
 			</Container>
 		</Box>
 	);

@@ -6,7 +6,7 @@ import {
 	GoogleDriveProviderConfig,
 } from "@/types/imageProvider";
 import { LocalImageProvider } from "./localProvider";
-import { GoogleDriveImageProvider } from "./googleDriveProvider";
+import { DirectGoogleDriveImageProvider } from "./directGoogleDriveProvider";
 
 /**
  * Hybrid Image Provider
@@ -31,8 +31,8 @@ export class HybridImageProvider implements IImageProvider {
 					return new LocalImageProvider(
 						providerConfig as LocalProviderConfig
 					);
-				case "google-drive":
-					return new GoogleDriveImageProvider(
+				case "direct-google-drive":
+					return new DirectGoogleDriveImageProvider(
 						providerConfig as GoogleDriveProviderConfig
 					);
 				default: {

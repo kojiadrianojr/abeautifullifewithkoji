@@ -4,10 +4,6 @@
 
 export { LocalImageProvider, createLocalProvider } from "./localProvider";
 export {
-	GoogleDriveImageProvider,
-	createGoogleDriveProvider,
-} from "./googleDriveProvider";
-export {
 	DirectGoogleDriveImageProvider,
 	createDirectGoogleDriveProvider,
 } from "./directGoogleDriveProvider";

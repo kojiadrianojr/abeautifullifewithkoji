@@ -15,7 +15,7 @@
  */
 
 import { config } from "dotenv";
-import { createGoogleDriveProvider } from "../src/services/providers/googleDriveProvider";
+import { createDirectGoogleDriveProvider } from "../src/services/providers/directGoogleDriveProvider";
 
 // Load environment variables
 config({ path: ".env.local" });
@@ -82,7 +82,7 @@ async function testGoogleDriveConnection() {
 		console.log(`   Folder ID: ${collection.folderId}`);
 
 		try {
-			const provider = createGoogleDriveProvider({
+			const provider = createDirectGoogleDriveProvider({
 				folderId: collection.folderId,
 				cacheEnabled: false, // Disable cache for testing
 			});
@@ -124,7 +124,7 @@ async function testGoogleDriveConnection() {
 				folderId: collection.folderId,
 				success: true,
 				imageCount: images.length,
-				images: images.slice(0, 5).map((img) => img.name || img.url),
+				images: images.slice(0, 5).map((img: { name?: string; url: string }) => img.name || img.url),
 			});
 
 			if (images.length === 0) {
@@ -132,7 +132,7 @@ async function testGoogleDriveConnection() {
 			} else {
 				console.log(`   ✅ Found ${images.length} image(s)`);
 				console.log(
-					`   First few: ${images.slice(0, 3).map((img) => img.name).join(", ")}`
+					`   First few: ${images.slice(0, 3).map((img: { name?: string }) => img.name).join(", ")}`
 				);
 			}
 		} catch (error) {
@@ -181,9 +181,10 @@ async function testGoogleDriveConnection() {
 	if (failed.length === 0) {
 		console.log("🎉 All tests passed! Your Google Drive setup is working correctly.");
 		console.log("\nNext steps:");
-		console.log("1. Set IMAGE_SOURCE_TYPE=google-drive in .env.local");
-		console.log("2. Run: npm run dev");
-		console.log("3. Open: http://localhost:3000");
+		console.log("1. Set IMAGE_SOURCE_TYPE=direct-google-drive in .env.local");
+		console.log("2. Run: npm run sync-images  (or npm run build — sync runs automatically)");
+		console.log("3. Run: npm run dev");
+		console.log("4. Open: http://localhost:3000");
 	} else {
 		console.log("⚠️  Some tests failed. Please check the errors above.");
 		console.log("\nTroubleshooting:");

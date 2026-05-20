@@ -1,53 +1,41 @@
 #!/usr/bin/env node
 /**
  * Clear image cache script
- * 
- * This script clears the Google Drive image cache by calling the API endpoint.
- * Useful after updating images in Google Drive.
- * 
+ *
+ * This project is a static site (next.config.ts: output: 'export').
+ * There is no running API server, so the image cache lives only in
+ * memory during a build or dev-server session.
+ *
+ * To pick up new/updated Google Drive images, run:
+ *   npm run build   — rebuilds the static site with fresh images
+ *   npm run dev     — restarts the dev server (cache resets on restart)
+ *
  * Usage:
- *   npm run clear-cache
- *   or
- *   node scripts/clear-cache.js [URL]
- * 
- * Examples:
- *   node scripts/clear-cache.js
- *   node scripts/clear-cache.js http://localhost:3000
- *   node scripts/clear-cache.js https://your-domain.com
+ *   npm run clear-cache           → triggers a full rebuild
+ *   npm run clear-cache -- --dev  → prints instructions for dev server
  */
 
-const baseUrl = process.argv[2] || 'http://localhost:3000';
-const endpoint = `${baseUrl}/api/cache/clear`;
+const { execSync } = require('child_process');
 
-console.log('🧹 Clearing image cache...\n');
-console.log(`Endpoint: ${endpoint}\n`);
+const isDev = process.argv.includes('--dev');
 
-fetch(endpoint, {
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json',
-	},
-})
-	.then(async (response) => {
-		const data = await response.json();
-		
-		if (response.ok && data.success) {
-			console.log('✅ Cache cleared successfully!');
-			console.log(`   Timestamp: ${data.timestamp}`);
-			console.log('\n💡 Tip: Refresh your browser to see updated images\n');
-		} else {
-			console.error('❌ Failed to clear cache:');
-			console.error(`   ${data.error || data.message}`);
-			console.log('\n💡 Make sure the development server is running\n');
-			process.exit(1);
-		}
-	})
-	.catch((error) => {
-		console.error('❌ Error connecting to server:');
-		console.error(`   ${error.message}`);
-		console.log('\n💡 Troubleshooting:');
-		console.log('   1. Make sure the dev server is running: npm run dev');
-		console.log('   2. Check the URL is correct');
-		console.log('   3. Try: node scripts/clear-cache.js http://localhost:3000\n');
-		process.exit(1);
-	});
+if (isDev) {
+	console.log('ℹ️  Dev server cache refresh\n');
+	console.log('   The image cache resets automatically when you restart the dev server.');
+	console.log('   Stop the server (Ctrl+C) then run:\n');
+	console.log('     npm run dev\n');
+	console.log('   Or set IMAGE_CACHE_ENABLED=false in .env.local to disable caching entirely.\n');
+	process.exit(0);
+}
+
+console.log('🧹 Clearing image cache by rebuilding the static site...\n');
+console.log('   (This project uses static export — there is no API server to clear cache against.)\n');
+
+try {
+	execSync('npm run build', { stdio: 'inherit' });
+	console.log('\n✅ Rebuild complete! Google Drive images have been refreshed.');
+	console.log('   Deploy the updated "out/" directory to see the changes.\n');
+} catch (error) {
+	console.error('\n❌ Build failed. Check the output above for errors.\n');
+	process.exit(1);
+}

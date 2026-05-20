@@ -18,6 +18,7 @@ export function StackedImageGallery({
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [isDragging, setIsDragging] = useState(false);
 	const [hasDragged, setHasDragged] = useState(false);
+	const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
 
 	// Handle swipe gestures with optimized thresholds for touch devices
 	const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -229,17 +230,33 @@ export function StackedImageGallery({
 									borderRadius="xl"
 									overflow="hidden"
 								>
-									<Image
-										src={image}
-										alt={`Wedding photo ${index + 1}`}
-										fill
-										style={{
-											objectFit: "cover",
-										}}
-										sizes="(max-width: 768px) 90vw, (max-width: 1200px) 500px, 600px"
-										priority={index === 0}
-										unoptimized
-									/>
+									{failedImages.has(index) ? (
+										<Box
+											w="full"
+											h="full"
+											bg="gray.100"
+											display="flex"
+											alignItems="center"
+											justifyContent="center"
+											color="gray.400"
+											fontSize="4xl"
+										>
+											📷
+										</Box>
+									) : (
+										<Image
+											src={image}
+											alt={`Wedding photo ${index + 1}`}
+											fill
+											style={{ objectFit: "cover" }}
+											sizes="(max-width: 768px) 90vw, (max-width: 1200px) 500px, 600px"
+											priority={index === 0}
+											unoptimized
+											onError={() =>
+												setFailedImages((prev) => new Set(prev).add(index))
+											}
+										/>
+									)}
 								</Box>
 
 								{/* Card number indicator */}
