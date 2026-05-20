@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Image } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { SkeletonImage } from "@/components/ui/SkeletonImage";
 
 interface GalleryImageProps {
 	src: string;
@@ -15,7 +16,6 @@ export function GalleryImage({ src, index, onClick }: GalleryImageProps) {
 
 	const handleError = () => {
 		if (!errored) {
-			// Retry once with the thumbnail-size variant as fallback
 			const fallback = src.includes("drive.google.com/thumbnail")
 				? src.replace(/sz=w\d+/, "sz=w800")
 				: src;
@@ -37,29 +37,17 @@ export function GalleryImage({ src, index, onClick }: GalleryImageProps) {
 				transform: "scale(1.05)",
 			}}
 			onClick={onClick}
+			position="relative"
 		>
-			<Image
+			<SkeletonImage
 				src={imgSrc}
 				alt={`Gallery image ${index + 1}`}
-				w="full"
-				h="full"
-				objectFit="cover"
+				fill
+				sizes="(max-width: 640px) 50vw, 25vw"
 				loading="lazy"
+				unoptimized
 				onError={handleError}
-				fallback={
-					<Box
-						w="full"
-						h="full"
-						bg="gray.100"
-						display="flex"
-						alignItems="center"
-						justifyContent="center"
-						color="gray.400"
-						fontSize="xs"
-					>
-						📷
-					</Box>
-				}
+				borderRadius="2xl"
 			/>
 		</Box>
 	);

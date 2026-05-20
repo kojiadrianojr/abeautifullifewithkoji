@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Image } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { SkeletonImage } from "@/components/ui/SkeletonImage";
 
 const MotionBox = motion.create(Box);
 
@@ -38,6 +39,7 @@ export function DressCodeImage({ src, index, onClick }: DressCodeImageProps) {
 			borderRadius="2xl"
 			boxShadow="md"
 			onClick={onClick}
+			position="relative"
 			_hover={{
 				boxShadow: "xl",
 				transform: "scale(1.04)",
@@ -46,28 +48,15 @@ export function DressCodeImage({ src, index, onClick }: DressCodeImageProps) {
 				transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
 			}}
 		>
-			<Image
+			<SkeletonImage
 				src={imgSrc}
 				alt={`Dress code inspiration ${index + 1}`}
-				w="full"
-				h="full"
-				objectFit="cover"
+				fill
+				sizes="(max-width: 640px) 50vw, 25vw"
 				loading="lazy"
+				unoptimized
 				onError={handleError}
-				fallback={
-					<Box
-						w="full"
-						h="full"
-						bg="gray.100"
-						display="flex"
-						alignItems="center"
-						justifyContent="center"
-						color="gray.400"
-						fontSize="xs"
-					>
-						👗
-					</Box>
-				}
+				borderRadius="2xl"
 			/>
 		</MotionBox>
 	);

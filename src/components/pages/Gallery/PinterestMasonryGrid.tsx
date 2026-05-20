@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Box } from "@chakra-ui/react";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/SkeletonImage";
 
 interface PinterestMasonryGridProps {
 	images: string[];
@@ -29,6 +29,7 @@ const ASPECT_RATIO_PATTERN = [
 
 const COLUMN_COUNTS = { base: 2, sm: 3, md: 4 };
 const SWAP_INTERVAL_MS = 3500;
+const FADE_DURATION_MS = 400; // must match the CSS transition duration
 
 interface TileState {
 	imageIndex: number;
@@ -48,44 +49,42 @@ export function PinterestMasonryGrid({
 	altText = "Photo",
 	ariaLabel = "Photo collage",
 }: PinterestMasonryGridProps) {
-	const effectiveCols = {
+	const effectiveCols = useMemo(() => ({
 		base: Math.min(COLUMN_COUNTS.base, maxColumns ?? COLUMN_COUNTS.base),
 		sm: Math.min(COLUMN_COUNTS.sm, maxColumns ?? COLUMN_COUNTS.sm),
 		md: Math.min(COLUMN_COUNTS.md, maxColumns ?? COLUMN_COUNTS.md),
-	};
+	}), [maxColumns]);
 
 	// Cap tile count so we never repeat images on initial render
 	const MAX_TILE_COUNT = effectiveCols.md * 4;
 	const TILE_COUNT = Math.min(images.length, MAX_TILE_COUNT);
 
 	// Distribute tiles as evenly as possible across columns
-	const basePerCol = Math.floor(TILE_COUNT / effectiveCols.md);
-	const remainder = TILE_COUNT % effectiveCols.md;
-	const tilesPerColumn = Array.from(
-		{ length: effectiveCols.md },
-		(_, i) => (i < remainder ? basePerCol + 1 : basePerCol)
+	const tilesPerColumn = useMemo(() => {
+		const basePerCol = Math.floor(TILE_COUNT / effectiveCols.md);
+		const remainder = TILE_COUNT % effectiveCols.md;
+		return Array.from(
+			{ length: effectiveCols.md },
+			(_, i) => (i < remainder ? basePerCol + 1 : basePerCol)
+		);
+	}, [TILE_COUNT, effectiveCols.md]);
+
+	const [tiles, setTiles] = useState<TileState[]>(() =>
+		Array.from({ length: TILE_COUNT }, (_, i) => ({ imageIndex: i, isFading: false }))
 	);
-
-	const initialTiles = useCallback((): TileState[] => {
-		return Array.from({ length: TILE_COUNT }, (_, i) => ({
-			imageIndex: i, // unique index — TILE_COUNT is always ≤ images.length
-			isFading: false,
-		}));
-	}, [TILE_COUNT]);
-
-	const [tiles, setTiles] = useState<TileState[]>(initialTiles);
-	const pendingImageRef = useRef<Map<number, number>>(new Map());
 
 	// Auto-rotate: every interval, pick a random tile to swap.
 	// Only enabled when there are more images than tiles (otherwise every swap
 	// would duplicate an image that's already visible).
+	// Single consolidated effect — schedules the fade-out and the image swap
+	// in one place, avoiding a second chained effect that scanned all tiles.
 	useEffect(() => {
 		if (images.length <= TILE_COUNT) return;
 
 		const interval = setInterval(() => {
-			const tileIndex = Math.floor(Math.random() * TILE_COUNT);
-
 			setTiles((prev) => {
+				const tileIndex = Math.floor(Math.random() * TILE_COUNT);
+
 				// Build the set of image indices currently visible in other tiles
 				const occupied = new Set(
 					prev.filter((_, i) => i !== tileIndex).map((t) => t.imageIndex)
@@ -99,7 +98,16 @@ export function PinterestMasonryGrid({
 				const newImageIndex = pickFromCandidates(available);
 				if (newImageIndex === -1) return prev; // no spare image, skip
 
-				pendingImageRef.current.set(tileIndex, newImageIndex);
+				// Schedule the actual image swap after the fade-out completes
+				setTimeout(() => {
+					setTiles((current) =>
+						current.map((tile, i) =>
+							i === tileIndex ? { imageIndex: newImageIndex, isFading: false } : tile
+						)
+					);
+				}, FADE_DURATION_MS);
+
+				// Start the fade-out immediately
 				return prev.map((tile, i) =>
 					i === tileIndex ? { ...tile, isFading: true } : tile
 				);
@@ -108,29 +116,6 @@ export function PinterestMasonryGrid({
 
 		return () => clearInterval(interval);
 	}, [images.length, TILE_COUNT]);
-
-	// After fade-out, swap the image and fade back in
-	useEffect(() => {
-		const fadingTiles = tiles
-			.map((tile, i) => ({ tile, i }))
-			.filter(({ tile }) => tile.isFading);
-
-		if (fadingTiles.length === 0) return;
-
-		const timeout = setTimeout(() => {
-			setTiles((prev) =>
-				prev.map((tile, i) => {
-					if (!tile.isFading) return tile;
-					const nextImage = pendingImageRef.current.get(i);
-					if (nextImage === undefined) return { ...tile, isFading: false };
-					pendingImageRef.current.delete(i);
-					return { imageIndex: nextImage, isFading: false };
-				})
-			);
-		}, 400); // matches the CSS transition duration
-
-		return () => clearTimeout(timeout);
-	}, [tiles]);
 
 	if (images.length === 0) return null;
 
@@ -195,14 +180,14 @@ export function PinterestMasonryGrid({
 										opacity={tile.isFading ? 0 : 1}
 										transition="opacity 0.4s ease"
 									>
-										<Image
+								<SkeletonImage
 											src={src}
 											alt={`${altText} ${tile.imageIndex + 1}`}
 											fill
-											style={{ objectFit: "cover" }}
 											sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
 											loading={globalTileIndex < 4 ? "eager" : "lazy"}
 											unoptimized
+											borderRadius="xl"
 										/>
 									</Box>
 								</Box>

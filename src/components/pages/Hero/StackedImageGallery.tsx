@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { motion, PanInfo } from "framer-motion";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/SkeletonImage";
 import { ConfigService } from "@/services";
 
 const MotionBox = motion.create(Box);
@@ -19,7 +19,6 @@ export function StackedImageGallery({
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [isDragging, setIsDragging] = useState(false);
 	const [hasDragged, setHasDragged] = useState(false);
-	const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
 
 	const coupleNames = ConfigService.getCoupleNames();
 
@@ -233,33 +232,15 @@ export function StackedImageGallery({
 									borderRadius="xl"
 									overflow="hidden"
 								>
-									{failedImages.has(index) ? (
-										<Box
-											w="full"
-											h="full"
-											bg="gray.100"
-											display="flex"
-											alignItems="center"
-											justifyContent="center"
-											color="gray.400"
-											fontSize="4xl"
-										>
-											📷
-										</Box>
-									) : (
-										<Image
-											src={image}
-											alt={`${coupleNames} – wedding photo ${index + 1} of ${images.length}`}
-											fill
-											style={{ objectFit: "cover" }}
-											sizes="(max-width: 768px) 90vw, (max-width: 1200px) 500px, 600px"
-											priority={index === 0}
-											unoptimized
-											onError={() =>
-												setFailedImages((prev) => new Set(prev).add(index))
-											}
-										/>
-									)}
+									<SkeletonImage
+										src={image}
+										alt={`${coupleNames} – wedding photo ${index + 1} of ${images.length}`}
+										fill
+										sizes="(max-width: 768px) 90vw, (max-width: 1200px) 500px, 600px"
+										priority={index === 0}
+										unoptimized
+										borderRadius="xl"
+									/>
 								</Box>
 
 								{/* Card number indicator */}
