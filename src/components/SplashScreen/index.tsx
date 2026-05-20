@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Box, Container, Text, VStack } from '@chakra-ui/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ConfigService } from "@/services";
 
 const MotionBox = motion.create(Box);
@@ -17,21 +17,22 @@ export default function SplashScreen({ onEnter }: SplashScreenProps) {
   const config = ConfigService.getConfig();
   const { wedding, theme } = config;
   const [isReady, setIsReady] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     // Initial fade in
     const readyTimer = setTimeout(() => setIsReady(true), 100);
 
-    // Auto-transition after couple reaches church (2.8s animation + 0.5s pause)
+    // Auto-transition: skip long animation if user prefers reduced motion
     const autoEnterTimer = setTimeout(() => {
       onEnter();
-    }, 3300);
+    }, prefersReducedMotion ? 800 : 3300);
 
     return () => {
       clearTimeout(readyTimer);
       clearTimeout(autoEnterTimer);
     };
-  }, [onEnter]);
+  }, [onEnter, prefersReducedMotion]);
 
   const name1 = wedding.couple.partner1.firstName;
   const name2 = wedding.couple.partner2.firstName;
@@ -43,7 +44,7 @@ export default function SplashScreen({ onEnter }: SplashScreenProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.8 }}
           position="fixed"
           top={0}
           left={0}

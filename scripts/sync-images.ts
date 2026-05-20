@@ -197,14 +197,28 @@ async function main() {
 
 			const safeFilename = sanitizeFilename(file.name);
 			const outputPath = path.join(outputDir, safeFilename);
+			// WebP counterpart written by the optimize-images step
+			const webpPath = outputPath.replace(/\.(jpg|jpeg|png)$/i, ".webp");
 
-			// Skip if file already exists and hasn't changed
-			if (fs.existsSync(outputPath) && file.modifiedTime) {
-				const localMtime = fs.statSync(outputPath).mtime;
+			// Skip if the original (or its WebP optimized version) is already up-to-date
+			if (file.modifiedTime) {
 				const remoteMtime = new Date(file.modifiedTime);
-				if (localMtime >= remoteMtime) {
-					skipped++;
-					continue;
+
+				if (fs.existsSync(outputPath)) {
+					const localMtime = fs.statSync(outputPath).mtime;
+					if (localMtime >= remoteMtime) {
+						skipped++;
+						continue;
+					}
+				}
+
+				// Original was deleted after WebP conversion — check the WebP instead
+				if (fs.existsSync(webpPath)) {
+					const webpMtime = fs.statSync(webpPath).mtime;
+					if (webpMtime >= remoteMtime) {
+						skipped++;
+						continue;
+					}
 				}
 			}
 

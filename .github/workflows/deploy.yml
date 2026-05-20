@@ -48,6 +48,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+      - name: Get cache week key
+        id: date
+        run: echo "week=$(date +'%Y-%U')" >> $GITHUB_OUTPUT
+      
+      - name: Cache public images
+        uses: actions/cache@v4
+        with:
+          path: public/images
+          key: ${{ runner.os }}-images-${{ steps.date.outputs.week }}
+          restore-keys: |
+            ${{ runner.os }}-images-
+      
       - name: Build with Next.js
         run: npm run build
         env:

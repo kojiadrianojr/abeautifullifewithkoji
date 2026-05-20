@@ -1,7 +1,7 @@
 "use client";
 
 import { Box } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode } from "react";
 
 const MotionBox = motion.create(Box);
@@ -21,7 +21,10 @@ export function FadeIn({
 	direction = "up",
 	mounted = true,
 }: FadeInProps) {
+	const prefersReducedMotion = useReducedMotion();
+
 	const getInitialPosition = () => {
+		if (prefersReducedMotion) return { opacity: 0 };
 		switch (direction) {
 			case "up":
 				return { y: 20, opacity: 0 };
@@ -38,6 +41,7 @@ export function FadeIn({
 	};
 
 	const getAnimatePosition = () => {
+		if (prefersReducedMotion) return { opacity: 1 };
 		switch (direction) {
 			case "up":
 			case "down":
@@ -57,7 +61,7 @@ export function FadeIn({
 			h="100%"
 			initial={getInitialPosition()}
 			animate={mounted ? getAnimatePosition() : getInitialPosition()}
-			transition={{ duration, delay }}
+			transition={{ duration: prefersReducedMotion ? 0 : duration, delay: prefersReducedMotion ? 0 : delay }}
 		>
 			{children}
 		</MotionBox>

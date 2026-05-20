@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { motion, PanInfo } from "framer-motion";
 import Image from "next/image";
+import { ConfigService } from "@/services";
 
 const MotionBox = motion.create(Box);
 
@@ -19,6 +20,8 @@ export function StackedImageGallery({
 	const [isDragging, setIsDragging] = useState(false);
 	const [hasDragged, setHasDragged] = useState(false);
 	const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
+
+	const coupleNames = ConfigService.getCoupleNames();
 
 	// Handle swipe gestures with optimized thresholds for touch devices
 	const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -246,7 +249,7 @@ export function StackedImageGallery({
 									) : (
 										<Image
 											src={image}
-											alt={`Wedding photo ${index + 1}`}
+											alt={`${coupleNames} – wedding photo ${index + 1} of ${images.length}`}
 											fill
 											style={{ objectFit: "cover" }}
 											sizes="(max-width: 768px) 90vw, (max-width: 1200px) 500px, 600px"

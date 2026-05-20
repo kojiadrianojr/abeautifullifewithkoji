@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsx scripts/sync-images.ts",
+    "prebuild": "tsx scripts/sync-images.ts && tsx scripts/optimize-images.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,7 +13,8 @@
     "sync-images": "tsx scripts/sync-images.ts",
     "sync-rsvp": "tsx scripts/sync-rsvp.ts",
     "test-drive": "tsx scripts/test-google-drive.ts",
-    "clear-cache": "node scripts/clear-cache.js"
+    "clear-cache": "node scripts/clear-cache.js",
+    "optimize-images": "tsx scripts/optimize-images.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
