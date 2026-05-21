@@ -70,7 +70,6 @@ export function RSVPSection() {
 							textAlign="center"
 							color="gray.700"
 							fontStyle="italic"
-							textDecor="underline"
 						>
 							Can&apos;t make it? Please let us know so we can plan accordingly.
 						</Text>
