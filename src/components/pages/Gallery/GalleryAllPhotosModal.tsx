@@ -35,6 +35,11 @@ const SKELETON_TILE_COUNT = 12;
 // modal open animation completes before the expensive image tree is mounted.
 const CONTENT_DEFER_MS = 120;
 
+// Progressive loading: how many images to render on first mount and per scroll batch.
+// Keeps initial memory low on mobile Safari (prevents the "A problem repeatedly occurred" crash).
+const INITIAL_BATCH_SIZE = 12;
+const LOAD_MORE_BATCH_SIZE = 12;
+
 interface GalleryAllPhotosModalProps {
 	images: string[];
 	isOpen: boolean;
@@ -166,27 +171,34 @@ export function GalleryAllPhotosModal({
 	// Deferred flag — stays false until after the modal open animation completes,
 	// so the first render only mounts the lightweight skeleton.
 	const [isContentReady, setIsContentReady] = useState(false);
+	// Progressive loading: only render a batch of images at a time to prevent
+	// mobile Safari memory crashes when there are many photos.
+	const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH_SIZE);
 	const deferTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const sentinelRef = useRef<HTMLDivElement | null>(null);
 
 	// Render only the column count matching the current breakpoint — avoids
 	// mounting all three responsive layouts simultaneously (was 3× all images).
 	const colCount = useBreakpointValue({ base: 2, sm: 3, md: 4 }) ?? 2;
 
-	// Fill each column top-to-bottom before moving to the next column.
-	// Recomputed only when the image list or column count changes.
+	// Compute columns only for the currently-visible slice of images.
 	const columns = useMemo<number[][]>(() => {
-		const itemsPerCol = Math.ceil(images.length / colCount);
+		const count = Math.min(visibleCount, images.length);
+		const itemsPerCol = Math.ceil(count / colCount);
 		return Array.from({ length: colCount }, (_, colIndex) => {
 			const start = colIndex * itemsPerCol;
-			const end = Math.min(start + itemsPerCol, images.length);
+			const end = Math.min(start + itemsPerCol, count);
 			return Array.from({ length: end - start }, (_, i) => start + i);
 		});
-	}, [images.length, colCount]);
+	}, [visibleCount, images.length, colCount]);
+
+	const hasMore = visibleCount < images.length;
 
 	// When the modal opens, show skeleton first and defer mounting images.
 	// When it closes, reset so the next open starts with a skeleton again.
 	useEffect(() => {
 		if (isOpen) {
+			setVisibleCount(INITIAL_BATCH_SIZE);
 			setIsContentReady(false);
 			deferTimerRef.current = setTimeout(() => {
 				setIsContentReady(true);
@@ -207,6 +219,24 @@ export function GalleryAllPhotosModal({
 			}
 		};
 	}, [isOpen]);
+
+	// IntersectionObserver: load the next batch when the sentinel scrolls into view.
+	useEffect(() => {
+		if (!isContentReady || !hasMore || !sentinelRef.current) return;
+
+		const sentinel = sentinelRef.current;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) {
+					setVisibleCount((prev) => Math.min(prev + LOAD_MORE_BATCH_SIZE, images.length));
+				}
+			},
+			{ threshold: 0 }
+		);
+
+		observer.observe(sentinel);
+		return () => observer.disconnect();
+	}, [isContentReady, hasMore, images.length]);
 
 	function handleTileClick(index: number) {
 		setExpandedIndex((prev) => (prev === index ? null : index));
@@ -257,6 +287,23 @@ export function GalleryAllPhotosModal({
 									/>
 								))}
 							</Box>
+
+							{/* Sentinel: when scrolled into view, the next batch of images is appended */}
+							{hasMore && (
+								<Box ref={sentinelRef} mt={6} display="flex" justifyContent="center">
+									<SimpleGrid columns={colCount} gap={3} w="100%">
+										{Array.from({ length: Math.min(LOAD_MORE_BATCH_SIZE, images.length - visibleCount) }).map((_, i) => (
+											<Skeleton
+												key={i}
+												borderRadius="xl"
+												startColor="gray.200"
+												endColor="gray.300"
+												style={{ paddingBottom: ASPECT_RATIO_PATTERN[i % ASPECT_RATIO_PATTERN.length] }}
+											/>
+										))}
+									</SimpleGrid>
+								</Box>
+							)}
 						</>
 					) : (
 						<ModalSkeleton colCount={colCount} />
