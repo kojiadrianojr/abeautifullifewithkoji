@@ -9,7 +9,7 @@ import { getAssetPath } from "@/lib/asset-path";
 export function RSVPSection() {
 	const config = ConfigService.getConfig();
 	const { rsvp } = config.content;
-	const rsvpBgPath = getAssetPath("/images/assets/RSVP-bg.png");
+	const rsvpBgPath = getAssetPath("/images/assets/RSVP-bg.webp");
 
 	return (
 		<Box
