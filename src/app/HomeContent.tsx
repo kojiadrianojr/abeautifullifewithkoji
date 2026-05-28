@@ -78,7 +78,7 @@ export default function HomeContent({
 	return (
 		<Box minH="100vh">
 			{showSplash ? (
-				<SplashScreen onEnter={handleEnterSite} />
+				<SplashScreen onEnter={handleEnterSite} prenupPhotos={prenupPhotos} />
 			) : (
 				<Box as="main" minH="100vh">
 					<Navigation />

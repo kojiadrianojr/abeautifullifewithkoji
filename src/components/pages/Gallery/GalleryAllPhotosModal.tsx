@@ -56,8 +56,6 @@ interface ColumnProps {
 	totalCols: number;
 	images: string[];
 	altPrefix: string;
-	expandedIndex: number | null;
-	onTileClick: (index: number) => void;
 }
 
 // Extracted as a module-level memoized component so React can reuse the
@@ -68,17 +66,12 @@ const Column = memo(function Column({
 	totalCols,
 	images,
 	altPrefix,
-	expandedIndex,
-	onTileClick,
 }: ColumnProps) {
-	const hasExpanded = expandedIndex !== null;
-
 	return (
 		<Box display="flex" flexDirection="column" gap={3} flex="1" minW={0}>
 			{indices.map((imageIndex) => {
 				const globalSlot = colIndex * totalCols + (imageIndex % ASPECT_RATIO_PATTERN.length);
 				const paddingBottom = ASPECT_RATIO_PATTERN[globalSlot % ASPECT_RATIO_PATTERN.length];
-				const isExpanded = expandedIndex === imageIndex;
 				// Prioritise the first two rows of images for faster initial paint
 				const isAboveFold = imageIndex < totalCols * 2;
 
@@ -89,21 +82,9 @@ const Column = memo(function Column({
 						w="100%"
 						overflow="hidden"
 						borderRadius="xl"
-						boxShadow={isExpanded ? "0 20px 60px rgba(0,0,0,0.45)" : "md"}
-						cursor="pointer"
-						zIndex={isExpanded ? 10 : 1}
-						style={{
-							paddingBottom,
-							transform: isExpanded
-								? "scale(1.45)"
-								: hasExpanded
-								? "scale(0.88)"
-								: "scale(1)",
-							transition: "transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease",
-							opacity: hasExpanded && !isExpanded ? 0.65 : 1,
-						}}
+						boxShadow="md"
+						style={{ paddingBottom }}
 						_hover={{ boxShadow: "lg" }}
-						onClick={() => onTileClick(imageIndex)}
 					>
 						<Box position="absolute" inset={0}>
 							<Image
@@ -117,25 +98,6 @@ const Column = memo(function Column({
 								unoptimized
 							/>
 						</Box>
-
-						{/* Expanded indicator badge */}
-						{isExpanded && (
-							<Box
-								position="absolute"
-								top={2}
-								right={2}
-								bg="blackAlpha.600"
-								backdropFilter="blur(6px)"
-								px={2}
-								py={0.5}
-								borderRadius="full"
-								pointerEvents="none"
-							>
-								<Text color="white" fontSize="xs" fontWeight="semibold">
-									{imageIndex + 1} / {images.length}
-								</Text>
-							</Box>
-						)}
 					</Box>
 				);
 			})}
@@ -167,7 +129,6 @@ export function GalleryAllPhotosModal({
 	title = "All Photos",
 	altPrefix = "Prenup photo",
 }: GalleryAllPhotosModalProps) {
-	const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 	// Deferred flag — stays false until after the modal open animation completes,
 	// so the first render only mounts the lightweight skeleton.
 	const [isContentReady, setIsContentReady] = useState(false);
@@ -209,7 +170,6 @@ export function GalleryAllPhotosModal({
 				deferTimerRef.current = null;
 			}
 			setIsContentReady(false);
-			setExpandedIndex(null);
 		}
 
 		return () => {
@@ -238,9 +198,6 @@ export function GalleryAllPhotosModal({
 		return () => observer.disconnect();
 	}, [isContentReady, hasMore, images.length]);
 
-	function handleTileClick(index: number) {
-		setExpandedIndex((prev) => (prev === index ? null : index));
-	}
 
 	return (
 		<Modal
@@ -269,10 +226,6 @@ export function GalleryAllPhotosModal({
 				<ModalBody px={{ base: 4, md: 8 }} py={6}>
 					{isContentReady ? (
 						<>
-							<Text fontSize="sm" color="gray.500" mb={6} textAlign="center">
-								Click any photo to enlarge it
-							</Text>
-
 							<Box display="flex" gap={4} alignItems="flex-start">
 								{columns.map((indices, colIndex) => (
 									<Column
@@ -282,8 +235,6 @@ export function GalleryAllPhotosModal({
 										totalCols={colCount}
 										images={images}
 										altPrefix={altPrefix}
-										expandedIndex={expandedIndex}
-										onTileClick={handleTileClick}
 									/>
 								))}
 							</Box>
