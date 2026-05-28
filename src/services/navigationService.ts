@@ -14,8 +14,8 @@ export const NAV_ITEMS: NavItem[] = [
 	{ label: "Details", href: "#details" },
 	{ label: "Dress Code", href: "#dress-code" },
 	{ label: "Entourage", href: "#entourage" },
-	{ label: "RSVP", href: "#rsvp" },
 	{ label: "FAQ", href: "#faq" },
+	{ label: "RSVP", href: "#rsvp" },
 ];
 
 export class NavigationService {

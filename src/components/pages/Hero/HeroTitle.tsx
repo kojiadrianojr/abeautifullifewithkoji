@@ -19,8 +19,9 @@ export function HeroTitle({ tagline, coupleNames, mounted }: HeroTitleProps) {
 					fontSize={{ base: "lg", md: "xl" }}
 					fontWeight={500}
 					letterSpacing="wider"
-				color="secondary.600"
+					color="whiteAlpha.800"
 					textTransform="uppercase"
+					textShadow="0 1px 4px rgba(0,0,0,0.6)"
 				>
 					{tagline}
 				</Text>
@@ -34,8 +35,9 @@ export function HeroTitle({ tagline, coupleNames, mounted }: HeroTitleProps) {
 						fontFamily="heading"
 						fontWeight="normal"
 						letterSpacing="wide"
-						color="gray.800"
+						color="white"
 						lineHeight={1.1}
+						textShadow="0 2px 12px rgba(0,0,0,0.55)"
 					>
 						{name1}
 					</Heading>
@@ -44,9 +46,10 @@ export function HeroTitle({ tagline, coupleNames, mounted }: HeroTitleProps) {
 						fontSize={{ base: "4xl", sm: "5xl", md: "6xl" }}
 						fontFamily="heading"
 						fontWeight="normal"
-						color="primary.500"
+						color="primary.300"
 						lineHeight={1}
 						py={1}
+						textShadow="0 2px 8px rgba(0,0,0,0.4)"
 					>
 						&amp;
 					</Box>
@@ -57,8 +60,9 @@ export function HeroTitle({ tagline, coupleNames, mounted }: HeroTitleProps) {
 						fontFamily="heading"
 						fontWeight="normal"
 						letterSpacing="wide"
-						color="gray.800"
+						color="white"
 						lineHeight={1.1}
+						textShadow="0 2px 12px rgba(0,0,0,0.55)"
 					>
 						{name2}
 					</Heading>

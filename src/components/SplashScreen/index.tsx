@@ -148,10 +148,12 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
 
   const [phase, setPhase] = useState<'entering' | 'idle' | 'scattering' | 'fading'>('entering');
 
-  // Pick up to 16 images; fall back gracefully if fewer are available
+  // Mobile shows 24 tiles (3 cols × 8 rows); desktop shows 24 tiles (4 cols × 6 rows)
   const COLS_DESKTOP = 4;
   const COLS_MOBILE = 3;
-  const MAX_TILES = 16;
+  const MAX_TILES_MOBILE = 24;
+  const MAX_TILES_DESKTOP = 24;
+  const MAX_TILES = Math.max(MAX_TILES_MOBILE, MAX_TILES_DESKTOP);
   const tiles = prenupPhotos.slice(0, MAX_TILES);
 
   useEffect(() => {
@@ -174,11 +176,11 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
   const name2 = wedding.couple.partner2.firstName;
 
   // Grid fills the entire viewport — tiles stretch to fill rows evenly
+  // Mobile: 3 cols × 8 rows = 24 tiles; Desktop: 4 cols × 6 rows = 24 tiles
   const gridStyle: React.CSSProperties = {
     display: 'grid',
     gridTemplateColumns: `repeat(${COLS_MOBILE}, 1fr)`,
-    // 16 tiles ÷ 3 cols = 6 rows on mobile; each row fills an equal fraction of 100vh
-    gridAutoRows: `calc(100vh / ${Math.ceil(MAX_TILES / COLS_MOBILE)})`,
+    gridAutoRows: `calc(100vh / ${Math.ceil(MAX_TILES_MOBILE / COLS_MOBILE)})`,
     gap: '4px',
     width: '100%',
     height: '100%',
@@ -369,7 +371,8 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'var(--color-background)',
+            // Match the hero section's darkened photo overlay (blackAlpha.500–600 + brightness 0.75)
+            background: '#0d0d0d',
             pointerEvents: 'none',
             zIndex: 10,
           }}
@@ -380,7 +383,7 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
           @media (min-width: 640px) {
             .splash-grid {
               grid-template-columns: repeat(4, 1fr) !important;
-              grid-auto-rows: calc(100vh / 4) !important;
+              grid-auto-rows: calc(100vh / 6) !important;
             }
           }
         `}</style>

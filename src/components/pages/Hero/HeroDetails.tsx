@@ -21,15 +21,17 @@ export function HeroDetails({
 			<VStack spacing={2}>
 				<Text
 					fontSize={{ base: "lg", md: "xl" }}
-					color="gray.700"
+					color="whiteAlpha.900"
 					fontWeight={500}
+					textShadow="0 1px 6px rgba(0,0,0,0.5)"
 				>
 					{weddingDate} • {weddingTime}
 				</Text>
 				<Text
 					fontSize={{ base: "md", md: "lg" }}
-					color="gray.600"
+					color="whiteAlpha.800"
 					fontWeight={400}
+					textShadow="0 1px 4px rgba(0,0,0,0.4)"
 				>
 					{venueName}
 				</Text>

@@ -21,9 +21,7 @@ export function useActiveSection({ sectionIds, offset = 100 }: UsActiveSectionOp
         return false;
       });
 
-      if (currentSection) {
-        setActiveSection(currentSection);
-      }
+      setActiveSection(currentSection ?? '');
     };
 
     handleScroll();

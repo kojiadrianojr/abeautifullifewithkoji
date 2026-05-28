@@ -6,7 +6,7 @@ import { Box, Text, Flex, VStack, Icon, Modal, ModalOverlay, ModalContent, Modal
 import { ConfigService } from "@/services";
 import { FiMaximize2 } from "react-icons/fi";
 
-function CountdownComponent() {
+function CountdownComponent({ variant = "light" }: { variant?: "light" | "dark" }) {
 	const [mounted, setMounted] = useState(false);
 	const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -30,24 +30,26 @@ function CountdownComponent() {
 				alignItems="center"
 				justifyContent="center"
 			>
-				<Text fontSize="xl" opacity={0.7}>
+				<Text fontSize="xl" opacity={0.7} color={variant === "dark" ? "whiteAlpha.700" : undefined}>
 					Loading...
 				</Text>
 			</Box>
 		);
 	}
 
+	const isDark = variant === "dark";
+
 	return (
 		<>
 			<Box>
 				<Countdown
 					date={new Date(ConfigService.getConfig().wedding.datetime).getTime()}
-					renderer={(props) => renderer(props, openFullScreen, false)}
+					renderer={(props) => renderer(props, openFullScreen, false, isDark)}
 				/>
 				<Flex justifyContent="center" mt={3}>
 					<Text
 						fontSize="xs"
-						color="gray.500"
+						color={isDark ? "whiteAlpha.600" : "gray.500"}
 						cursor="pointer"
 						onClick={openFullScreen}
 						px={3}
@@ -55,8 +57,8 @@ function CountdownComponent() {
 						borderRadius="md"
 						transition="all 0.2s"
 						_hover={{
-							color: "primary.600",
-							bg: "gray.50",
+							color: isDark ? "primary.300" : "primary.600",
+							bg: isDark ? "whiteAlpha.100" : "gray.50",
 						}}
 						userSelect="none"
 						display="flex"
@@ -122,14 +124,15 @@ interface CountdownRenderProps {
 const renderer = (
 	{ days, hours, minutes, seconds, completed }: CountdownRenderProps,
 	openFullScreen: () => void,
-	isFullScreenMode: boolean
+	isFullScreenMode: boolean,
+	isDark = false
 ) => {
 	if (completed) {
 		return (
 			<Text 
 				fontSize={isFullScreenMode ? "6xl" : "2xl"} 
 				fontWeight="semibold" 
-				color={isFullScreenMode ? "white" : "primary.600"}
+				color={isFullScreenMode ? "white" : isDark ? "primary.300" : "primary.600"}
 			>
 				Today&apos;s the day! 🎉
 			</Text>
@@ -160,13 +163,13 @@ const renderer = (
 						key={index}
 						px={isFullScreenMode ? { base: 8, sm: 12 } : { base: 4, sm: 6 }}
 						py={isFullScreenMode ? { base: 6, sm: 10 } : { base: 3, sm: 4 }}
-						bg={isFullScreenMode ? "whiteAlpha.100" : "gray.50"}
+						bg={isFullScreenMode ? "whiteAlpha.100" : isDark ? "whiteAlpha.100" : "gray.50"}
 						borderRadius="xl"
 						minW={isFullScreenMode ? { base: "120px", sm: "180px" } : { base: "70px", sm: "90px" }}
 						textAlign="center"
 						spacing={isFullScreenMode ? 3 : 1}
 						border="2px solid"
-						borderColor={isFullScreenMode ? "whiteAlpha.300" : "gray.200"}
+						borderColor={isFullScreenMode ? "whiteAlpha.300" : isDark ? "whiteAlpha.200" : "gray.200"}
 						transition="all 0.3s ease"
 						cursor={isFullScreenMode ? "default" : "pointer"}
 						position="relative"
@@ -174,6 +177,10 @@ const renderer = (
 						display={isSeconds && !isFullScreenMode ? { base: "none", xl: "flex" } : "flex"}
 						_hover={isFullScreenMode ? {
 							borderColor: "whiteAlpha.500",
+						} : isDark ? {
+							borderColor: "primary.400",
+							transform: "translateY(-2px)",
+							boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
 						} : {
 							borderColor: "secondary.400",
 							transform: "translateY(-2px)",
@@ -182,7 +189,7 @@ const renderer = (
 						_active={isFullScreenMode ? {} : {
 							transform: "translateY(0)",
 						}}
-						backdropFilter={isFullScreenMode ? "blur(10px)" : "none"}
+						backdropFilter={isFullScreenMode || isDark ? "blur(10px)" : "none"}
 					>
 					{!isFullScreenMode && (
 						<Box
@@ -201,14 +208,14 @@ const renderer = (
 							<Icon
 								as={FiMaximize2}
 								boxSize={3}
-								color="gray.400"
+								color={isDark ? "whiteAlpha.500" : "gray.400"}
 							/>
 						</Box>
 					)}
 					<Text
 						fontSize={isFullScreenMode ? { base: "7xl", sm: "8xl", md: "9xl" } : { base: "3xl", sm: "4xl" }}
 						fontWeight="bold"
-						color={isFullScreenMode ? "white" : "primary.600"}
+						color={isFullScreenMode ? "white" : isDark ? "white" : "primary.600"}
 						lineHeight={1}
 					>
 						{unit.value}
@@ -216,7 +223,7 @@ const renderer = (
 					<Text
 						fontSize={isFullScreenMode ? { base: "xl", sm: "2xl" } : { base: "xs", sm: "sm" }}
 						fontWeight="semibold"
-						color={isFullScreenMode ? "whiteAlpha.800" : "gray.600"}
+						color={isFullScreenMode ? "whiteAlpha.800" : isDark ? "whiteAlpha.700" : "gray.600"}
 						textTransform="uppercase"
 						letterSpacing="wide"
 					>
