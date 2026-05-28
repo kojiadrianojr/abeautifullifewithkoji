@@ -64,7 +64,7 @@ export function ScheduleEvent({
 					bgGradient="linear(to-b, primary.500, primary.400, secondary.500)"
 					transform="translateX(-50%)"
 					zIndex={0}
-					boxShadow="0 0 8px rgba(212, 102, 140, 0.3)"
+					boxShadow="0 0 8px rgba(192,57,43,0.25)"
 					opacity={0.9}
 				/>
 			)}
@@ -81,7 +81,7 @@ export function ScheduleEvent({
 					bgGradient="linear(to-b, primary.500, primary.400, secondary.500)"
 					transform="translateX(-50%)"
 					zIndex={0}
-					boxShadow="0 0 8px rgba(212, 102, 140, 0.3)"
+					boxShadow="0 0 8px rgba(192,57,43,0.25)"
 					opacity={0.9}
 				/>
 			)}

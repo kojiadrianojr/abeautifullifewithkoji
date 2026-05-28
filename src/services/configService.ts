@@ -3,11 +3,14 @@
  */
 
 import weddingConfig from "@/config/wedding.json";
+import themeConfig from "@/config/theme.json";
 
 export type WeddingConfig = typeof weddingConfig;
+export type ThemeConfig = typeof themeConfig;
 
 export class ConfigService {
 	private static config: WeddingConfig = weddingConfig;
+	private static theme: ThemeConfig = themeConfig;
 
 	/**
 	 * Get the full wedding configuration
@@ -97,30 +100,30 @@ export class ConfigService {
 	}
 
 	/**
-	 * Get theme colors
+	 * Get theme (colors + fonts) from the dedicated theme config
 	 */
-	static getTheme() {
-		return this.config.theme;
+	static getTheme(): ThemeConfig {
+		return this.theme;
 	}
 
 	/**
 	 * Get primary color
 	 */
 	static getPrimaryColor(): string {
-		return this.config.theme.colors.primary;
+		return this.theme.colors.primary;
 	}
 
 	/**
 	 * Get secondary color
 	 */
 	static getSecondaryColor(): string {
-		return this.config.theme.colors.secondary;
+		return this.theme.colors.secondary;
 	}
 
 	/**
 	 * Get accent color
 	 */
 	static getAccentColor(): string {
-		return this.config.theme.colors.accent;
+		return this.theme.colors.accent;
 	}
 }

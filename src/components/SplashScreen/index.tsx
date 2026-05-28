@@ -15,7 +15,8 @@ interface SplashScreenProps {
 
 export default function SplashScreen({ onEnter }: SplashScreenProps) {
   const config = ConfigService.getConfig();
-  const { wedding, theme } = config;
+  const { wedding } = config;
+  const theme = ConfigService.getTheme();
   const [isReady, setIsReady] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 

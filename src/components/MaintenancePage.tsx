@@ -12,7 +12,7 @@ export default function MaintenancePage() {
 				flexDirection: 'column',
 				alignItems: 'center',
 				justifyContent: 'center',
-				background: 'linear-gradient(135deg, #FFFAF0 0%, rgba(195, 177, 225, 0.12) 40%, rgba(245, 202, 195, 0.12) 100%)',
+				background: 'linear-gradient(135deg, var(--color-background) 0%, rgba(212,160,23,0.08) 40%, rgba(192,57,43,0.08) 100%)',
 				...fontStyles.body,
 				padding: '2rem',
 				textAlign: 'center',
@@ -20,7 +20,7 @@ export default function MaintenancePage() {
 				overflow: 'hidden',
 			}}
 		>
-			{/* Decorative watercolor blobs */}
+			{/* Decorative blobs */}
 			<div
 				style={{
 					position: 'absolute',
@@ -29,7 +29,7 @@ export default function MaintenancePage() {
 					width: '320px',
 					height: '320px',
 					borderRadius: '50%',
-					background: 'radial-gradient(circle, rgba(195, 177, 225, 0.25) 0%, transparent 70%)',
+					background: 'radial-gradient(circle, rgba(212,160,23,0.18) 0%, transparent 70%)',
 					pointerEvents: 'none',
 				}}
 			/>
@@ -41,7 +41,7 @@ export default function MaintenancePage() {
 					width: '280px',
 					height: '280px',
 					borderRadius: '50%',
-					background: 'radial-gradient(circle, rgba(245, 202, 195, 0.3) 0%, transparent 70%)',
+					background: 'radial-gradient(circle, rgba(192,57,43,0.15) 0%, transparent 70%)',
 					pointerEvents: 'none',
 				}}
 			/>
@@ -53,7 +53,7 @@ export default function MaintenancePage() {
 					width: '160px',
 					height: '160px',
 					borderRadius: '50%',
-					background: 'radial-gradient(circle, rgba(168, 216, 234, 0.2) 0%, transparent 70%)',
+					background: 'radial-gradient(circle, rgba(255,243,205,0.4) 0%, transparent 70%)',
 					pointerEvents: 'none',
 				}}
 			/>
@@ -74,7 +74,7 @@ export default function MaintenancePage() {
 						marginBottom: '0.5rem',
 						opacity: 0.6,
 						letterSpacing: '0.5em',
-						color: '#C3B1E1',
+						color: 'var(--color-secondary)',
 					}}
 				>
 					✦ ✦ ✦
@@ -86,7 +86,7 @@ export default function MaintenancePage() {
 						...fontStyles.heading,
 						fontSize: 'clamp(2.8rem, 8vw, 4.5rem)',
 						fontWeight: 400,
-						color: '#6B4E71',
+						color: 'var(--color-primary)',
 						margin: '0 0 0.25rem',
 						lineHeight: 1.2,
 					}}
@@ -100,7 +100,7 @@ export default function MaintenancePage() {
 						margin: '1.25rem auto',
 						width: '120px',
 						height: '1px',
-						background: 'linear-gradient(90deg, transparent, rgba(195, 177, 225, 0.7), transparent)',
+						background: 'linear-gradient(90deg, transparent, var(--color-secondary), transparent)',
 					}}
 				/>
 
@@ -110,7 +110,7 @@ export default function MaintenancePage() {
 						...fontStyles.display,
 						fontSize: 'clamp(1.4rem, 4vw, 2rem)',
 						fontWeight: 500,
-						color: '#4A3F5C',
+						color: 'var(--color-foreground)',
 						margin: '0 0 1rem',
 						letterSpacing: '0.05em',
 					}}
@@ -123,10 +123,11 @@ export default function MaintenancePage() {
 					style={{
 						...fontStyles.body,
 						fontSize: '1rem',
-						color: '#7A6E8A',
+						color: 'var(--color-foreground)',
 						margin: '0 0 2rem',
 						lineHeight: 1.7,
 						fontWeight: 300,
+						opacity: 0.7,
 					}}
 				>
 					We&apos;re putting the finishing touches on something beautiful.
@@ -139,7 +140,7 @@ export default function MaintenancePage() {
 					style={{
 						fontSize: '1.4rem',
 						opacity: 0.45,
-						color: '#F5CAC3',
+						color: 'var(--color-secondary)',
 					}}
 				>
 					🌸

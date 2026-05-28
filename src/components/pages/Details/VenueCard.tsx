@@ -98,7 +98,7 @@ export function VenueCard({
 							<Text
 								fontSize="sm"
 								fontWeight="semibold"
-								color="primary.500"
+								color="secondary.500"
 								textTransform="uppercase"
 								letterSpacing="wide"
 								mb={2}

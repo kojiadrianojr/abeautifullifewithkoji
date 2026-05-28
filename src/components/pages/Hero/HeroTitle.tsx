@@ -19,7 +19,7 @@ export function HeroTitle({ tagline, coupleNames, mounted }: HeroTitleProps) {
 					fontSize={{ base: "lg", md: "xl" }}
 					fontWeight={500}
 					letterSpacing="wider"
-					color="primary.600"
+				color="secondary.600"
 					textTransform="uppercase"
 				>
 					{tagline}

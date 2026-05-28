@@ -16,7 +16,7 @@ export function DetailsSection() {
 	return (
 		<Box id="details" as="section" py={{ base: 16, md: 24 }} bg="accent.50">
 			<Container maxW="6xl">
-				<SectionTitle color="primary.500" mb={16}>
+				<SectionTitle color="secondary.500" mb={16}>
 					{config.content.details.title || "Venue Details"}
 				</SectionTitle>
 

@@ -34,7 +34,7 @@ export function SkeletonImage({
 					zIndex={1}
 					style={skeletonStyle}
 					sx={{
-						background: "linear-gradient(90deg, #ede9f0 25%, #f5f0f8 50%, #ede9f0 75%)",
+						background: "linear-gradient(90deg, var(--color-accent) 25%, #fffdf5 50%, var(--color-accent) 75%)",
 						backgroundSize: "200% 100%",
 						animation: "shimmer 1.6s infinite linear",
 						"@keyframes shimmer": {

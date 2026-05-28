@@ -123,7 +123,7 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
           position="relative"
           borderRadius="2xl"
           overflow="hidden"
-          bg="pink.50"
+          bg="accent.50"
           boxShadow="lg"
           cursor="pointer"
           onClick={() => openLightbox([active.main], 0)}
@@ -197,7 +197,7 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
                   objectFit="cover"
                 />
               ) : (
-                <Box h={{ base: "80px", md: "110px" }} bg="pink.100" />
+                <Box h={{ base: "80px", md: "110px" }} bg="accent.100" />
               )}
             </MotionBox>
             <Text

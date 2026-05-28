@@ -39,7 +39,7 @@ export function MilestonesSection({
 
 			<Container maxW="7xl">
 				<SectionTitle
-					bgGradient="linear(to-r, purple.500, orange.400)"
+					bgGradient="linear(to-r, secondary.500, primary.500)"
 					bgClip="text"
 					mb={2}
 				>
@@ -52,7 +52,7 @@ export function MilestonesSection({
 					mx="auto"
 					mb={16}
 					borderRadius="md"
-					bgGradient="linear(to-r, pink.500, orange.400, pink.500)"
+					bgGradient="linear(to-r, primary.500, secondary.500, primary.500)"
 					border="none"
 				/>
 
@@ -60,7 +60,7 @@ export function MilestonesSection({
 					{/* Milestones Timeline */}
 					{milestones.timeline && milestones.timeline.length > 0 && (
 						<Box>
-							<SectionTitle fontSize="3xl" mb={8} color="primary.500">
+							<SectionTitle fontSize="3xl" mb={8} color="secondary.500">
 								Our Milestones
 							</SectionTitle>
 							<MilestonesTimeline timeline={milestones.timeline} />
@@ -80,7 +80,7 @@ export function MilestonesSection({
 					{/* Moments We Love - Throwback Photos */}
 					{throwbackPhotos.length > 0 && (
 						<Box>
-							<SectionTitle fontSize="3xl" mb={8} color="primary.500">
+							<SectionTitle fontSize="3xl" mb={8} color="secondary.500">
 								Moments We Love
 							</SectionTitle>
 							<PinterestMasonryGrid

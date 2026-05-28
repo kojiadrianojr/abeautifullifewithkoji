@@ -42,7 +42,7 @@ export function DressCodeDetailedStrip({ images }: DressCodeDetailedStripProps) 
 				css={{
 					"&::-webkit-scrollbar": { height: "4px" },
 					"&::-webkit-scrollbar-thumb": {
-						background: "#F8B4D0",
+						background: "var(--color-secondary)",
 						borderRadius: "4px",
 					},
 					"&::-webkit-scrollbar-track": { background: "transparent" },

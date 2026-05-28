@@ -22,10 +22,10 @@ export function GuestResult({ guest }: GuestResultProps) {
 			borderColor="purple.100"
 			overflow="hidden"
 		>
-			{/* Soft blush top accent bar */}
+			{/* Top accent bar */}
 			<Box
 				h="4px"
-				bgGradient="linear(to-r, #C3B1E1, #F5CAC3)"
+				bgGradient="linear(to-r, primary.400, secondary.400)"
 			/>
 
 			<VStack spacing={3} p={{ base: 5, md: 6 }} align="stretch">

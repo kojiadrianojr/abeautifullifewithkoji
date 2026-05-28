@@ -21,7 +21,7 @@ export function GallerySection({ images }: GallerySectionProps) {
 	return (
 		<Box id="gallery" as="section" py={{ base: 16, md: 24 }} bg="gray.100">
 			<Container maxW="7xl">
-				<SectionTitle color="primary.500" mb={10}>
+				<SectionTitle color="secondary.500" mb={10}>
 					{gallery.title}
 				</SectionTitle>
 
@@ -39,12 +39,12 @@ export function GallerySection({ images }: GallerySectionProps) {
 						<Button
 							size="lg"
 							variant="outline"
-							colorScheme="primary"
+							colorScheme="secondary"
 							borderRadius="full"
 							px={10}
 							fontWeight="semibold"
 							onClick={() => setModalOpen(true)}
-							_hover={{ bg: "primary.50" }}
+							_hover={{ bg: "secondary.50" }}
 						>
 							See All Photos ({images.length})
 						</Button>

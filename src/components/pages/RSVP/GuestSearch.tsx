@@ -102,7 +102,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 								<AnimatedButton
 									size="lg"
 									variant="solid"
-									bg="primary.500"
+									bg="secondary.500"
 									color="white"
 									leftIcon={<EditIcon />}
 									px={{ base: 8, md: 10 }}
@@ -111,10 +111,10 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 									fontWeight="semibold"
 									w="100%"
 									borderRadius="xl"
-									boxShadow="0 4px 16px rgba(195,177,225,0.4)"
+									boxShadow="0 4px 16px rgba(192,57,43,0.3)"
 									_hover={{
-										bg: "primary.600",
-										boxShadow: "0 6px 24px rgba(195,177,225,0.5)",
+										bg: "secondary.600",
+										boxShadow: "0 6px 24px rgba(192,57,43,0.4)",
 										transform: "translateY(-2px)",
 									}}
 								>

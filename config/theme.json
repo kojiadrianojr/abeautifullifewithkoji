@@ -1,0 +1,15 @@
+{
+  "colors": {
+    "primary": "#F5B800",
+    "secondary": "#C0392B",
+    "accent": "#FFF8DC",
+    "gold": "#B8860B",
+    "background": "#FFFEF5",
+    "foreground": "#2C1A15"
+  },
+  "fonts": {
+    "heading": "Great Vibes",
+    "body": "Lato",
+    "display": "Playfair Display"
+  }
+}

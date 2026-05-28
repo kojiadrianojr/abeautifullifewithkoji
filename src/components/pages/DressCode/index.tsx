@@ -26,7 +26,7 @@ export function DressCodeSection({ images }: DressCodeSectionProps) {
 			className="watercolor-section-blush"
 		>
 			<Container maxW="4xl">
-				<SectionTitle color="primary.500" mb={4}>
+				<SectionTitle color="secondary.500" mb={4}>
 					{dressCode.title}
 				</SectionTitle>
 

@@ -49,12 +49,12 @@ export function EntourageSection() {
 	return (
 		<Box id="entourage" as="section" py={{ base: 16, md: 24 }} bg="accent.50">
 			<Container maxW="6xl">
-				<SectionTitle color="primary.500" mb={4}>
+				<SectionTitle color="secondary.500" mb={4}>
 					{entourage.title || "Our Entourage"}
 				</SectionTitle>
 				<Text
 					textAlign="center"
-					color="primary.600"
+						color="secondary.600"
 					fontSize={{ base: "xl", md: "lg" }}
 					fontFamily="display"
 					fontStyle="italic"

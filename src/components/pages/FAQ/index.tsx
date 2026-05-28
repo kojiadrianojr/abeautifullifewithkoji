@@ -9,7 +9,7 @@ export function FAQSection() {
 	return (
 		<Box id="faq" as="section" py={{ base: 16, md: 24 }}>
 			<Container maxW="6xl">
-				<SectionTitle color="primary.500" mb={16}>
+			<SectionTitle color="primary.500" mb={16}>
 					{faqData.title}
 				</SectionTitle>
 

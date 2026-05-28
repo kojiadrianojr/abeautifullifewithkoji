@@ -48,7 +48,7 @@ export function RSVPSection() {
 					py={{ base: 8, md: 12 }}
 				>
 					<VStack spacing={5}>
-						<SectionTitle color="primary.600">{rsvp.title}</SectionTitle>
+						<SectionTitle color="secondary.600">{rsvp.title}</SectionTitle>
 						<Text
 							fontSize={{ base: "lg", md: "xl" }}
 							textAlign="center"

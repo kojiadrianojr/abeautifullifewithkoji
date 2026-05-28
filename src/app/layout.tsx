@@ -82,7 +82,9 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { heading, body, display } = config.theme.fonts;
+	const theme = ConfigService.getTheme();
+	const { heading, body, display } = theme.fonts;
+	const { primary, secondary, accent, gold, background, foreground } = theme.colors;
 	const googleFontsUrl = buildGoogleFontsUrl(heading, body, display);
 
 	return (
@@ -100,6 +102,12 @@ export default function RootLayout({
 						--font-heading: '${heading}', cursive;
 						--font-display: '${display ?? body}', Georgia, serif;
 						--font-body: '${body}', sans-serif;
+						--color-primary: ${primary};
+						--color-secondary: ${secondary};
+						--color-accent: ${accent};
+						--color-gold: ${gold};
+						--color-background: ${background};
+						--color-foreground: ${foreground};
 					}
 				`}</style>
 				<script
@@ -108,7 +116,7 @@ export default function RootLayout({
 				/>
 			</head>
 			<body>
-				<ThemeProvider theme={config.theme}>
+				<ThemeProvider theme={theme}>
 					<MaintenanceGate>{children}</MaintenanceGate>
 				</ThemeProvider>
 			</body>
