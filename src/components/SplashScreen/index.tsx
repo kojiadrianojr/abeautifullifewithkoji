@@ -48,8 +48,11 @@ const T = {
   titleDelay: 2.4,         // when the couple names appear
   titleDuration: 1.0,
   scatterDelay: 4800,      // ms until scatter begins (after mount)
-  enterDelay: 6200,        // ms until onEnter() is called
+  fadeDelay: 5800,         // ms until background fade-to-cream begins (scatter ~0.9s, +100ms buffer)
+  enterDelay: 7200,        // ms until onEnter() is called (gives ~1.4s for the fade)
   reducedTotal: 1200,      // ms for reduced-motion path
+  reducedFadeDelay: 1400,  // ms for reduced-motion fade phase
+  reducedEnterDelay: 1900, // ms for reduced-motion onEnter
 };
 
 // ---------------------------------------------------------------------------
@@ -143,7 +146,7 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
   const { wedding } = config;
   const prefersReducedMotion = useReducedMotion();
 
-  const [phase, setPhase] = useState<'entering' | 'idle' | 'scattering'>('entering');
+  const [phase, setPhase] = useState<'entering' | 'idle' | 'scattering' | 'fading'>('entering');
 
   // Pick up to 16 images; fall back gracefully if fewer are available
   const COLS_DESKTOP = 4;
@@ -152,14 +155,17 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
   const tiles = prenupPhotos.slice(0, MAX_TILES);
 
   useEffect(() => {
-    const totalMs = prefersReducedMotion ? T.reducedTotal : T.scatterDelay;
-    const enterMs = prefersReducedMotion ? T.reducedTotal + 200 : T.enterDelay;
+    const scatterMs  = prefersReducedMotion ? T.reducedTotal : T.scatterDelay;
+    const fadeMs     = prefersReducedMotion ? T.reducedFadeDelay : T.fadeDelay;
+    const enterMs    = prefersReducedMotion ? T.reducedEnterDelay : T.enterDelay;
 
-    const scatterTimer = setTimeout(() => setPhase('scattering'), totalMs);
-    const enterTimer = setTimeout(() => onEnter(), enterMs);
+    const scatterTimer = setTimeout(() => setPhase('scattering'), scatterMs);
+    const fadeTimer    = setTimeout(() => setPhase('fading'),    fadeMs);
+    const enterTimer   = setTimeout(() => onEnter(),             enterMs);
 
     return () => {
       clearTimeout(scatterTimer);
+      clearTimeout(fadeTimer);
       clearTimeout(enterTimer);
     };
   }, [onEnter, prefersReducedMotion]);
@@ -191,7 +197,7 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
           position: 'fixed',
           inset: 0,
           zIndex: 9999,
-          background: '#000',
+          background: '#2C1A15',
           overflow: 'hidden',
         }}
         aria-hidden="true"
@@ -212,16 +218,16 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
               index={i}
               cols={COLS_DESKTOP}
               total={tiles.length}
-              isScattering={phase === 'scattering'}
+              isScattering={phase === 'scattering' || phase === 'fading'}
               prefersReducedMotion={prefersReducedMotion}
             />
           ))}
         </div>
 
-        {/* ── Dark overlay ── */}
+        {/* ── Warm vignette overlay ── */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: phase === 'scattering' ? 0 : 0.55 }}
+          animate={{ opacity: phase === 'scattering' || phase === 'fading' ? 0 : 1 }}
           transition={{
             duration: prefersReducedMotion ? 0 : 0.8,
             delay: prefersReducedMotion ? 0 : T.overlayDelay,
@@ -229,7 +235,7 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'rgba(0, 0, 0, 0.55)',
+            background: 'radial-gradient(ellipse at center, rgba(44,26,21,0.38) 0%, rgba(44,26,21,0.75) 100%)',
             pointerEvents: 'none',
           }}
         />
@@ -238,7 +244,7 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={
-            phase === 'scattering'
+            phase === 'scattering' || phase === 'fading'
               ? { opacity: 0, y: -16 }
               : { opacity: 1, y: 0 }
           }
@@ -256,17 +262,31 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
             justifyContent: 'center',
             pointerEvents: 'none',
             textAlign: 'center',
-            padding: '0 1rem',
+            padding: '0 1.5rem',
           }}
         >
+          {/* Ornamental top rule */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            width: '100%',
+            maxWidth: '28rem',
+            marginBottom: '0.5rem',
+          }}>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, transparent, rgba(245,184,0,0.7))' }} />
+            <span style={{ color: 'var(--color-primary)', fontSize: '0.55rem', letterSpacing: '0.4em' }}>✦</span>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(270deg, transparent, rgba(245,184,0,0.7))' }} />
+          </div>
+
           <h1
             style={{
               fontFamily: 'var(--font-heading)',
-              fontWeight: 200,
-              letterSpacing: '0.06em',
-              color: '#fff',
-              lineHeight: 1.15,
-              textShadow: '0 2px 20px rgba(0,0,0,0.6)',
+              fontWeight: 400,
+              letterSpacing: '0.04em',
+              color: 'var(--color-accent)',
+              lineHeight: 1.1,
+              textShadow: '0 2px 24px rgba(44,26,21,0.8)',
               margin: 0,
               display: 'flex',
               flexDirection: 'column',
@@ -293,6 +313,8 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
                 fontWeight: 400,
                 fontSize: '0.65em',
                 lineHeight: 1.2,
+                color: 'var(--color-primary)',
+                filter: 'drop-shadow(0 0 12px rgba(245,184,0,0.45))',
               }}
             >
               &amp;
@@ -300,27 +322,58 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
             <span>{name2}</span>
           </h1>
 
+          {/* Ornamental bottom rule */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            width: '100%',
+            maxWidth: '28rem',
+            marginTop: '0.5rem',
+          }}>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, transparent, rgba(245,184,0,0.7))' }} />
+            <span style={{ color: 'var(--color-primary)', fontSize: '0.55rem', letterSpacing: '0.4em' }}>✦</span>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(270deg, transparent, rgba(245,184,0,0.7))' }} />
+          </div>
+
           <motion.p
             initial={{ opacity: 0 }}
-            animate={phase === 'scattering' ? { opacity: 0 } : { opacity: 1 }}
+            animate={phase === 'scattering' || phase === 'fading' ? { opacity: 0 } : { opacity: 1 }}
             transition={{
               duration: prefersReducedMotion ? 0 : 0.8,
-              delay: prefersReducedMotion ? 0 : T.titleDelay + 0.5,
+              delay: prefersReducedMotion ? 0 : T.titleDelay + 0.4,
             }}
             style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 300,
-              fontSize: 'clamp(0.65rem, 1.8vw, 0.9rem)',
-              letterSpacing: '0.25em',
+              fontFamily: 'var(--font-display)',
+              fontWeight: 400,
+              fontSize: 'clamp(0.6rem, 1.6vw, 0.85rem)',
+              letterSpacing: '0.3em',
               textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.75)',
-              textShadow: '0 1px 8px rgba(0,0,0,0.5)',
-              margin: '1.2rem 0 0',
+              color: 'rgba(255,248,220,0.65)',
+              textShadow: '0 1px 10px rgba(44,26,21,0.6)',
+              margin: '1rem 0 0',
             }}
           >
-            Every detail made with love
+            August 14, 2026
           </motion.p>
         </motion.div>
+
+        {/* ── Fade-to-background overlay (prevents flash on entry) ── */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: phase === 'fading' ? 1 : 0 }}
+          transition={{
+            duration: prefersReducedMotion ? 0.3 : 1.2,
+            ease: [0.4, 0, 0.2, 1],
+          }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'var(--color-background)',
+            pointerEvents: 'none',
+            zIndex: 10,
+          }}
+        />
 
         {/* Responsive grid override */}
         <style>{`
