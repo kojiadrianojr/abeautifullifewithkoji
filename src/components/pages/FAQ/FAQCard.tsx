@@ -27,7 +27,7 @@ export function FAQCard({ question, answer, index }: FAQCardProps) {
       borderColor="gray.100"
       _hover={{
         shadow: "xl",
-        borderColor: "primary.200",
+        borderColor: "secondary.300",
         transform: "translateY(-4px)",
       }}
       css={{
@@ -39,7 +39,7 @@ export function FAQCard({ question, answer, index }: FAQCardProps) {
           as="h3"
           size="md"
           fontWeight="semibold"
-          color="primary.600"
+          color="secondary.600"
           mb={4}
         >
           {question}

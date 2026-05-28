@@ -122,7 +122,7 @@ export function VenueCard({
 						<HStack spacing={3}>
 							<Button
 								flex={1}
-								colorScheme="primary"
+								colorScheme="secondary"
 								leftIcon={<FaDirections />}
 								onClick={handleOpenDirections}
 								size="md"
@@ -132,7 +132,7 @@ export function VenueCard({
 							<Button
 								flex={1}
 								variant="outline"
-								colorScheme="primary"
+								colorScheme="secondary"
 								leftIcon={<FaCopy />}
 								onClick={handleCopyAddress}
 								size="md"

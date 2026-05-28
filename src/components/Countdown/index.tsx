@@ -175,7 +175,7 @@ const renderer = (
 						_hover={isFullScreenMode ? {
 							borderColor: "whiteAlpha.500",
 						} : {
-							borderColor: "primary.300",
+							borderColor: "secondary.400",
 							transform: "translateY(-2px)",
 							boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
 						}}

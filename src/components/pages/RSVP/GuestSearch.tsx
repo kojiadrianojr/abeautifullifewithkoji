@@ -124,16 +124,14 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 
 							{/* Try Another Name */}
 							<Text
-								fontSize="xs"
-								color="gray.700"
+								fontSize="sm"
+								color="gray.500"
 								textAlign="center"
 								cursor="pointer"
 								textDecoration="underline"
 								onClick={handleReset}
-								_hover={{ color: "gray.900" }}
-								fontStyle="italic"
+								_hover={{ color: "gray.700" }}
 								mt={-2}
-								textShadow="0 1px 3px rgba(255,255,255,0.6)"
 							>
 								Search for another guest
 							</Text>
@@ -146,8 +144,8 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 							<AnimatedButton
 								size="md"
 								variant="outline"
-								color="primary.500"
-								borderColor="primary.300"
+								color="secondary.500"
+								borderColor="secondary.300"
 								border="1.5px solid"
 								px={8}
 								py={5}
@@ -157,7 +155,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 								onClick={handleReset}
 								_hover={{
 									bg: "purple.50",
-									borderColor: "primary.400",
+									borderColor: "secondary.400",
 								}}
 							>
 								Try Again

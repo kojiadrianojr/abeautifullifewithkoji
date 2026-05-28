@@ -318,7 +318,7 @@ export default function SplashScreen({ onEnter, prenupPhotos = [] }: SplashScree
               margin: '1.2rem 0 0',
             }}
           >
-            Every detail made with love — just a moment…
+            Every detail made with love
           </motion.p>
         </motion.div>
 

@@ -94,12 +94,12 @@ export function MilestonesSection({
 									<Button
 										size="lg"
 										variant="outline"
-										colorScheme="primary"
+										colorScheme="secondary"
 										borderRadius="full"
 										px={10}
 										fontWeight="semibold"
 										onClick={() => openLightbox()}
-										_hover={{ bg: "primary.50" }}
+										_hover={{ bg: "secondary.50" }}
 									>
 										See All Moments ({throwbackPhotos.length})
 									</Button>

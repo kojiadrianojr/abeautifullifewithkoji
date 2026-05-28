@@ -56,7 +56,7 @@ export function MobileNav({
                     key={item.href}
                     onClick={() => onItemClick(item.href)}
                     variant={isActive ? 'solid' : 'ghost'}
-                    colorScheme={isActive ? 'primary' : 'gray'}
+                    colorScheme={isActive ? 'secondary' : 'gray'}
                     justifyContent="flex-start"
                     fontWeight={isActive ? 700 : 500}
                     size="lg"

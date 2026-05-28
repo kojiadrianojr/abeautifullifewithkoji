@@ -96,7 +96,7 @@ export function ScheduleEvent({
 						borderRadius="full"
 						bg="white"
 						border="5px solid"
-						borderColor="primary.500"
+						borderColor="secondary.500"
 						display="flex"
 						alignItems="center"
 						justifyContent="center"
@@ -120,14 +120,14 @@ export function ScheduleEvent({
 						<Icon
 							as={() => getEventIcon(title)}
 							boxSize={7}
-							color="primary.500"
+							color="secondary.500"
 						/>
 						<Box
 							position="absolute"
 							inset={0}
 							borderRadius="full"
 							border="2px solid"
-							borderColor="primary.300"
+							borderColor="secondary.400"
 							opacity={0.6}
 							animation="pulse 2s ease-in-out infinite"
 							sx={{
@@ -175,7 +175,7 @@ export function ScheduleEvent({
 					<Heading
 						as="h3"
 						size="sm"
-						color="primary.600"
+						color="secondary.600"
 						fontFamily="body"
 						fontWeight="bold"
 					>
@@ -215,7 +215,7 @@ export function ScheduleEvent({
 							<Heading
 								as="h3"
 								size="md"
-								color="primary.600"
+								color="secondary.600"
 								fontFamily="body"
 								fontWeight="bold"
 								textAlign="right"
@@ -237,7 +237,7 @@ export function ScheduleEvent({
 						borderRadius="full"
 						bg="white"
 						border="5px solid"
-						borderColor="primary.500"
+						borderColor="secondary.500"
 						display="flex"
 						alignItems="center"
 						justifyContent="center"
@@ -258,13 +258,13 @@ export function ScheduleEvent({
 							animationDelay: `${index * 0.2 + 0.2}s`,
 						}}
 					>
-						<Icon as={() => getEventIcon(title)} boxSize={8} color="primary.500" />
+						<Icon as={() => getEventIcon(title)} boxSize={8} color="secondary.500" />
 						<Box
 							position="absolute"
 							inset={0}
 							borderRadius="full"
 							border="2px solid"
-							borderColor="primary.300"
+							borderColor="secondary.400"
 							opacity={0.6}
 							animation="pulse 2s ease-in-out infinite"
 							sx={{
@@ -312,7 +312,7 @@ export function ScheduleEvent({
 							<Heading
 								as="h3"
 								size="md"
-								color="primary.600"
+								color="secondary.600"
 								fontFamily="body"
 								fontWeight="bold"
 								textAlign="left"

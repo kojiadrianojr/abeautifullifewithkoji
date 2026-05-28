@@ -32,7 +32,7 @@ export function BackToTopButton({ show, onClick }: BackToTopButtonProps) {
             icon={<ChevronUpIcon />}
             onClick={onClick}
             aria-label="Scroll back to top"
-            colorScheme="primary"
+            colorScheme="secondary"
             size="lg"
             rounded="full"
             boxShadow="lg"

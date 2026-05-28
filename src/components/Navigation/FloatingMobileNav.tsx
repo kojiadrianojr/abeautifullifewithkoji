@@ -148,20 +148,20 @@ export function FloatingMobileNav({
                         px={4}
                         py={2}
                         borderRadius="full"
-                        bg={isActive ? 'primary.500' : 'rgba(255,255,255,0.95)'}
+                        bg={isActive ? 'secondary.500' : 'rgba(255,255,255,0.95)'}
                         color={isActive ? 'white' : 'gray.700'}
                         fontSize="sm"
                         fontWeight={isActive ? 700 : 500}
                         boxShadow="lg"
                         backdropFilter="blur(8px)"
                         border="1px solid"
-                        borderColor={isActive ? 'primary.500' : 'rgba(195,177,225,0.4)'}
+                        borderColor={isActive ? 'secondary.500' : 'rgba(195,177,225,0.4)'}
                         whiteSpace="nowrap"
                         cursor="pointer"
                         transition="all 0.2s ease"
                         _hover={{
-                          bg: isActive ? 'primary.600' : 'primary.50',
-                          color: isActive ? 'white' : 'primary.600',
+                          bg: isActive ? 'secondary.600' : 'secondary.50',
+                          color: isActive ? 'white' : 'secondary.600',
                           transform: 'scale(1.05)',
                         }}
                         _active={{ transform: 'scale(0.97)' }}
@@ -188,7 +188,7 @@ export function FloatingMobileNav({
           backdropFilter="blur(12px)"
           boxShadow="0 4px 24px rgba(195,177,225,0.5), 0 2px 8px rgba(0,0,0,0.15)"
           border="1.5px solid"
-          borderColor="primary.200"
+          borderColor="secondary.300"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -206,7 +206,7 @@ export function FloatingMobileNav({
               inset={0}
               borderRadius="full"
               border="2px solid"
-              borderColor="primary.400"
+              borderColor="secondary.500"
               opacity={isOpen ? 0.5 : 1}
               transition="opacity 0.2s"
             />
@@ -219,7 +219,7 @@ export function FloatingMobileNav({
               w="8px"
               h="8px"
               borderRadius="full"
-              bg="primary.500"
+              bg="secondary.500"
             />
             {/* Cross lines (visible when open) */}
             <AnimatePresence>
@@ -235,7 +235,7 @@ export function FloatingMobileNav({
                     style={{ transform: 'translate(-50%, -50%)' }}
                     w="18px"
                     h="2px"
-                    bg="primary.500"
+                    bg="secondary.500"
                     borderRadius="full"
                   />
                   <MotionBox
@@ -248,7 +248,7 @@ export function FloatingMobileNav({
                     style={{ transform: 'translate(-50%, -50%)' }}
                     w="2px"
                     h="18px"
-                    bg="primary.500"
+                    bg="secondary.500"
                     borderRadius="full"
                   />
                 </>
@@ -263,7 +263,7 @@ export function FloatingMobileNav({
               inset={-1}
               borderRadius="full"
               border="1px solid"
-              borderColor="primary.300"
+              borderColor="secondary.400"
               animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0, 0.6] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
               pointerEvents="none"

@@ -2,7 +2,7 @@
 
 import { Box, Text, VStack, HStack, Icon, Flex } from "@chakra-ui/react";
 import { CheckCircleIcon } from "@chakra-ui/icons";
-import { Guest, GuestService } from "@/services";
+import { Guest } from "@/services";
 
 export interface GuestResultProps {
 	guest: Guest;
@@ -10,7 +10,9 @@ export interface GuestResultProps {
 
 export function GuestResult({ guest }: GuestResultProps) {
 	const seatCount = guest.allowedSeats ?? guest.members?.length ?? 1;
-	const guestName = guest.fullName || (guest.members ? GuestService.formatMembersList(guest.members) : "");
+	const hasMultipleMembers = guest.members && guest.members.length > 1;
+	const isSingleMember = !guest.members || guest.members.length <= 1;
+	const singleName = guest.fullName || (guest.members?.[0] ?? "");
 
 	return (
 		<Box
@@ -29,20 +31,29 @@ export function GuestResult({ guest }: GuestResultProps) {
 			/>
 
 			<VStack spacing={3} p={{ base: 5, md: 6 }} align="stretch">
-				{/* Success Icon and Header */}
+				{/* Success Icon and Header — only cursive element */}
 				<HStack spacing={2} justify="center">
-					<Icon
-						as={CheckCircleIcon}
-						boxSize={{ base: 5, md: 5 }}
-						color="primary.400"
-					/>
+					<Box
+						display="inline-flex"
+						alignItems="center"
+						justifyContent="center"
+						boxSize={8}
+						borderRadius="full"
+						bg="secondary.50"
+						flexShrink={0}
+					>
+						<Icon
+							as={CheckCircleIcon}
+							boxSize={4}
+							color="secondary.400"
+						/>
+					</Box>
 					<Text
 						fontSize={{ base: "lg", md: "xl" }}
-						fontWeight="bold"
-						color="primary.500"
+						fontWeight="semibold"
+						color="secondary.500"
 						fontFamily="heading"
 						textAlign="center"
-						letterSpacing="wide"
 					>
 						You&apos;re Invited!
 					</Text>
@@ -54,24 +65,51 @@ export function GuestResult({ guest }: GuestResultProps) {
 				{/* Guest Names */}
 				<Box textAlign="center">
 					<Text
-						fontSize="2xs"
-						fontWeight="semibold"
+						fontSize="xs"
+						fontWeight="medium"
 						color="gray.400"
-						letterSpacing="widest"
+						letterSpacing="wider"
 						textTransform="uppercase"
-						mb={1}
+						mb={2}
 					>
-						{(guest.members && guest.members.length > 1) ? "Honored Guests" : "Honored Guest"}
+						{hasMultipleMembers ? "Honored Guests" : "Honored Guest"}
 					</Text>
-					<Text
-						fontSize={{ base: "xl", md: "2xl" }}
-						fontWeight="bold"
-						color="gray.800"
-						fontFamily="heading"
-						lineHeight="shorter"
-					>
-						{guestName}
-					</Text>
+
+					{isSingleMember ? (
+						/* Single guest — display name directly */
+						<Text
+							fontSize={{ base: "xl", md: "2xl" }}
+							fontWeight="semibold"
+							color="gray.800"
+							lineHeight="shorter"
+						>
+							{singleName}
+						</Text>
+					) : (
+						/* Group guests — display members as bullet list */
+						<VStack spacing={1.5} align="center" mt={1}>
+							{guest.members!.map((member) => (
+								<HStack key={member} spacing={2} align="center">
+									<Text
+										fontSize="xs"
+										color="primary.300"
+										lineHeight={1}
+										aria-hidden="true"
+									>
+										◆
+									</Text>
+									<Text
+										fontSize={{ base: "md", md: "lg" }}
+										fontWeight="medium"
+										color="gray.800"
+										lineHeight="short"
+									>
+										{member}
+									</Text>
+								</HStack>
+							))}
+						</VStack>
+					)}
 				</Box>
 
 				{/* Soft divider */}
@@ -83,30 +121,36 @@ export function GuestResult({ guest }: GuestResultProps) {
 						<Flex align="center" justify="center" gap={3} py={1}>
 							<Box textAlign="right">
 								<Text
-									fontSize="2xs"
-									fontWeight="semibold"
+									fontSize="xs"
+									fontWeight="medium"
 									color="gray.400"
-									letterSpacing="widest"
+									letterSpacing="wider"
 									textTransform="uppercase"
 									mb={0.5}
 								>
 									Reserved Seats
 								</Text>
 							</Box>
-							<HStack spacing={2} align="baseline">
+							<HStack
+								spacing={1.5}
+								align="baseline"
+								borderRadius="xl"
+								px={4}
+								py={2}
+								bg="secondary.50"
+							>
 								<Text
 									fontSize={{ base: "4xl", md: "5xl" }}
 									fontWeight="bold"
-									color="primary.400"
+									color="secondary.400"
 									lineHeight="none"
-									fontFamily="heading"
 								>
 									{seatCount}
 								</Text>
 								<Text
-									fontSize={{ base: "lg", md: "xl" }}
+									fontSize={{ base: "md", md: "lg" }}
 									color="gray.500"
-									fontStyle="italic"
+									fontWeight="medium"
 								>
 									{seatCount === 1 ? "seat" : "seats"}
 								</Text>
@@ -118,7 +162,6 @@ export function GuestResult({ guest }: GuestResultProps) {
 								fontSize={{ base: "xs", md: "sm" }}
 								color="gray.500"
 								textAlign="center"
-								fontStyle="italic"
 								pt={1}
 							>
 								Total of {seatCount} {seatCount === 1 ? "seat" : "seats"} reserved for your party

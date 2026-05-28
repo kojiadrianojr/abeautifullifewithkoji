@@ -50,14 +50,25 @@ export function RSVPSection() {
 					<VStack spacing={5}>
 						<SectionTitle color="secondary.600">{rsvp.title}</SectionTitle>
 						<Text
-							fontSize={{ base: "lg", md: "xl" }}
+							fontSize={{ base: "md", md: "lg" }}
 							textAlign="center"
-							fontWeight={400}
+							fontWeight={500}
 							color="gray.700"
-							fontStyle="italic"
 							maxW="lg"
 						>
-							{rsvp.message}
+							{rsvp.message.split("July 14th, 2026").map((part, i, arr) =>
+								i < arr.length - 1 ? (
+									// eslint-disable-next-line react/no-array-index-key
+									<span key={i}>
+										{part}
+										<Text as="span" fontWeight={700} textDecoration="underline">
+											July 14th, 2026
+										</Text>
+									</span>
+								) : (
+									part
+								)
+							)}
 						</Text>
 
 						{/* Guest Search Component */}
@@ -66,10 +77,9 @@ export function RSVPSection() {
 						</Box>
 
 						<Text
-							fontSize="xs"
+							fontSize="sm"
 							textAlign="center"
-							color="gray.700"
-							fontStyle="italic"
+							color="gray.500"
 						>
 							Can&apos;t make it? Please let us know so we can plan accordingly.
 						</Text>

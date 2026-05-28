@@ -15,8 +15,7 @@ export function NotFoundMessage({ searchTerm }: NotFoundMessageProps) {
 			borderRadius="2xl"
 				boxShadow="0 4px 24px rgba(192,57,43,0.1), 0 1px 6px rgba(0,0,0,0.05)"
 			border="1.5px solid"
-			borderColor="primary.100"
-				overflow="hidden"
+			borderColor="secondary.300"
 			>
 				{/* Top accent bar */}
 				<Box
@@ -28,27 +27,25 @@ export function NotFoundMessage({ searchTerm }: NotFoundMessageProps) {
 					<Icon
 						as={WarningTwoIcon}
 						boxSize={{ base: 6, md: 7 }}
-						color="primary.400"
+						color="secondary.500"
 					/>
 
 					<Text
 						fontSize={{ base: "lg", md: "xl" }}
-						fontWeight="bold"
+						fontWeight="semibold"
 						color="gray.700"
 						textAlign="center"
-						fontFamily="heading"
 					>
 						Guest Not Found
 					</Text>
 
-					{searchTerm && (
+						{searchTerm && (
 						<>
 							<Box height="1px" bg="gray.100" w="60%" />
 							<Text
 								fontSize={{ base: "sm", md: "md" }}
 								color="gray.500"
 								textAlign="center"
-								fontStyle="italic"
 							>
 								We couldn&apos;t locate &quot;<Text as="span" fontWeight="semibold" color="gray.700">{searchTerm}</Text>&quot; in our guest registry.
 							</Text>
@@ -61,29 +58,29 @@ export function NotFoundMessage({ searchTerm }: NotFoundMessageProps) {
 						p={{ base: 4, md: 5 }}
 						w="100%"
 						border="1px solid"
-						borderColor="primary.100"
+						borderColor="secondary.300"
 						mt={1}
 					>
 						<VStack spacing={2} align="stretch">
 							<Text
-								fontSize="2xs"
+								fontSize="xs"
 								color="gray.400"
-								fontWeight="bold"
+								fontWeight="medium"
 								textAlign="center"
-								letterSpacing="widest"
+								letterSpacing="wider"
 								textTransform="uppercase"
 								mb={1}
 							>
 								Please Consider
 							</Text>
 							<VStack spacing={1.5} align="start" pl={1}>
-								<Text fontSize="xs" color="gray.600">
+								<Text fontSize="sm" color="gray.600">
 									♡ Verify the spelling of your name
 								</Text>
-								<Text fontSize="xs" color="gray.600">
+								<Text fontSize="sm" color="gray.600">
 									♡ Use your complete name as written on the invitation
 								</Text>
-								<Text fontSize="xs" color="gray.600">
+								<Text fontSize="sm" color="gray.600">
 									♡ Contact us if you believe this is an oversight
 								</Text>
 							</VStack>

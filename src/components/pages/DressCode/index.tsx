@@ -47,7 +47,7 @@ export function DressCodeSection({ images }: DressCodeSectionProps) {
 						borderRadius="full"
 						bg="white"
 						border="1.5px solid"
-						borderColor="primary.300"
+						borderColor="secondary.400"
 						boxShadow="sm"
 					>
 						<Box
@@ -56,14 +56,14 @@ export function DressCodeSection({ images }: DressCodeSectionProps) {
 							w="6px"
 							h="6px"
 							borderRadius="full"
-							bg="primary.400"
+							bg="secondary.400"
 							flexShrink={0}
 						/>
 						<Text
 							as="span"
 							fontSize={{ base: "sm", md: "md" }}
 							fontWeight="bold"
-							color="primary.700"
+							color="secondary.600"
 							letterSpacing="widest"
 							textTransform="uppercase"
 						>
@@ -75,7 +75,7 @@ export function DressCodeSection({ images }: DressCodeSectionProps) {
 							w="6px"
 							h="6px"
 							borderRadius="full"
-							bg="primary.400"
+							bg="secondary.400"
 							flexShrink={0}
 						/>
 					</Box>

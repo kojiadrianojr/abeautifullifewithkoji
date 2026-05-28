@@ -64,18 +64,18 @@ function FlipCard({ question, answer, index }: FlipCardProps) {
 						WebkitBackfaceVisibility: "hidden",
 					}}
 					border="2px solid"
-					borderColor="primary.200"
+					borderColor="secondary.300"
 				>
 					<VStack h="full" justify="center" align="center" gap={4}>
 						<Icon
 							as={QuestionIcon}
 							boxSize={8}
-							color="primary.500"
+							color="secondary.500"
 						/>
 						<Text
 							fontSize="lg"
 							fontWeight="bold"
-							color="primary.600"
+							color="secondary.600"
 							textAlign="center"
 							lineHeight="tall"
 						>
@@ -99,7 +99,7 @@ function FlipCard({ question, answer, index }: FlipCardProps) {
 					h="full"
 					minH="240px"
 					p={6}
-					bg="primary.500"
+					bg="secondary.500"
 					color="white"
 					borderRadius="lg"
 					shadow="md"
@@ -111,7 +111,7 @@ function FlipCard({ question, answer, index }: FlipCardProps) {
 						transform: "rotateY(180deg)",
 					}}
 					border="2px solid"
-					borderColor="primary.600"
+					borderColor="secondary.600"
 				>
 					<VStack h="full" justify="center" align="center" gap={4}>
 						<Icon

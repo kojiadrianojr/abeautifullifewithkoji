@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, SimpleGrid, Heading, Text } from "@chakra-ui/react";
+import { Box, Container, SimpleGrid, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import { ConfigService } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { EntourageGroup } from "./EntourageGroup";
@@ -143,36 +143,32 @@ export function EntourageSection() {
 
 				{/* Little Ones */}
 				<Box>
-					<SectionGroupHeading>Little Ones</SectionGroupHeading>
-					<SimpleGrid
-						columns={{ base: 2, sm: 3, md: 5 }}
-						gap={4}
-						sx={{
-							"@media (max-width: 479px)": {
-								"& > *:last-of-type:nth-of-type(odd)": {
-									gridColumn: "1 / -1",
-									maxWidth: "50%",
-									marginInline: "auto",
-								},
-							},
-						}}
-					>
-						{littleOnes.map((person) => (
-							<Box
-								key={person.role}
-								bg="white"
-								borderRadius="2xl"
-								px={4}
-								py={5}
-								boxShadow="sm"
-								borderTop="3px solid"
-								borderColor="secondary.300"
-								textAlign="center"
-							>
-								<EntouragePerson name={person.name} role={person.role} />
-							</Box>
-						))}
-					</SimpleGrid>
+					<SectionGroupHeading>Cutest Members of the Entourage</SectionGroupHeading>
+					<Grid templateColumns="repeat(6, 1fr)" gap={4}>
+						{littleOnes.map((person, index) => {
+							let gridColumn: string;
+							if (index === 3) gridColumn = "2 / span 2";
+							else if (index === 4) gridColumn = "4 / span 2";
+							else gridColumn = "span 2";
+
+							return (
+								<GridItem key={person.role} gridColumn={gridColumn}>
+									<Box
+										bg="white"
+										borderRadius="2xl"
+										px={4}
+										py={5}
+										boxShadow="sm"
+										borderTop="3px solid"
+										borderColor="secondary.300"
+										textAlign="center"
+									>
+										<EntouragePerson name={person.name} role={person.role} />
+									</Box>
+								</GridItem>
+							);
+						})}
+					</Grid>
 				</Box>
 			</Container>
 		</Box>

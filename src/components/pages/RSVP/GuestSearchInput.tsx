@@ -49,7 +49,7 @@ export function GuestSearchInput({
 			<FormLabel
 				fontSize={{ base: "sm", md: "md" }}
 				fontWeight="semibold"
-				color="primary.600"
+				color="secondary.600"
 				textAlign="left"
 				letterSpacing="widest"
 				textTransform="uppercase"
@@ -60,7 +60,7 @@ export function GuestSearchInput({
 
 			<InputGroup size={{ base: "md", md: "lg" }}>
 				<InputLeftElement pointerEvents="none" height="100%">
-					<SearchIcon color="primary.400" boxSize={4} />
+					<SearchIcon color="secondary.400" boxSize={4} />
 				</InputLeftElement>
 				<Input
 					value={value}
@@ -70,14 +70,14 @@ export function GuestSearchInput({
 					bg="white"
 					color="gray.800"
 					border="1.5px solid"
-					borderColor="gray.200"
+					borderColor="secondary.200"
 					borderRadius="xl"
 					_hover={{
-						borderColor: "primary.300",
+						borderColor: "secondary.300",
 					}}
 					_focus={{
-						borderColor: "primary.400",
-						boxShadow: "0 0 0 3px rgba(195,177,225,0.35)",
+						borderColor: "secondary.400",
+						boxShadow: "0 0 0 3px rgba(192,57,43,0.15)",
 					}}
 					fontSize={{ base: "md", md: "lg" }}
 					px={12}
@@ -98,9 +98,9 @@ export function GuestSearchInput({
 							size="sm"
 							variant="ghost"
 							onClick={handleClear}
-							colorScheme="gray"
+							colorScheme="red"
 							disabled={isLoading}
-							_hover={{ bg: "gray.100" }}
+							_hover={{ bg: "secondary.50" }}
 						/>
 					</InputRightElement>
 				)}
@@ -108,11 +108,10 @@ export function GuestSearchInput({
 
 			{helperText && (
 				<FormHelperText
-					color="gray.700"
-					fontSize="xs"
+					color="gray.600"
+					fontSize="sm"
 					mt={2}
 					textAlign="center"
-					fontStyle="italic"
 					textShadow="0 1px 3px rgba(255,255,255,0.6)"
 				>
 					{helperText}
