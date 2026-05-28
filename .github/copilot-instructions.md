@@ -19,6 +19,27 @@ There are no tests in this project.
 
 ## Architecture
 
+### Component organization
+
+- `src/components/pages/` — full page sections (Hero, Gallery, Schedule, etc.), each in its own subdirectory
+- `src/components/sections/` — only `Footer.tsx` (legacy naming; new sections go in `pages/`)
+- `src/components/ui/` — reusable primitives: `SectionTitle`, `AnimatedButton`, `AnimatedIconButton`, `TimelineCard`, `GalleryLightbox`, `SkeletonImage`
+- `src/components/ui/skeletons/` — per-section skeleton loaders used as `next/dynamic` fallbacks
+- `src/hooks/` — custom hooks: `useActiveSection`, `useMounted`, `useScrollPosition`
+- `src/types/` — shared TypeScript types (e.g., `ImageMetadata`)
+- `scripts/` — build-time scripts run via `tsx` (sync-images, optimize-images, sync-rsvp)
+
+### Dynamic imports and skeletons
+
+All page sections except `HeroSection` are loaded with `next/dynamic` in `HomeContent.tsx`, each paired with a skeleton fallback from `src/components/ui/skeletons/`. When adding a new section, create both the section component and its corresponding skeleton, then register them in `HomeContent.tsx` using this pattern:
+
+```tsx
+const MySection = dynamic(
+  () => import("@/components/pages/MySection").then((m) => ({ default: m.MySectionComponent })),
+  { loading: () => <MySectionSkeleton /> }
+);
+```
+
 ### Config-driven content
 
 All wedding content lives in `config/wedding.json`. Every section (hero, schedule, gallery, etc.) has an `enabled` boolean field. Components check `ConfigService.isSectionEnabled(section)` before rendering. To add/change any wedding detail, update `config/wedding.json` — do not hardcode values in components.
@@ -71,3 +92,14 @@ Copy `.env.local.example` to `.env.local`. Key vars:
 ## Static Export Constraints
 
 Because `output: 'export'` is set, **there are no API routes** and no server-side rendering at request time. All data fetching must happen at build time in server components. `next/image` optimization is disabled (`unoptimized: true`); images are pre-optimized to WebP by `scripts/optimize-images.ts` during prebuild.
+
+## Commit Message Format
+
+```
+Add: New feature
+Fix: Bug description
+Update: What was updated
+Remove: What was removed
+Docs: Documentation changes
+Refactor: Code restructure (no functionality change)
+```

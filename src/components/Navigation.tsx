@@ -12,7 +12,6 @@ import { motion } from "framer-motion";
 import { NAV_ITEMS, smoothScrollTo, scrollToTop } from "@/services/navigationService";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { useActiveSection } from "@/hooks/useActiveSection";
-import { useMounted } from "@/hooks/useMounted";
 import { FloatingMobileNav } from "./Navigation/FloatingMobileNav";
 import { DesktopNav } from "./Navigation/DesktopNav";
 import { BackToTopButton } from "./Navigation/BackToTopButton";
@@ -22,7 +21,6 @@ const MotionBox = motion.create(Box);
 export default function Navigation() {
 	const [isNavHovered, setIsNavHovered] = useState(false);
 
-	const mounted = useMounted();
 	const { isScrolled: trigger } = useScrollPosition({ threshold: 30 });
 	const { isScrolled: showBackToTop } = useScrollPosition({ threshold: 300 });
 
@@ -46,8 +44,6 @@ export default function Navigation() {
 		const sectionId = href.slice(1);
 		smoothScrollTo(sectionId);
 	};
-
-	if (!mounted) return null;
 
 	const shouldShowNav = isNavHovered || !trigger;
 
@@ -76,7 +72,7 @@ export default function Navigation() {
 			)}
 
 			{/* Hover trigger area - always present at top for desktop */}
-			{!isMobile && (
+			{isMobile === false && (
 				<Box
 					position="fixed"
 					top={0}
@@ -133,7 +129,7 @@ export default function Navigation() {
 								K & B
 							</Heading>
 
-							{!isMobile && (
+							{isMobile === false && (
 								<DesktopNav
 									items={NAV_ITEMS}
 									activeSection={activeSection}

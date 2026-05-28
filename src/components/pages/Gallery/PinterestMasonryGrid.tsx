@@ -29,11 +29,13 @@ const ASPECT_RATIO_PATTERN = [
 
 const COLUMN_COUNTS = { base: 2, sm: 3, md: 4 };
 const SWAP_INTERVAL_MS = 3500;
-const FADE_DURATION_MS = 400; // must match the CSS transition duration
+const FADE_DURATION_MS = 500;
 
+// Two-layer crossfade: `current` stays visible, `next` fades in on top.
+// No blank frame between images.
 interface TileState {
-	imageIndex: number;
-	isFading: boolean;
+	current: number;
+	next: number | null;
 }
 
 /** Pick a random index from `candidates`. Returns -1 if the array is empty. */
@@ -70,14 +72,11 @@ export function PinterestMasonryGrid({
 	}, [TILE_COUNT, effectiveCols.md]);
 
 	const [tiles, setTiles] = useState<TileState[]>(() =>
-		Array.from({ length: TILE_COUNT }, (_, i) => ({ imageIndex: i, isFading: false }))
+		Array.from({ length: TILE_COUNT }, (_, i) => ({ current: i, next: null }))
 	);
 
-	// Auto-rotate: every interval, pick a random tile to swap.
-	// Only enabled when there are more images than tiles (otherwise every swap
-	// would duplicate an image that's already visible).
-	// Single consolidated effect — schedules the fade-out and the image swap
-	// in one place, avoiding a second chained effect that scanned all tiles.
+	// Auto-rotate: every interval, pick a random tile to swap using two-layer crossfade.
+	// The current image stays fully visible until the next image has faded in on top.
 	useEffect(() => {
 		if (images.length <= TILE_COUNT) return;
 
@@ -85,31 +84,35 @@ export function PinterestMasonryGrid({
 			setTiles((prev) => {
 				const tileIndex = Math.floor(Math.random() * TILE_COUNT);
 
+				// Skip tiles that are already transitioning
+				if (prev[tileIndex].next !== null) return prev;
+
 				// Build the set of image indices currently visible in other tiles
 				const occupied = new Set(
-					prev.filter((_, i) => i !== tileIndex).map((t) => t.imageIndex)
+					prev.filter((_, i) => i !== tileIndex).map((t) => t.current)
 				);
-				// Pick only from images that are NOT already on screen
 				const available = Array.from(
 					{ length: images.length },
 					(_, i) => i
 				).filter((i) => !occupied.has(i));
 
 				const newImageIndex = pickFromCandidates(available);
-				if (newImageIndex === -1) return prev; // no spare image, skip
+				if (newImageIndex === -1) return prev;
 
-				// Schedule the actual image swap after the fade-out completes
+				// Schedule promote after crossfade completes
 				setTimeout(() => {
 					setTiles((current) =>
 						current.map((tile, i) =>
-							i === tileIndex ? { imageIndex: newImageIndex, isFading: false } : tile
+							i === tileIndex && tile.next !== null
+								? { current: tile.next, next: null }
+								: tile
 						)
 					);
-				}, FADE_DURATION_MS);
+				}, FADE_DURATION_MS + 50);
 
-				// Start the fade-out immediately
+				// Start crossfade: set next so top layer fades in
 				return prev.map((tile, i) =>
-					i === tileIndex ? { ...tile, isFading: true } : tile
+					i === tileIndex ? { current: tile.current, next: newImageIndex } : tile
 				);
 			});
 		}, SWAP_INTERVAL_MS);
@@ -155,7 +158,6 @@ export function PinterestMasonryGrid({
 							const globalTileIndex = colIndex * tilesPerColumn[colIndex] + rowIndex;
 							const aspectStyle =
 								ASPECT_RATIO_PATTERN[globalTileIndex % ASPECT_RATIO_PATTERN.length];
-							const src = images[tile.imageIndex];
 
 							return (
 								<Box
@@ -171,18 +173,14 @@ export function PinterestMasonryGrid({
 										transform: "scale(1.03)",
 										boxShadow: "xl",
 									}}
-									onClick={() => onImageClick(tile.imageIndex)}
+									onClick={() => onImageClick(tile.next ?? tile.current)}
 									style={{ paddingBottom: aspectStyle.paddingBottom }}
 								>
-									<Box
-										position="absolute"
-										inset={0}
-										opacity={tile.isFading ? 0 : 1}
-										transition="opacity 0.4s ease"
-									>
-								<SkeletonImage
-											src={src}
-											alt={`${altText} ${tile.imageIndex + 1}`}
+									{/* Bottom layer — current image, always visible */}
+									<Box position="absolute" inset={0}>
+										<SkeletonImage
+											src={images[tile.current]}
+											alt={`${altText} ${tile.current + 1}`}
 											fill
 											sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
 											loading={globalTileIndex < 4 ? "eager" : "lazy"}
@@ -190,6 +188,31 @@ export function PinterestMasonryGrid({
 											borderRadius="xl"
 										/>
 									</Box>
+
+									{/* Top layer — incoming image fades in, no blank frame */}
+									{tile.next !== null && (
+										<Box
+											position="absolute"
+											inset={0}
+											sx={{
+												animation: `pmgFadeIn ${FADE_DURATION_MS}ms ease forwards`,
+												"@keyframes pmgFadeIn": {
+													from: { opacity: 0 },
+													to: { opacity: 1 },
+												},
+											}}
+										>
+											<SkeletonImage
+												src={images[tile.next]}
+												alt={`${altText} ${tile.next + 1}`}
+												fill
+												sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+												loading="lazy"
+												unoptimized
+												borderRadius="xl"
+											/>
+										</Box>
+									)}
 								</Box>
 							);
 						})}

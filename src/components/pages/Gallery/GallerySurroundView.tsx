@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Pinterest-style varying aspect ratios for surrounding tiles
 const ASPECT_RATIOS = [
@@ -60,20 +61,8 @@ export function GallerySurroundView({
 		})), [images.length]);
 
 	const [slots, setSlots] = useState<SlotState[]>(initSlots);
-	const [displayedMainIndex, setDisplayedMainIndex] = useState(selectedIndex);
-	const [nextMainIndex, setNextMainIndex] = useState<number | null>(null);
+	const [direction, setDirection] = useState<number>(0); // -1 = prev, +1 = next, 0 = auto
 	const transitionTimers = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
-
-	// Two-layer crossfade for main image
-	useEffect(() => {
-		if (selectedIndex === displayedMainIndex) return;
-		setNextMainIndex(selectedIndex);
-		const t = setTimeout(() => {
-			setDisplayedMainIndex(selectedIndex);
-			setNextMainIndex(null);
-		}, CROSSFADE_MS);
-		return () => clearTimeout(t);
-	}, [selectedIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Auto-rotate surrounding tiles
 	useEffect(() => {
@@ -214,43 +203,41 @@ export function GallerySurroundView({
 				onClick={onOpenFullscreen}
 				sx={{ aspectRatio: "4/3" }}
 			>
-				{/* Bottom layer — current main image */}
-				<Box position="absolute" inset={0}>
-					<Image
-						src={images[displayedMainIndex]}
-						alt={`Featured photo ${displayedMainIndex + 1}`}
-						fill
-						style={{ objectFit: "cover" }}
-						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 52vw, 600px"
-						priority
-						unoptimized
-					/>
-				</Box>
-
-				{/* Top layer — incoming main image */}
-				{nextMainIndex !== null && (
-					<Box
-						position="absolute"
-						inset={0}
-						sx={{
-							animation: `galleryFadeIn ${CROSSFADE_MS}ms ease forwards`,
-							"@keyframes galleryFadeIn": {
-								from: { opacity: 0 },
-								to: { opacity: 1 },
-							},
+				{/* Animated image layer — direction-aware slide + fade */}
+				<AnimatePresence initial={false} custom={direction} mode="popLayout">
+					<motion.div
+						key={selectedIndex}
+						custom={direction}
+						variants={{
+							enter: (dir: number) => ({
+								x: dir === 0 ? 0 : dir > 0 ? 40 : -40,
+								opacity: 0,
+								scale: 0.97,
+							}),
+							center: { x: 0, opacity: 1, scale: 1 },
+							exit: (dir: number) => ({
+								x: dir === 0 ? 0 : dir > 0 ? -40 : 40,
+								opacity: 0,
+								scale: 0.97,
+							}),
 						}}
+						initial="enter"
+						animate="center"
+						exit="exit"
+						transition={{ duration: CROSSFADE_MS / 1000, ease: "easeInOut" }}
+						style={{ position: "absolute", inset: 0 }}
 					>
 						<Image
-							src={images[nextMainIndex]}
-							alt={`Featured photo ${nextMainIndex + 1}`}
+							src={images[selectedIndex]}
+							alt={`Featured photo ${selectedIndex + 1}`}
 							fill
 							style={{ objectFit: "cover" }}
 							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 52vw, 600px"
 							priority
 							unoptimized
 						/>
-					</Box>
-				)}
+					</motion.div>
+				</AnimatePresence>
 
 				{/* Bottom gradient overlay */}
 				<Box
@@ -268,7 +255,7 @@ export function GallerySurroundView({
 					px={3} py={1} borderRadius="full" pointerEvents="none"
 				>
 					<Text color="white" fontSize="sm" fontWeight="semibold">
-						{displayedMainIndex + 1} / {images.length}
+						{selectedIndex + 1} / {images.length}
 					</Text>
 				</Box>
 
@@ -291,7 +278,7 @@ export function GallerySurroundView({
 							size="md" borderRadius="full"
 							bg="blackAlpha.500" backdropFilter="blur(6px)" color="white"
 							_hover={{ bg: "blackAlpha.700" }}
-							onClick={(e) => { e.stopPropagation(); onPrev(); }}
+							onClick={(e) => { e.stopPropagation(); setDirection(-1); onPrev(); }}
 						/>
 						<IconButton
 							aria-label="Next"
@@ -300,7 +287,7 @@ export function GallerySurroundView({
 							size="md" borderRadius="full"
 							bg="blackAlpha.500" backdropFilter="blur(6px)" color="white"
 							_hover={{ bg: "blackAlpha.700" }}
-							onClick={(e) => { e.stopPropagation(); onNext(); }}
+							onClick={(e) => { e.stopPropagation(); setDirection(1); onNext(); }}
 						/>
 					</>
 				)}

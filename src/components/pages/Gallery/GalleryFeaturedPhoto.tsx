@@ -20,22 +20,24 @@ export function GalleryFeaturedPhoto({
 	onOpenFullscreen,
 }: GalleryFeaturedPhotoProps) {
 	const [displayedIndex, setDisplayedIndex] = useState(selectedIndex);
-	const [isFading, setIsFading] = useState(false);
+	const [nextIndex, setNextIndex] = useState<number | null>(null);
 
-	// Crossfade when selectedIndex changes
+	// Two-layer crossfade: bottom stays visible, top fades in on top.
+	// No blank frame between images.
 	useEffect(() => {
 		if (selectedIndex === displayedIndex) return;
-		setIsFading(true);
+		setNextIndex(selectedIndex);
 		const t = setTimeout(() => {
 			setDisplayedIndex(selectedIndex);
-			setIsFading(false);
-		}, 300);
+			setNextIndex(null);
+		}, 500);
 		return () => clearTimeout(t);
 	}, [selectedIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (images.length === 0) return null;
 
-	const src = images[displayedIndex];
+	// Show the incoming index during transition for a snappy counter update
+	const activeIndex = nextIndex ?? displayedIndex;
 
 	return (
 		<Box
@@ -53,15 +55,13 @@ export function GalleryFeaturedPhoto({
 			aria-label="View fullscreen"
 			sx={{ aspectRatio: "4/3" }}
 		>
-			{/* Main image with crossfade */}
+			{/* Bottom layer — current image, always visible */}
 			<Box
 				position="absolute"
 				inset={0}
-				opacity={isFading ? 0 : 1}
-				transition="opacity 0.3s ease"
 			>
 				<Image
-					src={src}
+					src={images[displayedIndex]}
 					alt={`Featured prenup photo ${displayedIndex + 1}`}
 					fill
 					style={{ objectFit: "cover" }}
@@ -70,6 +70,31 @@ export function GalleryFeaturedPhoto({
 					unoptimized
 				/>
 			</Box>
+
+			{/* Top layer — incoming image fades in, no blank frame */}
+			{nextIndex !== null && (
+				<Box
+					position="absolute"
+					inset={0}
+					sx={{
+						animation: "gfpFadeIn 0.5s ease forwards",
+						"@keyframes gfpFadeIn": {
+							from: { opacity: 0 },
+							to: { opacity: 1 },
+						},
+					}}
+				>
+					<Image
+						src={images[nextIndex]}
+						alt={`Featured prenup photo ${nextIndex + 1}`}
+						fill
+						style={{ objectFit: "cover" }}
+						sizes="(max-width: 768px) 100vw, 55vw"
+						priority
+						unoptimized
+					/>
+				</Box>
+			)}
 
 			{/* Gradient overlay at bottom */}
 			<Box
@@ -95,7 +120,7 @@ export function GalleryFeaturedPhoto({
 				pointerEvents="none"
 			>
 				<Text color="white" fontSize="xs" fontWeight="semibold">
-					{displayedIndex + 1} / {images.length}
+					{activeIndex + 1} / {images.length}
 				</Text>
 			</Box>
 
@@ -171,10 +196,10 @@ export function GalleryFeaturedPhoto({
 					{images.map((_, i) => (
 						<Box
 							key={i}
-							w={i === displayedIndex ? 3.5 : 1.5}
+							w={i === activeIndex ? 3.5 : 1.5}
 							h={1.5}
 							borderRadius="full"
-							bg={i === displayedIndex ? "white" : "whiteAlpha.600"}
+							bg={i === activeIndex ? "white" : "whiteAlpha.600"}
 							transition="all 0.3s ease"
 						/>
 					))}
