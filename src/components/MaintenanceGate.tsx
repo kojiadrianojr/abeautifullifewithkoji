@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import MaintenancePage from './MaintenancePage';
 
 const BYPASS_STORAGE_KEY = 'maintenance_bypass';
@@ -9,45 +9,41 @@ export default function MaintenanceGate({ children }: { children: React.ReactNod
 	const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
 	const maintenanceToken = process.env.NEXT_PUBLIC_MAINTENANCE_TOKEN;
 
-	// Start as "loading" to avoid flash of maintenance page before client-side check
-	const [bypassed, setBypassed] = useState<boolean | null>(null);
+	// Resolve bypass synchronously on first render (browser only) to avoid
+	// the null → children flash that occurred with the previous useEffect approach.
+	const [bypassed] = useState<boolean | null>(() => {
+		// SSR: we cannot access window/sessionStorage — stay null until hydration.
+		if (typeof window === 'undefined') return null;
 
-	useEffect(() => {
-		if (!maintenanceMode) {
-			setBypassed(true);
-			return;
-		}
+		// Maintenance off — always allow through.
+		if (!maintenanceMode) return true;
 
+		// Check URL token first.
 		const params = new URLSearchParams(window.location.search);
 		const urlToken = params.get('token');
-
-		// Check if token in URL matches the configured token
 		if (maintenanceToken && urlToken === maintenanceToken) {
 			sessionStorage.setItem(BYPASS_STORAGE_KEY, 'true');
-			// Remove ?token= from the URL without a page reload
+			// Clean the token from the URL without a page reload.
 			params.delete('token');
 			const newSearch = params.toString();
-			const newUrl = window.location.pathname + (newSearch ? `?${newSearch}` : '') + window.location.hash;
+			const newUrl =
+				window.location.pathname +
+				(newSearch ? `?${newSearch}` : '') +
+				window.location.hash;
 			window.history.replaceState(null, '', newUrl);
-			setBypassed(true);
-			return;
+			return true;
 		}
 
-		// Check sessionStorage for a previously validated bypass
-		if (sessionStorage.getItem(BYPASS_STORAGE_KEY) === 'true') {
-			setBypassed(true);
-			return;
-		}
+		// Fall back to a previously stored bypass.
+		return sessionStorage.getItem(BYPASS_STORAGE_KEY) === 'true';
+	});
 
-		setBypassed(false);
-	}, [maintenanceMode, maintenanceToken]);
-
-	// If maintenance mode is off, render immediately (no flash)
+	// If maintenance mode is off, render immediately (no flash).
 	if (!maintenanceMode) {
 		return <>{children}</>;
 	}
 
-	// Loading state: render nothing briefly while sessionStorage/URL is checked
+	// SSR: render nothing briefly while we wait for client hydration.
 	if (bypassed === null) {
 		return null;
 	}

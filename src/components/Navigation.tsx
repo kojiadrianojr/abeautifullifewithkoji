@@ -16,7 +16,7 @@ export default function Navigation() {
 	const isMobile = useBreakpointValue(
 		{ base: true, md: false },
 		{ ssr: false },
-	);
+	) ?? false;
 
 	const sectionIds = useMemo(
 		() => NAV_ITEMS.map((item) => item.href.slice(1)),

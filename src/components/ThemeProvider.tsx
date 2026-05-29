@@ -26,6 +26,10 @@ export default function ThemeProvider({ children, theme }: ThemeProviderProps) {
   const chakraTheme = useMemo(
     () =>
       extendTheme({
+        config: {
+          initialColorMode: 'light',
+          useSystemColorMode: false,
+        },
         colors: {
           primary: {
             50: adjustColor(theme.colors.primary, 95),

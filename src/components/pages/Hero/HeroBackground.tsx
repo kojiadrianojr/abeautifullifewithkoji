@@ -1,39 +1,52 @@
 "use client";
 
-import { Box, useBreakpointValue } from "@chakra-ui/react";
-import { SkeletonImage } from "@/components/ui/SkeletonImage";
+import { Box } from "@chakra-ui/react";
+import { getAssetPath } from "@/lib/asset-path";
 
 export const HERO_BG_MOBILE = "/images/assets/hero-bg-mobile.webp";
 export const HERO_BG_DESKTOP = "/images/assets/hero-bg-desktop.webp";
 
-export function useHeroBgSrc() {
-	return useBreakpointValue(
-		{ base: HERO_BG_MOBILE, lg: HERO_BG_DESKTOP },
-		{ fallback: "lg" },
-	) ?? HERO_BG_DESKTOP;
-}
-
 export function HeroBackground() {
-	const src = useHeroBgSrc();
-
 	return (
 		<>
-			{/* Full-bleed hero background — mobile or desktop asset */}
+			{/* Full-bleed hero background — CSS media query picks mobile vs desktop
+			    asset before any JS runs, eliminating the post-hydration image swap. */}
 			<Box
 				position="absolute"
 				inset={0}
 				zIndex={0}
 				overflow="hidden"
 			>
-				<SkeletonImage
-					src={src}
-					alt="Hero background"
-					fill
-					sizes="100vw"
-					priority
-					unoptimized
-					style={{ objectFit: "cover", objectPosition: "center", filter: "blur(1px) brightness(0.75)" }}
-				/>
+				<picture
+					style={{
+						position: "absolute",
+						inset: 0,
+						width: "100%",
+						height: "100%",
+						display: "block",
+					}}
+				>
+					<source
+						media="(min-width: 1024px)"
+						srcSet={getAssetPath(HERO_BG_DESKTOP)}
+						type="image/webp"
+					/>
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img
+						src={getAssetPath(HERO_BG_MOBILE)}
+						alt="Hero background"
+						style={{
+							position: "absolute",
+							inset: 0,
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+							objectPosition: "center",
+							filter: "blur(1px) brightness(0.75)",
+						}}
+						fetchPriority="high"
+					/>
+				</picture>
 			</Box>
 
 			{/* Gradient overlay: stronger on left for text readability on desktop */}

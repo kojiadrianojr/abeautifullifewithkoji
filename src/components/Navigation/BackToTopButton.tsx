@@ -13,7 +13,7 @@ interface BackToTopButtonProps {
 }
 
 export function BackToTopButton({ show, onClick }: BackToTopButtonProps) {
-  const isMobile = useBreakpointValue({ base: true, md: false }, { ssr: false });
+  const isMobile = useBreakpointValue({ base: true, md: false }, { ssr: false }) ?? false;
 
   return (
     <AnimatePresence>
