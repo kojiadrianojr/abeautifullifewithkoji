@@ -15,7 +15,6 @@ export function ScheduleSection() {
 			as="section"
 			py={{ base: 16, md: 24 }}
 			position="relative"
-			className="schedule-pattern"
 			sx={{ bg: "var(--color-background)" }}
 		>
 			<Container maxW="5xl" position="relative" zIndex={1}>
@@ -23,12 +22,14 @@ export function ScheduleSection() {
 					{schedule.title}
 				</SectionTitle>
 
+				<Box position="relative">
 				<VStack spacing={{ base: 16, md: 20 }} align="stretch" py={8}>
 					{schedule.events.map((event, index) => (
 						<ScheduleEvent
 							key={index}
 							index={index}
 							time={event.time}
+							label={event.label}
 							title={event.title}
 							description={event.description}
 							isFirst={index === 0}
@@ -36,6 +37,7 @@ export function ScheduleSection() {
 						/>
 					))}
 				</VStack>
+			</Box>
 			</Container>
 		</Box>
 	);

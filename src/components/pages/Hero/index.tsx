@@ -57,6 +57,9 @@ export function HeroSection({ heroImages }: HeroSectionProps) {
 				opacity={contentHidden ? 0 : 1}
 				pointerEvents={contentHidden ? "none" : "auto"}
 				transition="opacity 0.5s ease"
+				display="flex"
+				flexDirection="column"
+				alignItems={{ base: "center", lg: "stretch" }}
 			>
 				<Box
 					display="flex"
@@ -74,12 +77,12 @@ export function HeroSection({ heroImages }: HeroSectionProps) {
 							zIndex={2}
 						>
 							<Box
-								bg="whiteAlpha.100"
-								backdropFilter="blur(8px)"
-								borderRadius="2xl"
-								p={{ base: 6, md: 8 }}
-								border="1px solid"
-								borderColor="whiteAlpha.200"
+							bg="rgba(255,255,255,0.07)"
+							backdropFilter="blur(10px)"
+							borderRadius="2xl"
+							p={{ base: 6, md: 8 }}
+							border="1px solid"
+							borderColor="whiteAlpha.100"
 							>
 								<VStack spacing={8} align={{ base: "center", lg: "flex-start" }}>
 									<Box textAlign={{ base: "center", lg: "left" }}>
@@ -105,17 +108,27 @@ export function HeroSection({ heroImages }: HeroSectionProps) {
 							flex={{ base: "0 0 auto", lg: "0 0 48%" }}
 							maxW={{ base: "100%", md: "540px", lg: "none" }}
 							w="100%"
+							mx={{ base: "auto", lg: 0 }}
+							alignSelf={{ base: "center", lg: "auto" }}
 							position="relative"
 							zIndex={1}
 						>
-							<VStack spacing={4} align="center">
+							<VStack spacing={4} align="center" w="100%">
 								{/* Media Toggle */}
 								<MediaToggle mode={mediaMode} onSelect={setMediaMode} />
 
 								{/* Media Widget */}
-								<Box w="100%" minH={{ base: "400px", md: "480px", lg: "500px" }}>
+								<Box
+									w="100%"
+									minH={{ base: "400px", md: "480px", lg: "500px" }}
+									display="flex"
+									flexDirection="column"
+									alignItems="center"
+								>
 									{mediaMode === "gallery" && hasImages ? (
-										<FeaturedPhotoGallery images={heroImages} />
+										<Box w="100%" maxW="600px" mx="auto">
+											<FeaturedPhotoGallery images={heroImages} />
+										</Box>
 									) : mediaMode === "video" ? (
 										<Box
 											w="100%"

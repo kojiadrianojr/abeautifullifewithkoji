@@ -65,7 +65,6 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState<string[]>([]);
   const [lightboxStartIdx, setLightboxStartIdx] = useState(0);
-  const [detailedHovered, setDetailedHovered] = useState(false);
 
   if (categories.length === 0) return null;
 

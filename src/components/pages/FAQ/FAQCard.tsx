@@ -1,53 +1,70 @@
 "use client";
 
-import { Box, Heading, Text, Card } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { linkifyText } from "@/lib/linkify";
 
-const MotionCard = motion.create(Card);
+const MotionBox = motion.create(Box);
 
 interface FAQCardProps {
-  question: string;
-  answer: string;
-  index: number;
+	question: string;
+	answer: string;
+	index: number;
 }
 
 export function FAQCard({ question, answer, index }: FAQCardProps) {
-  return (
-    <MotionCard
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      p={{ base: 6, md: 8 }}
-      bg="white"
-      borderRadius="2xl"
-      shadow="md"
-      borderWidth="1px"
-      borderColor="gray.100"
-      _hover={{
-        shadow: "xl",
-        borderColor: "secondary.300",
-        transform: "translateY(-4px)",
-      }}
-      css={{
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-      }}
-    >
-      <Box>
-        <Text
-          as="h3"
-          size="md"
-          fontWeight="semibold"
-          color="secondary.600"
-          mb={4}
-        >
-          {question}
-        </Text>
-        <Text color="gray.600" fontSize="md" lineHeight="tall" whiteSpace="pre-line">
-          {linkifyText(answer)}
-        </Text>
-      </Box>
-    </MotionCard>
-  );
+	return (
+		<MotionBox
+			initial={{ opacity: 0, y: 8 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true, margin: "-30px" }}
+			transition={{
+				duration: 0.4,
+				delay: Math.min(index * 0.04, 0.2),
+				ease: [0.22, 1, 0.36, 1],
+			}}
+			w="100%"
+			minW={0}
+			maxW="100%"
+			bg="white"
+			borderRadius="lg"
+			border="1px solid"
+			borderColor="gray.100"
+			borderLeft="2px solid"
+			borderLeftColor="primary.300"
+			px={{ base: 4, md: 5 }}
+			py={{ base: 3.5, md: 4 }}
+			css={{ transition: "border-color 0.2s ease" }}
+			_hover={{ borderColor: "gray.200", borderLeftColor: "primary.400" }}
+		>
+			<Text
+				as="h3"
+				fontFamily="display"
+				fontSize={{ base: "sm", md: "md" }}
+				fontWeight="500"
+				color="secondary.600"
+				lineHeight="1.4"
+				letterSpacing="0.01em"
+				wordBreak="break-word"
+				overflowWrap="anywhere"
+				mb={2}
+			>
+				{question}
+			</Text>
+
+			<Box w="28px" h="1px" bg="primary.400" opacity={0.65} mb={2.5} />
+
+			<Text
+				color="gray.500"
+				fontSize="sm"
+				lineHeight="1.65"
+				whiteSpace="pre-line"
+				fontFamily="body"
+				wordBreak="break-word"
+				overflowWrap="anywhere"
+			>
+				{linkifyText(answer)}
+			</Text>
+		</MotionBox>
+	);
 }

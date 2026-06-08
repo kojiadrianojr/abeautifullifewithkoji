@@ -1,20 +1,31 @@
-import { Box, Container, Skeleton, SkeletonText, SimpleGrid } from "@chakra-ui/react";
+import { Box, Container, Skeleton, VStack } from "@chakra-ui/react";
 
 export function EntourageSkeleton() {
 	return (
-		<Box as="section" py={{ base: 16, md: 24 }} bg="white">
-			<Container maxW="7xl">
-				<Skeleton h={10} w="200px" mx="auto" mb={10} borderRadius="lg" />
+		<Box as="section" py={{ base: 14, md: 20 }} bg="gray.50">
+			<Container maxW="5xl">
+				<Skeleton h={10} w="240px" mx="auto" mb={4} borderRadius="md" />
+				<Skeleton h={4} w="120px" mx="auto" mb={10} borderRadius="md" />
 
-				<SimpleGrid columns={{ base: 2, sm: 3, md: 4 }} gap={6}>
-					{Array.from({ length: 8 }).map((_, i) => (
-						<Box key={i} textAlign="center">
-							<Skeleton boxSize="100px" borderRadius="full" mx="auto" mb={3} />
-							<Skeleton h={4} w="70%" mx="auto" mb={2} borderRadius="md" />
-							<SkeletonText noOfLines={1} mx="auto" w="50%" />
+				<VStack spacing={10} align="stretch">
+					{Array.from({ length: 4 }).map((_, i) => (
+						<Box key={i}>
+							<Skeleton h={5} w="180px" mx="auto" mb={5} borderRadius="md" />
+							<Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={8}>
+								<VStack spacing={2}>
+									<Skeleton h={3} w="90px" borderRadius="md" />
+									<Skeleton h={4} w="160px" borderRadius="md" />
+									<Skeleton h={4} w="140px" borderRadius="md" />
+								</VStack>
+								<VStack spacing={2}>
+									<Skeleton h={3} w="90px" borderRadius="md" />
+									<Skeleton h={4} w="160px" borderRadius="md" />
+									<Skeleton h={4} w="140px" borderRadius="md" />
+								</VStack>
+							</Box>
 						</Box>
 					))}
-				</SimpleGrid>
+				</VStack>
 			</Container>
 		</Box>
 	);

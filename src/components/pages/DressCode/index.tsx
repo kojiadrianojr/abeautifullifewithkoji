@@ -46,9 +46,9 @@ export function DressCodeSection({ images }: DressCodeSectionProps) {
 						py={2}
 						borderRadius="full"
 						bg="white"
-						border="1.5px solid"
-						borderColor="secondary.400"
-						boxShadow="sm"
+						border="1px solid"
+						borderColor="gray.200"
+						
 					>
 						<Box
 							as="span"

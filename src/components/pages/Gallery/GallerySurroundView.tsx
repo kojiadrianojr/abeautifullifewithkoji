@@ -67,11 +67,12 @@ export function GallerySurroundView({
 	// Auto-rotate surrounding tiles
 	useEffect(() => {
 		if (images.length < 2) return;
+		const timers = transitionTimers.current;
 		const interval = setInterval(() => {
 			const slotIndex = Math.floor(Math.random() * SLOT_COUNT);
 
 			// Abort any in-progress transition for this slot
-			const existing = transitionTimers.current.get(slotIndex);
+			const existing = timers.get(slotIndex);
 			if (existing) clearTimeout(existing);
 
 			setSlots((prev) => {
@@ -90,16 +91,16 @@ export function GallerySurroundView({
 							: slot
 					)
 				);
-				transitionTimers.current.delete(slotIndex);
+				timers.delete(slotIndex);
 			}, CROSSFADE_MS + 50);
 
-			transitionTimers.current.set(slotIndex, t);
+			timers.set(slotIndex, t);
 		}, SWAP_INTERVAL_MS);
 
 		return () => {
 			clearInterval(interval);
-			transitionTimers.current.forEach(clearTimeout);
-			transitionTimers.current.clear();
+			timers.forEach(clearTimeout);
+			timers.clear();
 		};
 	}, [images.length]);
 

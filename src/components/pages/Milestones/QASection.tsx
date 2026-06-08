@@ -5,7 +5,7 @@ import { Box, SimpleGrid, Text, VStack, Icon } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { QuestionIcon, InfoIcon } from "@chakra-ui/icons";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface QAItem {
 	question: string;

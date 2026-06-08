@@ -2,7 +2,7 @@ import { Box, Container, Skeleton, SkeletonText, VStack, HStack } from "@chakra-
 
 export function DetailsSkeleton() {
 	return (
-		<Box as="section" py={{ base: 16, md: 24 }} bg="white">
+		<Box as="section" py={{ base: 12, md: 20 }} bg="gray.50">
 			<Container maxW="7xl">
 				<Skeleton h={10} w="220px" mx="auto" mb={10} borderRadius="lg" />
 

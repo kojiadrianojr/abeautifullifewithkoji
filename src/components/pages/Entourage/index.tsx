@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, SimpleGrid, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
+import { Box, Container, Grid, GridItem, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { ConfigService } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { EntourageGroup } from "./EntourageGroup";
@@ -47,147 +47,115 @@ export function EntourageSection() {
 	];
 
 	return (
-		<Box id="entourage" as="section" py={{ base: 16, md: 24 }} bg="accent.50">
-			<Container maxW="6xl">
-				<SectionTitle color="secondary.500" mb={4}>
+		<Box id="entourage" as="section" py={{ base: 14, md: 20 }} bg="gray.50">
+			<Container maxW="5xl">
+				<SectionTitle color="secondary.500" subtitle={entourage.description} mb={10}>
 					{entourage.title || "Our Entourage"}
 				</SectionTitle>
-				<Text
-					textAlign="center"
-						color="secondary.600"
-					fontSize={{ base: "xl", md: "lg" }}
-					fontFamily="display"
-					fontStyle="italic"
-					fontWeight="400"
-					letterSpacing="wide"
-					mb={16}
-				>
-					{entourage.description}
-				</Text>
 
-				{/* Parents */}
-				<Box mb={14}>
-					<SectionGroupHeading>Parents</SectionGroupHeading>
-					<SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-						<EntourageGroup
-							title="Parents of the Groom"
-							members={entourage.parents.groom}
-						/>
-						<EntourageGroup
-							title="Parents of the Bride"
-							members={entourage.parents.bride}
-						/>
-					</SimpleGrid>
-				</Box>
-
-				{/* Principal Sponsors */}
-				<Box mb={14}>
-					<SectionGroupHeading>Principal Sponsors</SectionGroupHeading>
-					<SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-						<EntourageGroup
-							title="Ninong"
-							members={entourage.principalSponsors.men}
-							accentColor="primary.500"
-						/>
-						<EntourageGroup
-							title="Ninang"
-							members={entourage.principalSponsors.women}
-							accentColor="primary.400"
-						/>
-					</SimpleGrid>
-				</Box>
-
-				{/* Wedding Party */}
-				<Box mb={14}>
-					<SectionGroupHeading>Wedding Party</SectionGroupHeading>
-					<SimpleGrid columns={{ base: 1, md: 2 }} gap={6} mb={6}>
-						<EntourageGroup
-							title="Best Men"
-							members={entourage.bestMen}
-							accentColor="primary.500"
-						/>
-						<EntourageGroup
-							title="Maids of Honor"
-							members={entourage.maidsOfHonor}
-							accentColor="primary.500"
-						/>
-					</SimpleGrid>
-					<SimpleGrid columns={{ base: 1, md: 2 }} gap={6} maxW="2xl" mx="auto">
-						<EntourageGroup
-							title="Groomsmen"
-							members={entourage.groomsmen}
-							accentColor="primary.500"
-						/>
-						<EntourageGroup
-							title="Bridesmaids"
-							members={entourage.bridesmaids}
-							accentColor="primary.500"
-						/>
-					</SimpleGrid>
-				</Box>
-
-				{/* Secondary Sponsors */}
-				<Box mb={14}>
-					<SectionGroupHeading>Secondary Sponsors</SectionGroupHeading>
-					<SimpleGrid columns={{ base: 1, md: 3 }} gap={6}>
-						{secondarySponsorGroups.map((group) => (
+				<VStack spacing={{ base: 8, md: 10 }} align="stretch">
+					<EntourageCategory title="Parents">
+						<SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 6, md: 10 }}>
 							<EntourageGroup
-								key={group.title}
-								title={group.title}
-								members={group.members}
-								accentColor="primary.300"
+								title="Parents of the Groom"
+								members={entourage.parents.groom}
 							/>
-						))}
-					</SimpleGrid>
-				</Box>
+							<EntourageGroup
+								title="Parents of the Bride"
+								members={entourage.parents.bride}
+							/>
+						</SimpleGrid>
+					</EntourageCategory>
 
-				{/* Little Ones */}
-				<Box>
-					<SectionGroupHeading>Cutest Members of the Entourage</SectionGroupHeading>
-					<Grid templateColumns="repeat(6, 1fr)" gap={4}>
-						{littleOnes.map((person, index) => {
-							let gridColumn: string;
-							if (index === 3) gridColumn = "2 / span 2";
-							else if (index === 4) gridColumn = "4 / span 2";
-							else gridColumn = "span 2";
+					<EntourageCategory title="Principal Sponsors">
+						<SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 6, md: 10 }}>
+							<EntourageGroup
+								title="Ninong"
+								members={entourage.principalSponsors.men}
+							/>
+							<EntourageGroup
+								title="Ninang"
+								members={entourage.principalSponsors.women}
+							/>
+						</SimpleGrid>
+					</EntourageCategory>
 
-							return (
-								<GridItem key={person.role} gridColumn={gridColumn}>
-									<Box
-										bg="white"
-										borderRadius="2xl"
-										px={4}
-										py={5}
-										boxShadow="sm"
-										borderTop="3px solid"
-										borderColor="secondary.300"
-										textAlign="center"
-									>
-										<EntouragePerson name={person.name} role={person.role} />
-									</Box>
+					<EntourageCategory title="Wedding Party">
+						<SimpleGrid columns={{ base: 1, sm: 2 }} gap={{ base: 6, md: 8 }}>
+							<EntourageGroup title="Best Men" members={entourage.bestMen} />
+							<EntourageGroup
+								title="Maids of Honor"
+								members={entourage.maidsOfHonor}
+							/>
+							<EntourageGroup title="Groomsmen" members={entourage.groomsmen} />
+							<EntourageGroup
+								title="Bridesmaids"
+								members={entourage.bridesmaids}
+							/>
+						</SimpleGrid>
+					</EntourageCategory>
+
+					<EntourageCategory title="Secondary Sponsors">
+						<SimpleGrid columns={{ base: 1, sm: 3 }} gap={{ base: 6, md: 8 }}>
+							{secondarySponsorGroups.map((group) => (
+								<EntourageGroup
+									key={group.title}
+									title={group.title}
+									members={group.members}
+								/>
+							))}
+						</SimpleGrid>
+					</EntourageCategory>
+
+					<EntourageCategory title="Cutest Members of the Entourage">
+						<Grid
+							templateColumns="repeat(4, 1fr)"
+							gap={{ base: 4, md: 6 }}
+							maxW="2xl"
+							mx="auto"
+						>
+							{littleOnes.map((person, index) => (
+								<GridItem
+									key={person.role}
+									gridColumn={index === 4 ? "2 / span 2" : "span 2"}
+								>
+									<EntouragePerson
+										name={person.name}
+										role={person.role}
+									/>
 								</GridItem>
-							);
-						})}
-					</Grid>
-				</Box>
+							))}
+						</Grid>
+					</EntourageCategory>
+				</VStack>
 			</Container>
 		</Box>
 	);
 }
 
-function SectionGroupHeading({ children }: { children: React.ReactNode }) {
+function EntourageCategory({
+	title,
+	children,
+}: {
+	title: string;
+	children: React.ReactNode;
+}) {
 	return (
-		<Heading
-			as="h3"
-			fontSize={{ base: "2xl", md: "3xl" }}
-			fontFamily="display"
-			fontStyle="italic"
-			fontWeight="500"
-			textAlign="center"
-			color="primary.600"
-			mb={6}
-		>
+		<Box>
+			<Box textAlign="center" mb={5}>
+				<Text
+					fontFamily="display"
+					fontStyle="italic"
+					fontWeight="500"
+					fontSize={{ base: "md", md: "lg" }}
+					color="primary.600"
+					mb={2}
+				>
+					{title}
+				</Text>
+				<Box w="32px" h="1px" bg="primary.400" mx="auto" opacity={0.5} />
+			</Box>
 			{children}
-		</Heading>
+		</Box>
 	);
 }

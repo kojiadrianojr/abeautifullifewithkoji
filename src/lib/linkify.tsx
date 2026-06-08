@@ -49,6 +49,8 @@ export function linkifyText(text: string): React.ReactNode[] {
           href={mdLink.url}
           color="primary.500"
           textDecoration="underline"
+          wordBreak="break-word"
+          overflowWrap="anywhere"
           _hover={{ color: "primary.600" }}
           isExternal
         >
@@ -97,6 +99,8 @@ function linkifyPlainUrls(text: string, startKey: number): React.ReactNode[] {
         href={match[0]}
         color="primary.500"
         textDecoration="underline"
+        wordBreak="break-word"
+        overflowWrap="anywhere"
         _hover={{ color: "primary.600" }}
         isExternal
       >

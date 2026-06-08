@@ -6,10 +6,10 @@
    Do not hardcode font or color values here — reference the CSS variables below. */
 
 :root {
-  --watercolor-warm: rgba(245, 184, 0, 0.15);
-  --watercolor-blush: rgba(192, 57, 43, 0.14);
-  --watercolor-light: rgba(255, 248, 220, 0.28);
-  --watercolor-peach: rgba(212, 100, 40, 0.1);
+  --watercolor-warm: rgba(245, 184, 0, 0.08);
+  --watercolor-blush: rgba(192, 57, 43, 0.07);
+  --watercolor-light: rgba(255, 248, 220, 0.18);
+  --watercolor-peach: rgba(212, 100, 40, 0.06);
 }
 
 html {
@@ -115,6 +115,25 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F5B800' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
   opacity: 0.4;
   pointer-events: none;
+}
+
+/* Section background utilities */
+.section-white {
+  background: #ffffff;
+}
+
+.section-ivory {
+  background: var(--color-background);
+}
+
+/* Elegant gold divider ornament */
+.elegant-divider {
+  width: 56px;
+  height: 1px;
+  background: var(--color-primary);
+  margin: 0 auto;
+  opacity: 0.6;
+  border: none;
 }
 
 /* Respect user preference for reduced motion */

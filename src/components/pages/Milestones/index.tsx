@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Button, Container, Divider, VStack } from "@chakra-ui/react";
+import { Box, Button, Container, VStack } from "@chakra-ui/react";
 import { ConfigService } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { PinterestMasonryGrid } from "@/components/pages/Gallery/PinterestMasonryGrid";
@@ -38,23 +38,9 @@ export function MilestonesSection({
 			<DecorativeFlowers />
 
 			<Container maxW="7xl">
-				<SectionTitle
-					bgGradient="linear(to-r, secondary.500, primary.500)"
-					bgClip="text"
-					mb={2}
-				>
+				<SectionTitle color="secondary.500" mb={12}>
 					{milestones.title}
 				</SectionTitle>
-
-				<Divider
-					w={100}
-					h={1}
-					mx="auto"
-					mb={16}
-					borderRadius="md"
-					bgGradient="linear(to-r, primary.500, secondary.500, primary.500)"
-					border="none"
-				/>
 
 				<VStack gap={16} align="stretch">
 					{/* Milestones Timeline */}

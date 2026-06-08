@@ -19,7 +19,7 @@ export function GallerySection({ images }: GallerySectionProps) {
 	if (images.length === 0) return null;
 
 	return (
-		<Box id="gallery" as="section" py={{ base: 16, md: 24 }} bg="gray.100">
+		<Box id="gallery" as="section" py={{ base: 16, md: 24 }} bg="white">
 			<Container maxW="7xl">
 				<SectionTitle color="secondary.500" mb={10}>
 					{gallery.title}

@@ -1,18 +1,19 @@
 "use client";
 
-import { Box, Heading, Text, HStack, VStack, Icon } from "@chakra-ui/react";
-import { ReactElement } from "react";
+import { Box, Heading, Text, HStack, VStack } from "@chakra-ui/react";
+import { IconType } from "react-icons";
 import {
-	FaDoorOpen,
-	FaChurch,
-	FaGlassCheers,
-	FaUtensils,
-	FaMusic,
-} from "react-icons/fa";
-import { GiPartyFlags } from "react-icons/gi";
+	LuDoorOpen,
+	LuHeart,
+	LuWine,
+	LuUtensilsCrossed,
+	LuMusic2,
+	LuSparkles,
+} from "react-icons/lu";
 
 interface ScheduleEventProps {
 	time: string;
+	label?: string;
 	title: string;
 	description: string;
 	isFirst?: boolean;
@@ -20,309 +21,345 @@ interface ScheduleEventProps {
 	index: number;
 }
 
-// Map event titles to icons
-const getEventIcon = (title: string): ReactElement => {
+const getEventIcon = (title: string): IconType => {
 	const lowerTitle = title.toLowerCase();
 	if (lowerTitle.includes("arrival") || lowerTitle.includes("guest")) {
-		return <FaDoorOpen />;
+		return LuDoorOpen;
 	}
 	if (lowerTitle.includes("ceremony")) {
-		return <FaChurch />;
+		return LuHeart;
 	}
 	if (lowerTitle.includes("cocktail")) {
-		return <FaGlassCheers />;
+		return LuWine;
 	}
 	if (lowerTitle.includes("reception")) {
-		return <FaUtensils />;
+		return LuUtensilsCrossed;
 	}
 	if (lowerTitle.includes("dance")) {
-		return <FaMusic />;
+		return LuMusic2;
 	}
-	return <GiPartyFlags />;
+	return LuSparkles;
 };
+
+const CONNECTOR_EXTENSION = { base: "1rem", md: "5.25rem" };
+
+function DividerLine({ align }: { align: "left" | "right" }) {
+	const towardTimeline = align === "left" ? "right" : "left";
+
+	return (
+		<Box
+			position="relative"
+			w="full"
+			h="2px"
+			mt={3}
+			bg="secondary.400"
+			_before={{
+				content: '""',
+				position: "absolute",
+				top: 0,
+				h: "2px",
+				bg: "secondary.400",
+				w: CONNECTOR_EXTENSION,
+				[towardTimeline]: "100%",
+			}}
+			_after={{
+				content: '""',
+				position: "absolute",
+				top: "50%",
+				w: "5px",
+				h: "5px",
+				borderRadius: "full",
+				bg: "secondary.500",
+				...(align === "left"
+					? {
+							left: { base: "calc(-1rem)", md: "calc(-5.25rem)" },
+							transform: "translate(-50%, -50%)",
+						}
+					: {
+							left: { base: "calc(100% + 1rem)", md: "calc(100% + 5.25rem)" },
+							transform: "translate(-50%, -50%)",
+						}),
+			}}
+		/>
+	);
+}
+
+interface EventContentProps {
+	label?: string;
+	title: string;
+	description: string;
+	align: "left" | "right";
+	index: number;
+	animation: "fadeInLeft" | "fadeInRight";
+}
+
+function EventContent({
+	label,
+	title,
+	description,
+	align,
+	index,
+	animation,
+}: EventContentProps) {
+	const isLeft = align === "left";
+
+	return (
+		<Box
+			maxW="300px"
+			overflow="visible"
+			opacity={0}
+			animation={`${animation} 0.6s ease forwards`}
+			sx={{
+				"@keyframes fadeInLeft": {
+					from: { opacity: 0, transform: "translateX(30px)" },
+					to: { opacity: 1, transform: "translateX(0)" },
+				},
+				"@keyframes fadeInRight": {
+					from: { opacity: 0, transform: "translateX(-30px)" },
+					to: { opacity: 1, transform: "translateX(0)" },
+				},
+				animationDelay: `${index * 0.2}s`,
+			}}
+		>
+			<VStack
+				spacing={0}
+				align={isLeft ? "flex-start" : "flex-end"}
+			>
+				{label ? (
+					<Box
+						alignSelf={isLeft ? "flex-start" : "flex-end"}
+						w="fit-content"
+						maxW="300px"
+						overflow="visible"
+					>
+						<Text
+							as="p"
+							fontFamily="heading"
+							fontSize={{ base: "2xl", md: "3xl" }}
+							color="secondary.500"
+							lineHeight="1.1"
+							textAlign={isLeft ? "left" : "right"}
+						>
+							{label}
+						</Text>
+						<DividerLine align={isLeft ? "left" : "right"} />
+					</Box>
+				) : (
+					<Heading
+						as="h3"
+						fontFamily="heading"
+						fontSize={{ base: "2xl", md: "3xl" }}
+						color="secondary.500"
+						fontWeight="normal"
+						lineHeight="1.1"
+						textAlign={isLeft ? "left" : "right"}
+					>
+						{title}
+					</Heading>
+				)}
+
+				{label && (
+					<Text
+						as="p"
+						fontFamily="display"
+						fontSize={{ base: "md", md: "lg" }}
+						fontWeight="semibold"
+						color="secondary.700"
+						letterSpacing="0.02em"
+						textAlign={isLeft ? "left" : "right"}
+						mt={3}
+						mb={2}
+					>
+						{title}
+					</Text>
+				)}
+
+				<Text
+					as="p"
+					fontFamily="body"
+					fontSize="sm"
+					color="gray.600"
+					lineHeight="1.7"
+					textAlign={isLeft ? "left" : "right"}
+					fontStyle="italic"
+					opacity={0.9}
+				>
+					{description}
+				</Text>
+			</VStack>
+		</Box>
+	);
+}
+
+interface TimelineNodeProps {
+	title: string;
+	time: string;
+	index: number;
+	side: "left" | "right" | "mobile";
+	isLast?: boolean;
+}
+
+function TimelineNode({ title, time, index, side, isLast }: TimelineNodeProps) {
+	const IconComponent = getEventIcon(title);
+	const iconSize = side === "mobile" ? 28 : 32;
+	const nodeSize = side === "mobile" ? "64px" : "72px";
+	const iconCenter = side === "mobile" ? "32px" : "36px";
+	const gapToNext = side === "mobile" ? "64px" : "80px";
+
+	return (
+		<Box position="relative" alignSelf="flex-start" flexShrink={0}>
+			{/* Vertical connector — only between events, not before first or after last */}
+			{!isLast && (
+				<Box
+					position="absolute"
+					left="50%"
+					top={iconCenter}
+					transform="translateX(-50%)"
+					w="2px"
+					h={`calc(100% - ${iconCenter} + ${gapToNext} + ${iconCenter})`}
+					bg="linear-gradient(180deg, var(--chakra-colors-secondary-400), var(--chakra-colors-secondary-300))"
+					zIndex={0}
+					display={{ base: side === "mobile" ? "block" : "none", md: "block" }}
+				/>
+			)}
+
+			<VStack spacing={2} zIndex={2} position="relative">
+				<Box
+					w={nodeSize}
+					h={nodeSize}
+					borderRadius="full"
+					bg="secondary.50"
+					border="3px solid"
+					borderColor="secondary.400"
+					display="flex"
+					alignItems="center"
+					justifyContent="center"
+					boxShadow="0 2px 12px rgba(192, 57, 43, 0.15)"
+					transition="transform 0.25s ease, box-shadow 0.25s ease"
+					_hover={{
+						transform: "scale(1.06)",
+						boxShadow: "0 4px 16px rgba(192, 57, 43, 0.22)",
+					}}
+					opacity={0}
+					animation="scaleIn 0.5s ease forwards"
+					sx={{
+						"@keyframes scaleIn": {
+							from: { opacity: 0, transform: "scale(0.8)" },
+							to: { opacity: 1, transform: "scale(1)" },
+						},
+						animationDelay: `${index * 0.2 + 0.2}s`,
+					}}
+				>
+					<Box as={IconComponent} boxSize={`${iconSize}px`} color="secondary.600" strokeWidth={1.75} />
+				</Box>
+
+				<Box
+					bg="white"
+					color="secondary.600"
+					borderWidth="1px"
+					borderColor="secondary.200"
+					px={side === "mobile" ? 2 : 4}
+					py={side === "mobile" ? 1 : 1.5}
+					borderRadius="full"
+					fontFamily="display"
+					fontSize={side === "mobile" ? "xs" : "sm"}
+					fontWeight="600"
+					letterSpacing="0.06em"
+					whiteSpace="nowrap"
+					textAlign="center"
+				>
+					{time}
+				</Box>
+			</VStack>
+		</Box>
+	);
+}
 
 export function ScheduleEvent({
 	time,
+	label,
 	title,
 	description,
-	isLast = false,
 	index,
+	isLast,
 }: ScheduleEventProps) {
 	const isEven = index % 2 === 0;
 
 	return (
-		<Box position="relative">
-			{/* Desktop timeline connector line — centered */}
-			{!isLast && (
-				<Box
-					display={{ base: "none", md: "block" }}
-					position="absolute"
-					left="50%"
-					top="60px"
-					bottom="-40px"
-					w="4px"
-					bgGradient="linear(to-b, primary.500, primary.400, secondary.500)"
-					transform="translateX(-50%)"
-					zIndex={0}
-					boxShadow="0 0 8px rgba(192,57,43,0.25)"
-					opacity={0.9}
-				/>
-			)}
-
-			{/* Mobile timeline connector line — left-aligned with the icon */}
-			{!isLast && (
-				<Box
-					display={{ base: "block", md: "none" }}
-					position="absolute"
-					left="35px"
-					top="70px"
-					bottom="-32px"
-					w="4px"
-					bgGradient="linear(to-b, primary.500, primary.400, secondary.500)"
-					transform="translateX(-50%)"
-					zIndex={0}
-					boxShadow="0 0 8px rgba(192,57,43,0.25)"
-					opacity={0.9}
-				/>
-			)}
-
+		<Box position="relative" zIndex={1} overflow="visible">
 			{/* ── Mobile layout: icon left, content right ── */}
-			<Box display={{ base: "flex", md: "none" }} alignItems="flex-start" gap={4}>
-				{/* Left column: icon + time */}
-				<VStack spacing={2} flexShrink={0} zIndex={1} alignItems="center" w="70px">
-					<Box
-						w="70px"
-						h="70px"
-						borderRadius="full"
-						bg="white"
-						border="5px solid"
-						borderColor="secondary.500"
-						display="flex"
-						alignItems="center"
-						justifyContent="center"
-						boxShadow="0 4px 24px rgba(212, 102, 140, 0.4), 0 0 0 8px rgba(255, 255, 255, 0.8)"
-						transition="all 0.3s ease"
-						_hover={{
-							transform: "scale(1.1) rotate(5deg)",
-							boxShadow: "0 6px 36px rgba(212, 102, 140, 0.5), 0 0 0 8px rgba(255, 255, 255, 0.9)",
-						}}
-						position="relative"
-						opacity={0}
-						animation="scaleIn 0.5s ease forwards"
-						sx={{
-							"@keyframes scaleIn": {
-								from: { opacity: 0, transform: "scale(0)" },
-								to: { opacity: 1, transform: "scale(1)" },
-							},
-							animationDelay: `${index * 0.2 + 0.2}s`,
-						}}
-					>
-						<Icon
-							as={() => getEventIcon(title)}
-							boxSize={7}
-							color="secondary.500"
-						/>
-						<Box
-							position="absolute"
-							inset={0}
-							borderRadius="full"
-							border="2px solid"
-							borderColor="secondary.400"
-							opacity={0.6}
-							animation="pulse 2s ease-in-out infinite"
-							sx={{
-								"@keyframes pulse": {
-									"0%, 100%": { transform: "scale(1)", opacity: 0.6 },
-									"50%": { transform: "scale(1.2)", opacity: 0.2 },
-								},
-								animationDelay: `${index * 0.3}s`,
-							}}
-						/>
-					</Box>
+			<Box
+				display={{ base: "flex", md: "none" }}
+				alignItems="flex-start"
+				gap={4}
+				position="relative"
+			>
+				<TimelineNode
+					title={title}
+					time={time}
+					index={index}
+					side="mobile"
+					isLast={isLast}
+				/>
 
-					<Box
-						bgGradient="linear(to-r, primary.500, primary.400)"
-						color="white"
-						px={2}
-						py={1}
-						borderRadius="full"
-						fontSize="xs"
-						fontWeight="bold"
-						boxShadow="sm"
-						whiteSpace="nowrap"
-						textAlign="center"
-					>
-						{time}
-					</Box>
-				</VStack>
-
-				{/* Right column: title + description */}
-				<VStack
-					spacing={1}
-					align="flex-start"
-					pt={1}
-					flex={1}
-					opacity={0}
-					animation="fadeInRight 0.6s ease forwards"
-					sx={{
-						"@keyframes fadeInRight": {
-							from: { opacity: 0, transform: "translateX(-20px)" },
-							to: { opacity: 1, transform: "translateX(0)" },
-						},
-						animationDelay: `${index * 0.2}s`,
-					}}
-				>
-					<Heading
-						as="h3"
-						size="sm"
-						color="secondary.600"
-						fontFamily="body"
-						fontWeight="bold"
-					>
-						{title}
-					</Heading>
-					<Text color="gray.600" fontSize="sm">
-						{description}
-					</Text>
-				</VStack>
+				<Box pt={1} flex={1}>
+					<EventContent
+						label={label}
+						title={title}
+						description={description}
+						align="left"
+						index={index}
+						animation="fadeInRight"
+					/>
+				</Box>
 			</Box>
 
 			{/* ── Desktop layout: alternating left / center / right ── */}
 			<HStack
 				spacing={8}
 				justify="center"
-				align="center"
+				align="flex-start"
 				position="relative"
+				overflow="visible"
 				display={{ base: "none", md: "flex" }}
 			>
-				{/* Left side - shows content for odd indices (1, 3, 5) */}
 				<Box flex={1} display="flex" justifyContent="flex-end" order={1}>
 					{!isEven && (
-						<VStack
-							spacing={2}
-							align="flex-end"
-							pr={4}
-							opacity={0}
-							animation="fadeInLeft 0.6s ease forwards"
-							sx={{
-								"@keyframes fadeInLeft": {
-									from: { opacity: 0, transform: "translateX(30px)" },
-									to: { opacity: 1, transform: "translateX(0)" },
-								},
-								animationDelay: `${index * 0.2}s`,
-							}}
-						>
-							<Heading
-								as="h3"
-								size="md"
-								color="secondary.600"
-								fontFamily="body"
-								fontWeight="bold"
-								textAlign="right"
-							>
-								{title}
-							</Heading>
-							<Text color="gray.600" fontSize="sm" maxW="300px" textAlign="right">
-								{description}
-							</Text>
-						</VStack>
+						<Box pr={4}>
+							<EventContent
+								label={label}
+								title={title}
+								description={description}
+								align="right"
+								index={index}
+								animation="fadeInLeft"
+							/>
+						</Box>
 					)}
 				</Box>
 
-				{/* Center icon and time */}
-				<VStack spacing={2} order={2} zIndex={1} flexShrink={0}>
-					<Box
-						w="80px"
-						h="80px"
-						borderRadius="full"
-						bg="white"
-						border="5px solid"
-						borderColor="secondary.500"
-						display="flex"
-						alignItems="center"
-						justifyContent="center"
-						boxShadow="0 4px 24px rgba(212, 102, 140, 0.4), 0 0 0 8px rgba(255, 255, 255, 0.8)"
-						transition="all 0.3s ease"
-						_hover={{
-							transform: "scale(1.1) rotate(5deg)",
-							boxShadow: "0 6px 36px rgba(212, 102, 140, 0.5), 0 0 0 8px rgba(255, 255, 255, 0.9)",
-						}}
-						position="relative"
-						opacity={0}
-						animation="scaleIn 0.5s ease forwards"
-						sx={{
-							"@keyframes scaleIn": {
-								from: { opacity: 0, transform: "scale(0)" },
-								to: { opacity: 1, transform: "scale(1)" },
-							},
-							animationDelay: `${index * 0.2 + 0.2}s`,
-						}}
-					>
-						<Icon as={() => getEventIcon(title)} boxSize={8} color="secondary.500" />
-						<Box
-							position="absolute"
-							inset={0}
-							borderRadius="full"
-							border="2px solid"
-							borderColor="secondary.400"
-							opacity={0.6}
-							animation="pulse 2s ease-in-out infinite"
-							sx={{
-								"@keyframes pulse": {
-									"0%, 100%": { transform: "scale(1)", opacity: 0.6 },
-									"50%": { transform: "scale(1.2)", opacity: 0.2 },
-								},
-								animationDelay: `${index * 0.3}s`,
-							}}
-						/>
-					</Box>
+				<Box order={2}>
+					<TimelineNode
+						title={title}
+						time={time}
+						index={index}
+						side={isEven ? "right" : "left"}
+						isLast={isLast}
+					/>
+				</Box>
 
-					<Box
-						bgGradient="linear(to-r, primary.500, primary.400)"
-						color="white"
-						px={4}
-						py={1.5}
-						borderRadius="full"
-						fontSize="sm"
-						fontWeight="bold"
-						boxShadow="sm"
-						whiteSpace="nowrap"
-					>
-						{time}
-					</Box>
-				</VStack>
-
-				{/* Right side - shows content for even indices (0, 2, 4) */}
 				<Box flex={1} display="flex" justifyContent="flex-start" order={3}>
 					{isEven && (
-						<VStack
-							spacing={2}
-							align="flex-start"
-							pl={4}
-							opacity={0}
-							animation="fadeInRight 0.6s ease forwards"
-							sx={{
-								"@keyframes fadeInRight": {
-									from: { opacity: 0, transform: "translateX(-30px)" },
-									to: { opacity: 1, transform: "translateX(0)" },
-								},
-								animationDelay: `${index * 0.2}s`,
-							}}
-						>
-							<Heading
-								as="h3"
-								size="md"
-								color="secondary.600"
-								fontFamily="body"
-								fontWeight="bold"
-								textAlign="left"
-							>
-								{title}
-							</Heading>
-							<Text color="gray.600" fontSize="sm" maxW="300px" textAlign="left">
-								{description}
-							</Text>
-						</VStack>
+						<Box pl={4}>
+							<EventContent
+								label={label}
+								title={title}
+								description={description}
+								align="left"
+								index={index}
+								animation="fadeInRight"
+							/>
+						</Box>
 					)}
 				</Box>
 			</HStack>

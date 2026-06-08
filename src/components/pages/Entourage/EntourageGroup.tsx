@@ -1,4 +1,4 @@
-import { Box, Heading, Stack } from "@chakra-ui/react";
+import { Box, Stack, Text } from "@chakra-ui/react";
 import { EntouragePerson } from "./EntouragePerson";
 
 interface Person {
@@ -9,39 +9,27 @@ interface Person {
 interface EntourageGroupProps {
 	title: string;
 	members: Person[];
-	accentColor?: string;
 }
 
-export function EntourageGroup({
-	title,
-	members,
-	accentColor = "primary.500",
-}: EntourageGroupProps) {
+export function EntourageGroup({ title, members }: EntourageGroupProps) {
+	const visibleMembers = members.filter((member) => member.name.trim());
+	if (visibleMembers.length === 0) return null;
+
 	return (
-		<Box
-			bg="white"
-			borderRadius="2xl"
-			px={{ base: 5, md: 8 }}
-			py={{ base: 6, md: 8 }}
-			boxShadow="sm"
-			borderTop="3px solid"
-			borderColor={accentColor}
-			textAlign="center"
-		>
-			<Heading
-				as="h3"
-				fontSize={{ base: "sm", md: "md" }}
+		<Box textAlign="center">
+			<Text
+				fontSize="xs"
+				fontWeight="500"
+				color="gray.500"
+				textTransform="uppercase"
+				letterSpacing="0.2em"
 				fontFamily="display"
-				fontStyle="italic"
-				fontWeight="600"
-				letterSpacing="wide"
-				color="gray.600"
-				mb={4}
+				mb={2}
 			>
 				{title}
-			</Heading>
-			<Stack gap={0}>
-				{members.map((member, i) => (
+			</Text>
+			<Stack gap={0} align="center">
+				{visibleMembers.map((member, i) => (
 					<EntouragePerson key={i} name={member.name} role={member.role} />
 				))}
 			</Stack>

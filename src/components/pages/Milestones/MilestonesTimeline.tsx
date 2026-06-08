@@ -5,7 +5,7 @@ import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface TimelineItem {
 	year: string;

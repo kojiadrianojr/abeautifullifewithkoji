@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { NavItem } from '@/services';
 
 const MotionBox = motion.create(Box);
@@ -17,8 +16,8 @@ interface NavButtonProps {
 
 function NavButton({ item, isActive, isHero, onItemClick, direction = 'right' }: NavButtonProps) {
   const xOffset = direction === 'left' ? -8 : 8;
-  const textColor = isActive ? 'white' : isHero ? 'rgba(255,255,255,0.85)' : 'gray.700';
-  const hoverColor = isActive ? 'white' : isHero ? 'white' : 'secondary.600';
+  const textColor = isActive ? (isHero ? 'white' : 'secondary.600') : isHero ? 'rgba(255,255,255,0.85)' : 'gray.700';
+  const hoverColor = isActive ? (isHero ? 'white' : 'secondary.600') : isHero ? 'white' : 'secondary.600';
   const hoverBg = isActive
     ? undefined
     : isHero
@@ -55,7 +54,7 @@ function NavButton({ item, isActive, isHero, onItemClick, direction = 'right' }:
             layoutId="active-capsule"
             position="absolute"
             inset={0}
-            bg={isHero ? 'rgba(255,255,255,0.25)' : 'secondary.500'}
+            bg={isHero ? 'rgba(255,255,255,0.2)' : 'secondary.50'}
             zIndex={0}
             style={{ borderRadius: '9999px' }}
           />
@@ -65,7 +64,7 @@ function NavButton({ item, isActive, isHero, onItemClick, direction = 'right' }:
           position="relative"
           zIndex={1}
           fontSize="xs"
-          fontWeight={isActive ? 700 : 500}
+          fontWeight={isActive ? 600 : 500}
           color={textColor}
           style={{ transition: 'color 0.35s ease' }}
         >
@@ -91,9 +90,6 @@ export function DesktopNav({
   onItemClick,
   onLogoClick,
 }: DesktopNavProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const isExpanded = !trigger || isHovered;
-  // True while the hero section is in view (not yet scrolled past threshold)
   const isHero = !trigger;
 
   const half = Math.ceil(items.length / 2);
@@ -116,8 +112,6 @@ export function DesktopNav({
       left="50%"
       style={{ transform: 'translateX(-50%)' }}
       zIndex={1100}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <MotionBox
         layout
@@ -138,46 +132,28 @@ export function DesktopNav({
         }}
       >
         {/* Left nav items */}
-        <AnimatePresence initial={false} mode="popLayout">
-          {isExpanded &&
-            leftItems.map((item) => {
-              const sectionId = item.href.slice(1);
-              return (
-                <NavButton
-                  key={item.href}
-                  item={item}
-                  isActive={activeSection === sectionId}
-                  isHero={isHero}
-                  onItemClick={onItemClick}
-                  direction="left"
-                />
-              );
-            })}
-        </AnimatePresence>
+        {leftItems.map((item) => {
+          const sectionId = item.href.slice(1);
+          return (
+            <NavButton
+              key={item.href}
+              item={item}
+              isActive={activeSection === sectionId}
+              isHero={isHero}
+              onItemClick={onItemClick}
+              direction="left"
+            />
+          );
+        })}
 
         {/* Left divider */}
-        <AnimatePresence initial={false}>
-          {isExpanded && (
-            <MotionBox
-              key="divider-left"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              layout
-              w="1px"
-              h="16px"
-              bg={dividerBg}
-              mx={2}
-              flexShrink={0}
-            />
-          )}
-        </AnimatePresence>
+        <Box w="1px" h="16px" bg={dividerBg} mx={2} flexShrink={0} />
 
         {/* K & B monogram */}
         <Box
           as="button"
           onClick={onLogoClick}
-          px={isExpanded ? 3 : 4}
+          px={3}
           py={1}
           borderRadius="full"
           cursor="pointer"
@@ -189,7 +165,7 @@ export function DesktopNav({
           <Text
             fontFamily="heading"
             fontWeight="normal"
-            fontSize={isExpanded ? 'lg' : 'xl'}
+            fontSize="lg"
             color={logoColor}
             lineHeight={1}
             whiteSpace="nowrap"
@@ -200,40 +176,22 @@ export function DesktopNav({
         </Box>
 
         {/* Right divider */}
-        <AnimatePresence initial={false}>
-          {isExpanded && (
-            <MotionBox
-              key="divider-right"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              layout
-              w="1px"
-              h="16px"
-              bg={dividerBg}
-              mx={2}
-              flexShrink={0}
-            />
-          )}
-        </AnimatePresence>
+        <Box w="1px" h="16px" bg={dividerBg} mx={2} flexShrink={0} />
 
         {/* Right nav items */}
-        <AnimatePresence initial={false} mode="popLayout">
-          {isExpanded &&
-            rightItems.map((item) => {
-              const sectionId = item.href.slice(1);
-              return (
-                <NavButton
-                  key={item.href}
-                  item={item}
-                  isActive={activeSection === sectionId}
-                  isHero={isHero}
-                  onItemClick={onItemClick}
-                  direction="right"
-                />
-              );
-            })}
-        </AnimatePresence>
+        {rightItems.map((item) => {
+          const sectionId = item.href.slice(1);
+          return (
+            <NavButton
+              key={item.href}
+              item={item}
+              isActive={activeSection === sectionId}
+              isHero={isHero}
+              onItemClick={onItemClick}
+              direction="right"
+            />
+          );
+        })}
       </MotionBox>
     </Box>
   );

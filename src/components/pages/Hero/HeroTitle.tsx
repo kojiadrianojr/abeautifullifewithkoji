@@ -16,12 +16,13 @@ export function HeroTitle({ tagline, coupleNames, mounted }: HeroTitleProps) {
 		<VStack spacing={6}>
 			<FadeIn delay={0} duration={2} direction="down" mounted={mounted}>
 				<Text
-					fontSize={{ base: "lg", md: "xl" }}
-					fontWeight={500}
-					letterSpacing="wider"
-					color="whiteAlpha.800"
-					textTransform="uppercase"
-					textShadow="0 1px 4px rgba(0,0,0,0.6)"
+					fontFamily="display"
+					fontStyle="italic"
+					fontSize={{ base: "md", md: "lg" }}
+					fontWeight={400}
+					letterSpacing="0.08em"
+					color="whiteAlpha.900"
+					textShadow="0 1px 4px rgba(0,0,0,0.5)"
 				>
 					{tagline}
 				</Text>
