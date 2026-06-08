@@ -15,15 +15,16 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { FAQService } from "@/services";
 import { FAQCard } from "./FAQCard";
 
+const faqData = FAQService.getFAQData();
+
 export function FAQSection() {
-	const faqData = FAQService.getFAQData();
 	const [query, setQuery] = useState("");
 
 	const filteredQuestions = useMemo(() => {
 		const trimmed = query.trim();
 		if (!trimmed) return faqData.questions;
 		return FAQService.searchFAQs(trimmed);
-	}, [query, faqData.questions]);
+	}, [query]);
 
 	return (
 		<Box
