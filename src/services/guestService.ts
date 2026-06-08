@@ -112,6 +112,16 @@ export class GuestService {
 	}
 
 	/**
+	 * Get a display label for a guest in search results
+	 */
+	static getGuestDisplayName(guest: Guest): string {
+		if (guest.fullName) return guest.fullName;
+		if (guest.groupName) return guest.groupName;
+		if (guest.members?.length) return this.formatMembersList(guest.members);
+		return "Guest";
+	}
+
+	/**
 	 * Format members list for display
 	 * @param members - Array of member names
 	 * @returns Formatted string (e.g., "John and Jane Doe", "John, Jane, and Bob")

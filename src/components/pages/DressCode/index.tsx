@@ -81,22 +81,6 @@ export function DressCodeSection({ images }: DressCodeSectionProps) {
 					</Box>
 				</MotionBox>
 
-				<MotionText
-					initial={{ opacity: 0, y: 10 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true }}
-					transition={{ duration: 0.5, delay: 0.2 }}
-					textAlign="center"
-					color="gray.600"
-					fontSize={{ base: "sm", md: "md" }}
-					maxW="2xl"
-					mx="auto"
-					mb={12}
-					lineHeight="tall"
-				>
-					{dressCode.description}
-				</MotionText>
-
 				{images.length > 0 ? (
 					<DressCodeCarousel images={images} />
 				) : (

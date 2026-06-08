@@ -7,6 +7,7 @@ import { GuestService, Guest } from "@/services";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { GuestSearchInput } from "./GuestSearchInput";
 import { GuestResult } from "./GuestResult";
+import { GuestSearchResultsList } from "./GuestSearchResultsList";
 import { NotFoundMessage } from "./NotFoundMessage";
 
 export interface GuestSearchProps {
@@ -16,7 +17,8 @@ export interface GuestSearchProps {
 export function GuestSearch({ formUrl }: GuestSearchProps) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [searchedTerm, setSearchedTerm] = useState("");
-	const [foundGuest, setFoundGuest] = useState<Guest | null>(null);
+	const [matchingGuests, setMatchingGuests] = useState<Guest[]>([]);
+	const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null);
 	const [hasSearched, setHasSearched] = useState(false);
 
 	const handleSearch = () => {
@@ -25,31 +27,26 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 
 		try {
 			if (!searchTerm.trim()) {
-				setFoundGuest(null);
+				setMatchingGuests([]);
+				setSelectedGuest(null);
 				setHasSearched(false);
 				return;
 			}
 
-			// Search for guest
 			const results = GuestService.searchGuest(searchTerm);
+			setMatchingGuests(results);
 
 			if (results.length === 0) {
-				setFoundGuest(null);
+				setSelectedGuest(null);
 			} else if (results.length === 1) {
-				// Exact or single match found
-				setFoundGuest(results[0]);
+				setSelectedGuest(results[0]);
 			} else {
-				// Multiple matches - try to find exact match by member name
 				const exactMatch = GuestService.findGuestByMemberName(searchTerm);
-				if (exactMatch) {
-					setFoundGuest(exactMatch);
-				} else {
-					// Show first result if no exact match
-					setFoundGuest(results[0]);
-				}
+				setSelectedGuest(exactMatch ?? null);
 			}
 		} catch (err) {
-			setFoundGuest(null);
+			setMatchingGuests([]);
+			setSelectedGuest(null);
 			console.error("Guest search error:", err);
 		}
 	};
@@ -57,7 +54,8 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 	const handleReset = () => {
 		setSearchTerm("");
 		setSearchedTerm("");
-		setFoundGuest(null);
+		setMatchingGuests([]);
+		setSelectedGuest(null);
 		setHasSearched(false);
 	};
 
@@ -75,9 +73,15 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 			{/* Search Results */}
 			{hasSearched && (
 				<Box w="100%">
-					{foundGuest ? (
+					{matchingGuests.length > 1 && !selectedGuest ? (
+						<GuestSearchResultsList
+							guests={matchingGuests}
+							searchTerm={searchedTerm}
+							onSelect={setSelectedGuest}
+						/>
+					) : selectedGuest ? (
 						<VStack spacing={5} w="100%">
-							<GuestResult guest={foundGuest} />
+							<GuestResult guest={selectedGuest} />
 
 							{/* Soft divider */}
 							<Box

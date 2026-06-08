@@ -14,8 +14,9 @@
  *   1. Authenticates with Google Drive API via service account
  *   2. Lists image files in each configured folder
  *   3. Downloads only new/changed files (skips unchanged ones)
- *   4. Saves to public/images/<collection>/
- *   5. Next.js build then treats them as local static assets
+ *   4. Removes local images no longer present in Google Drive
+ *   5. Saves to public/images/<collection>/
+ *   6. Next.js build then treats them as local static assets
  *
  * Set IMAGE_SOURCE_TYPE=direct-google-drive or IMAGE_SOURCE_TYPE=hybrid to
  * enable syncing. Set IMAGE_SOURCE_TYPE=local to skip the sync entirely.
@@ -55,6 +56,16 @@ const IMAGE_MIME_TYPES = [
 	"image/bmp",
 ];
 
+const LOCAL_IMAGE_EXTENSIONS = new Set([
+	".jpg",
+	".jpeg",
+	".png",
+	".gif",
+	".webp",
+	".avif",
+	".bmp",
+]);
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function sanitizeFilename(name: string): string {
@@ -68,6 +79,56 @@ function log(msg: string) {
 
 function warn(msg: string) {
 	console.warn(`  ⚠️  ${msg}`);
+}
+
+/**
+ * Build the set of local filenames that should be kept for a collection.
+ * Includes WebP variants for JPEG/PNG sources (written by optimize-images).
+ */
+function getKeepFilenames(remoteFiles: drive_v3.Schema$File[]): Set<string> {
+	const keep = new Set<string>();
+
+	for (const file of remoteFiles) {
+		if (!file.name) continue;
+
+		const safeFilename = sanitizeFilename(file.name);
+		keep.add(safeFilename);
+
+		const webpVariant = safeFilename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+		if (webpVariant !== safeFilename) {
+			keep.add(webpVariant);
+		}
+	}
+
+	return keep;
+}
+
+/**
+ * Remove local image files that are no longer present in Google Drive.
+ */
+function removeOrphanedLocalImages(
+	outputDir: string,
+	keepFilenames: Set<string>
+): number {
+	if (!fs.existsSync(outputDir)) return 0;
+
+	let removed = 0;
+
+	for (const entry of fs.readdirSync(outputDir, { withFileTypes: true })) {
+		if (!entry.isFile()) continue;
+
+		const ext = path.extname(entry.name).toLowerCase();
+		if (!LOCAL_IMAGE_EXTENSIONS.has(ext)) continue;
+		if (keepFilenames.has(entry.name)) continue;
+
+		fs.unlinkSync(path.join(outputDir, entry.name));
+		removed++;
+		process.stdout.write(
+			`   ✕ ${entry.name} (removed — no longer in Google Drive)\n`
+		);
+	}
+
+	return removed;
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -118,6 +179,7 @@ async function main() {
 
 	let totalDownloaded = 0;
 	let totalSkipped = 0;
+	let totalRemoved = 0;
 	let totalFailed = 0;
 
 	/**
@@ -182,14 +244,14 @@ async function main() {
 		}
 
 		if (files.length === 0) {
-			log(`   ℹ️  No images found.\n`);
-			continue;
+			log(`   ℹ️  No images found in Google Drive.`);
+		} else {
+			log(`   Found ${files.length} image(s)`);
 		}
-
-		log(`   Found ${files.length} image(s)`);
 
 		let downloaded = 0;
 		let skipped = 0;
+		let removed = 0;
 		let failed = 0;
 
 		for (const file of files) {
@@ -244,11 +306,15 @@ async function main() {
 			}
 		}
 
+		const keepFilenames = getKeepFilenames(files);
+		removed = removeOrphanedLocalImages(outputDir, keepFilenames);
+
 		log(
-			`   ✅ Downloaded: ${downloaded}  ⏭  Skipped (unchanged): ${skipped}  ❌ Failed: ${failed}\n`
+			`   ✅ Downloaded: ${downloaded}  ⏭  Skipped (unchanged): ${skipped}  🗑  Removed: ${removed}  ❌ Failed: ${failed}\n`
 		);
 		totalDownloaded += downloaded;
 		totalSkipped += skipped;
+		totalRemoved += removed;
 		totalFailed += failed;
 	}
 
@@ -256,6 +322,7 @@ async function main() {
 	log(`📊 Sync complete`);
 	log(`   Downloaded : ${totalDownloaded}`);
 	log(`   Skipped    : ${totalSkipped}`);
+	log(`   Removed    : ${totalRemoved}`);
 	log(`   Failed     : ${totalFailed}`);
 
 	if (totalFailed > 0) {
