@@ -21,10 +21,11 @@ export function HeroDetails({
 			<VStack spacing={0} align="center">
 				<Text
 					fontFamily="display"
-					fontSize={{ base: "md", md: "lg" }}
+					fontSize={{ base: "3xl", sm: "4xl" }}
 					color="whiteAlpha.900"
-					fontWeight={500}
+					fontWeight="bold"
 					letterSpacing="0.05em"
+					lineHeight={1.1}
 					textShadow="0 1px 6px rgba(0,0,0,0.5)"
 				>
 					{weddingDate}
