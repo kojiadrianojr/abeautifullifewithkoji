@@ -8,8 +8,8 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-	{ label: "Gallery", href: "#gallery" },
 	{ label: "Schedule", href: "#schedule" },
+	{ label: "Gallery", href: "#gallery" },
 	{ label: "Details", href: "#details" },
 	{ label: "Dress Code", href: "#dress-code" },
 	{ label: "Entourage", href: "#entourage" },

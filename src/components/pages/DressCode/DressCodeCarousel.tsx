@@ -87,7 +87,6 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
     <Box w="full">
       {/* Main display area */}
       <Box mb={6}>
-        {/* Badge in normal flow above the image */}
         <Box px={1} mb={3}>
           <AnimatePresence mode="wait">
             <MotionBox
@@ -161,6 +160,7 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
             key={cat.key}
             as="button"
             onClick={() => selectCategory(i)}
+            aria-label={`View dress code image ${i + 1}`}
             textAlign="center"
             flex="1"
             minW="80px"
@@ -173,7 +173,6 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
               borderRadius="xl"
               overflow="hidden"
               boxShadow={i === activeIdx ? "md" : "sm"}
-              mb={2}
               style={{
                 border: "2px solid",
                 borderColor:
@@ -190,7 +189,8 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
               {cat.main ? (
                 <Image
                   src={cat.main.url}
-                  alt={cat.label}
+                  alt=""
+                  aria-hidden
                   w="full"
                   h={{ base: "80px", md: "110px" }}
                   objectFit="cover"
@@ -199,16 +199,6 @@ export function DressCodeCarousel({ images }: DressCodeCarouselProps) {
                 <Box h={{ base: "80px", md: "110px" }} bg="accent.100" />
               )}
             </MotionBox>
-            <Text
-              fontSize="xs"
-              fontWeight={i === activeIdx ? "bold" : "medium"}
-              color={i === activeIdx ? "primary.500" : "gray.500"}
-              letterSpacing="widest"
-              textTransform="uppercase"
-              transition="color 0.2s"
-            >
-              {cat.label}
-            </Text>
           </MotionBox>
         ))}
       </Flex>

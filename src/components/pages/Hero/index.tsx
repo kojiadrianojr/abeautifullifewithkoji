@@ -31,7 +31,7 @@ export function HeroSection({ heroImages }: HeroSectionProps) {
 	const { time, venue } = config.wedding;
 
 	const hasImages = heroImages.length > 0;
-	const [mediaMode, setMediaMode] = useState<MediaMode>("gallery");
+	const [mediaMode, setMediaMode] = useState<MediaMode>("video");
 	const [contentHidden, setContentHidden] = useState(false);
 
 	return (
