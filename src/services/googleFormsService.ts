@@ -12,7 +12,7 @@
  */
 
 import { google, sheets_v4 } from "googleapis";
-import type { Guest } from "./guestService";
+import type { Guest } from "../../config/guests/types";
 
 export interface FormResponse {
 	timestamp: string;

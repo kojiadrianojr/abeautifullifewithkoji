@@ -17,7 +17,7 @@ export { FAQService } from "./faqService";
 export type { WeddingConfig } from "./configService";
 export type { NavItem } from "./navigationService";
 export { NAV_ITEMS } from "./navigationService";
-export type { Guest, GuestsData } from "./guestService";
+export type { Guest } from "./guestService";
 export type { FAQQuestion, FAQData } from "./faqService";
 
 // GoogleFormsService types (the service itself is server-only)
