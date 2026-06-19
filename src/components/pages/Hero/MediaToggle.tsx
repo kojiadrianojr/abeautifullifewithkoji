@@ -21,7 +21,7 @@ export function MediaToggle({ mode, onSelect }: MediaToggleProps) {
 			borderColor="whiteAlpha.300"
 		>
 			<HStack spacing={0}>
-				{(["video", "gallery"] as MediaMode[]).map((m) => {
+				{(["gallery", "video"] as MediaMode[]).map((m) => {
 					const isActive = mode === m;
 					return (
 						<Button
