@@ -178,26 +178,26 @@ Each section can be toggled on or off:
 }
 ```
 
-#### Option 2: Google Drive Images (New!)
+#### Option 2: Google Drive Images (Build-Time Sync)
 
-Store and manage your photos directly in Google Drive - no need to redeploy when adding new photos!
+Manage photos in Google Drive — they sync to `public/images/` before each build.
 
 **Quick Setup:**
 1. Create folders in Google Drive for your photos
-2. Configure `.env.local` with your folder IDs
-3. Images load automatically from Google Drive
+2. Configure `.env.local` with service account and folder IDs
+3. Run `npm run build` — images sync automatically
 
-**See detailed guide:** [Image Sources Documentation](documentation/IMAGE_SOURCES.md)
+**See:** [Image Sources Documentation](documentation/IMAGE_SOURCES.md)
 
 **Benefits:**
-- ✅ Update photos without redeploying
-- ✅ Easy photo management in Google Drive
-- ✅ Automatic caching for better performance
-- ✅ Supports hybrid mode (local + Google Drive)
+- Update photos in Drive without editing the repo
+- Images served as fast local static assets
+- Incremental sync (only downloads changes)
 
-**Configuration:** 
+**Configuration:**
 ```env
 IMAGE_SOURCE_TYPE=google-drive
+GOOGLE_SERVICE_ACCOUNT_KEY='{"type":"service_account",...}'
 GOOGLE_DRIVE_FOLDER_ID=your-folder-id
 ```
 
@@ -205,7 +205,7 @@ GOOGLE_DRIVE_FOLDER_ID=your-folder-id
 
 #### Guest List Setup
 
-Edit `config/guests.json` to add your guest list:
+Edit `config/guests/bea.json` and `config/guests/koji.json`:
 
 ```json
 {
@@ -225,39 +225,9 @@ Edit `config/guests.json` to add your guest list:
 }
 ```
 
-#### Google Forms RSVP Integration
+#### RSVP
 
-Automatically sync RSVP responses from Google Forms:
-
-1. **Quick Setup**: See [Google Forms Quick Reference](documentation/GOOGLE_FORMS_QUICK_REFERENCE.md)
-2. **Detailed Guide**: See [Google Forms Setup](documentation/GOOGLE_FORMS_SETUP.md)
-
-**Quick steps:**
-```bash
-# 1. Create Google Form and link to Sheets
-# 2. Setup Google Cloud service account
-# 3. Configure environment variables in .env.local
-# 4. Install dependencies
-npm install
-
-# 5. Sync RSVP responses
-npm run sync-rsvp
-```
-
-The script will:
-- ✅ Fetch responses from Google Sheets
-- ✅ Match responses to your guest list
-- ✅ Update guest RSVP status automatically
-- ✅ Track dietary restrictions and notes
-- ✅ Create backups before updating
-
-**Get RSVP statistics:**
-```typescript
-import { GuestService } from '@/services';
-
-const stats = GuestService.getRsvpStats();
-// { confirmed: 45, declined: 5, pending: 10, responseRate: 83% }
-```
+Guests search their name on the website, then open the Google Forms link configured in `config/wedding.json` (`content.rsvp.formUrl`). Responses are collected in Google Forms — not synced into the codebase.
 
 ## 🐳 Docker Deployment
 
@@ -353,13 +323,12 @@ nano .env.local
 For automatic deployments with GitHub Actions, use GitHub Secrets to securely store environment variables:
 
 1. **Navigate to**: Repository Settings → Secrets and variables → Actions
-2. **Add secrets** for your configuration (Google Forms, Google Drive, etc.)
+2. **Add secrets** for your configuration (Google Drive, domain, etc.)
 3. **Push to main** - GitHub Actions will automatically inject secrets during build
 
 **Common secrets you might need:**
-- `GOOGLE_SERVICE_ACCOUNT_KEY` - For Google Forms/Drive integration
-- `GOOGLE_FORMS_SPREADSHEET_ID` - For RSVP sync
-- `IMAGE_SOURCE_TYPE` - To use Google Drive images
+- `GOOGLE_SERVICE_ACCOUNT_KEY` - For build-time Google Drive image sync
+- `IMAGE_SOURCE_TYPE` - Set to `google-drive` to sync images from Drive
 - `GOOGLE_DRIVE_FOLDER_ID` - Your Google Drive folder
 - `NEXT_PUBLIC_BASE_URL` - Your custom domain URL
 

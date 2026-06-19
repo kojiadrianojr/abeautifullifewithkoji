@@ -38,26 +38,35 @@ Frequently Asked Questions data displayed in the FAQ section.
 
 **Categories:** Use categories to organize FAQs (e.g., "dress-code", "venue", "food", "guests", "schedule")
 
-### `guests.json`
+### `guests/` (bea.json + koji.json)
 
-Guest list for RSVP management and personalized features.
+Guest lists for the RSVP name-search feature. Files are merged at build time via [`guests/index.ts`](guests/index.ts).
 
 **Structure:**
 
 ```json
 {
-	"guests": [
-		{
-			"id": "unique-id",
-			"name": "Guest Name",
-			"email": "guest@example.com",
-			"phone": "+1234567890",
-			"plusOne": false,
-			"rsvpStatus": "pending"
-		}
-	]
+  "guests": [
+    {
+      "id": "1",
+      "fullName": "Guest Name",
+      "allowedSeats": 1
+    },
+    {
+      "id": "2",
+      "groupName": "The Smith Family",
+      "members": ["John Smith", "Jane Smith"],
+      "allowedSeats": 2
+    }
+  ]
 }
 ```
+
+**Fields:**
+
+- `fullName` — single guest
+- `groupName` + `members` — party invitation
+- `allowedSeats` — seats reserved (shown on RSVP page)
 
 ## How to Customize
 

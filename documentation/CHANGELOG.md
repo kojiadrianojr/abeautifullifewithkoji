@@ -4,6 +4,16 @@ All notable changes to this wedding website template will be documented here.
 
 ## [Unreleased]
 
+### Removed - 2026-06-19
+
+#### Simplified Google integrations
+- Removed Google Sheets RSVP sync (`googleFormsService`, `sync-rsvp` script)
+- Removed hybrid image mode and runtime Google Drive providers
+- Google Drive now used only at build time via `src/lib/googleDrive/` module
+- Runtime images always served from `public/images/`
+- Stripped unused RSVP fields from guest JSON (`rsvpStatus`, `rsvpCount`, etc.)
+- Updated documentation to reflect two image modes: `local` and `google-drive`
+
 ### Fixed - 2026-03-07
 
 #### Google Drive Image Display Issue ✅

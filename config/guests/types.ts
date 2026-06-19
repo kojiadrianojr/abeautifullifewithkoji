@@ -4,16 +4,10 @@ export interface Guest {
 	fullName?: string;
 	members?: string[];
 	allowedSeats?: number;
-	rsvpStatus?: "pending" | "confirmed" | "declined";
-	rsvpCount?: number;
-	rsvpDate?: string | null;
-	dietaryRestrictions?: string | null;
-	notes?: string | null;
 }
 
 export interface GuestsFile {
 	guests: Guest[];
-	lastSyncedAt?: string;
 }
 
 export function guestKey(
@@ -34,27 +28,4 @@ export function reindexGuests(guests: Guest[]): Guest[] {
 
 export function mergeGuestLists(beaGuests: Guest[], kojiGuests: Guest[]): Guest[] {
 	return reindexGuests([...beaGuests, ...kojiGuests]);
-}
-
-export function applyRsvpUpdates(
-	sourceGuests: Guest[],
-	updatedGuests: Guest[]
-): Guest[] {
-	const updatedByKey = new Map(
-		updatedGuests.map((guest) => [guestKey(guest), guest])
-	);
-
-	return sourceGuests.map((guest) => {
-		const updated = updatedByKey.get(guestKey(guest));
-		if (!updated) return guest;
-
-		return {
-			...guest,
-			rsvpStatus: updated.rsvpStatus,
-			rsvpCount: updated.rsvpCount,
-			rsvpDate: updated.rsvpDate,
-			dietaryRestrictions: updated.dietaryRestrictions,
-			notes: updated.notes,
-		};
-	});
 }

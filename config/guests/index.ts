@@ -7,7 +7,6 @@ const koji = kojiData as GuestsFile;
 
 const guestsData = {
 	guests: mergeGuestLists(bea.guests, koji.guests),
-	lastSyncedAt: bea.lastSyncedAt ?? koji.lastSyncedAt,
 };
 
 export default guestsData;

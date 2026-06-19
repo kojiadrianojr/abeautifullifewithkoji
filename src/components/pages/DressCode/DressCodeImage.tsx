@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { SkeletonImage } from "@/components/ui/SkeletonImage";
@@ -14,19 +13,6 @@ interface DressCodeImageProps {
 }
 
 export function DressCodeImage({ src, index, onClick }: DressCodeImageProps) {
-	const [imgSrc, setImgSrc] = useState(src);
-	const [errored, setErrored] = useState(false);
-
-	const handleError = () => {
-		if (!errored) {
-			const fallback = src.includes("drive.google.com/thumbnail")
-				? src.replace(/sz=w\d+/, "sz=w800")
-				: src;
-			setImgSrc(fallback);
-			setErrored(true);
-		}
-	};
-
 	return (
 		<MotionBox
 			initial={{ opacity: 0, y: 20 }}
@@ -49,13 +35,12 @@ export function DressCodeImage({ src, index, onClick }: DressCodeImageProps) {
 			}}
 		>
 			<SkeletonImage
-				src={imgSrc}
+				src={src}
 				alt={`Dress code inspiration ${index + 1}`}
 				fill
 				sizes="(max-width: 640px) 50vw, 25vw"
 				loading="lazy"
 				unoptimized
-				onError={handleError}
 				borderRadius="2xl"
 			/>
 		</MotionBox>

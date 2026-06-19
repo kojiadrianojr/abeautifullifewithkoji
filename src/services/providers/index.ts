@@ -3,20 +3,9 @@
  */
 
 export { LocalImageProvider, createLocalProvider } from "./localProvider";
-export {
-	DirectGoogleDriveImageProvider,
-	createDirectGoogleDriveProvider,
-} from "./directGoogleDriveProvider";
-export { HybridImageProvider, createHybridProvider } from "./hybridProvider";
 
-// Re-export types
 export type {
 	IImageProvider,
 	ImageMetadata,
-	ImageSourceType,
-	ImageProviderConfig,
 	LocalProviderConfig,
-	GoogleDriveProviderConfig,
-	HybridProviderConfig,
-	ImageCollectionConfig,
 } from "@/types/imageProvider";

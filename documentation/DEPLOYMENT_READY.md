@@ -112,10 +112,7 @@ Since GitHub Pages is static-only, you have two options for images:
 
 ### Google Forms for RSVP
 
-RSVP form integration works perfectly with GitHub Pages:
-- Uses direct Google Forms embed or redirect
-- No server-side code required
-- See `documentation/GOOGLE_FORMS_SETUP.md` for setup
+RSVP uses a Google Forms link in `config/wedding.json`. Guests open the form in a new tab — no server-side code or Sheets sync required.
 
 ### Build Command
 

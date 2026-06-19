@@ -11,7 +11,6 @@
     "lint": "next lint",
     "export": "next build",
     "sync-images": "tsx scripts/sync-images.ts",
-    "sync-rsvp": "tsx scripts/sync-rsvp.ts",
     "test-drive": "tsx scripts/test-google-drive.ts",
     "clear-cache": "node scripts/clear-cache.js",
     "optimize-images": "tsx scripts/optimize-images.ts"
