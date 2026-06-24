@@ -48,7 +48,6 @@ export class ConfigService {
 	static formatWeddingDate(): string {
 		const date = this.getWeddingDate();
 		return date.toLocaleDateString("en-US", {
-			weekday: "long",
 			year: "numeric",
 			month: "long",
 			day: "numeric",

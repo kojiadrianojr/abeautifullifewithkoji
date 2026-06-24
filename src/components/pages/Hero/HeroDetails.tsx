@@ -27,6 +27,7 @@ export function HeroDetails({
 					letterSpacing="0.05em"
 					lineHeight={1.1}
 					textShadow="0 1px 6px rgba(0,0,0,0.5)"
+					whiteSpace="nowrap"
 				>
 					{weddingDate}
 				</Text>
@@ -35,9 +36,9 @@ export function HeroDetails({
 
 				<Text
 					fontFamily="display"
-					fontSize={{ base: "sm", md: "md" }}
+					fontSize={{ base: "1.375rem", md: "1.5rem" }}
 					color="whiteAlpha.800"
-					fontWeight={400}
+					fontWeight={600}
 					letterSpacing="0.03em"
 					textShadow="0 1px 4px rgba(0,0,0,0.4)"
 					textAlign="center"

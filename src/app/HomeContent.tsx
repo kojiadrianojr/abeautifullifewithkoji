@@ -84,12 +84,12 @@ export default function HomeContent({
 					<Navigation />
 					{content.hero.enabled && <HeroSection heroImages={heroImages} />}
 					{content.schedule.enabled && <ScheduleSection />}
-					{content.gallery.enabled && <GallerySection images={prenupPhotos} />}
 					{content.details?.enabled && <DetailsSection />}
 					{content.dressCode?.enabled && (
 						<DressCodeSection images={dressCodePhotos} />
 					)}
 					{content.entourage?.enabled && <EntourageSection />}
+					{content.gallery.enabled && <GallerySection images={prenupPhotos} />}
 					{content.faq.enabled && <FAQSection />}
 					{content.rsvp.enabled && <RSVPSection />}
 					{content.milestones.enabled && (

@@ -9,10 +9,10 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
 	{ label: "Schedule", href: "#schedule" },
-	{ label: "Gallery", href: "#gallery" },
 	{ label: "Details", href: "#details" },
 	{ label: "Dress Code", href: "#dress-code" },
 	{ label: "Entourage", href: "#entourage" },
+	{ label: "Gallery", href: "#gallery" },
 	{ label: "FAQ", href: "#faq" },
 	{ label: "RSVP", href: "#rsvp" },
 	{ label: "Milestones", href: "#milestones" },
