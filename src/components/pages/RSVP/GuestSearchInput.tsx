@@ -30,7 +30,7 @@ export function GuestSearchInput({
 	value,
 	onChange,
 	onSearch,
-	placeholder = "Enter your full name",
+	placeholder = "Enter your name",
 	helperText = "Search for your name to view your invitation details",
 	isLoading = false,
 }: GuestSearchInputProps) {
