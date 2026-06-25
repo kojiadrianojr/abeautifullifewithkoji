@@ -1,5 +1,4 @@
 import {
-	getHeroAlbumImages,
 	getThrowbackPhotos,
 	getPrenupPhotos,
 	getDressCodePhotosMetadata,
@@ -7,17 +6,14 @@ import {
 import HomeContent from "./HomeContent";
 
 export default async function Home() {
-	const [heroImages, throwbackPhotos, prenupPhotos, dressCodePhotos] =
-		await Promise.all([
-			getHeroAlbumImages(),
-			getThrowbackPhotos(),
-			getPrenupPhotos(),
-			getDressCodePhotosMetadata(),
-		]);
+	const [throwbackPhotos, prenupPhotos, dressCodePhotos] = await Promise.all([
+		getThrowbackPhotos(),
+		getPrenupPhotos(),
+		getDressCodePhotosMetadata(),
+	]);
 
 	return (
 		<HomeContent
-			heroImages={heroImages}
 			throwbackPhotos={throwbackPhotos}
 			prenupPhotos={prenupPhotos}
 			dressCodePhotos={dressCodePhotos}

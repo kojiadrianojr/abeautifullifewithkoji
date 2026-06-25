@@ -53,14 +53,12 @@ const RSVPSection = dynamic(
 );
 
 interface HomeContentProps {
-	heroImages: string[];
 	throwbackPhotos: string[];
 	prenupPhotos: string[];
 	dressCodePhotos: ImageMetadata[];
 }
 
 export default function HomeContent({
-	heroImages,
 	throwbackPhotos,
 	prenupPhotos,
 	dressCodePhotos,
@@ -82,7 +80,7 @@ export default function HomeContent({
 			) : (
 				<Box as="main" minH="100vh">
 					<Navigation />
-					{content.hero.enabled && <HeroSection heroImages={heroImages} />}
+					{content.hero.enabled && <HeroSection />}
 					{content.schedule.enabled && <ScheduleSection />}
 					{content.details?.enabled && <DetailsSection />}
 					{content.dressCode?.enabled && (

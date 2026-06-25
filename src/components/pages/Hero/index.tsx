@@ -14,24 +14,16 @@ import { FadeIn } from "@/components/ui/animations";
 import { HeroContent } from "./HeroContent";
 import { CountdownBox } from "./CountdownBox";
 import { HeroBackground } from "./HeroBackground";
-import { FeaturedPhotoGallery } from "./FeaturedPhotoGallery";
 import { VideoComingSoon } from "./VideoComingSoon";
-import { MediaToggle, type MediaMode } from "./MediaToggle";
 import { ScrollIndicator } from "./ScrollIndicator";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-interface HeroSectionProps {
-	heroImages: string[];
-}
-
-export function HeroSection({ heroImages }: HeroSectionProps) {
+export function HeroSection() {
 	const mounted = useMounted();
 	const config = ConfigService.getConfig();
 	const { hero } = config.content;
 	const { time, venue } = config.wedding;
 
-	const hasImages = heroImages.length > 0;
-	const [mediaMode, setMediaMode] = useState<MediaMode>("gallery");
 	const [contentHidden, setContentHidden] = useState(false);
 
 	return (
@@ -114,31 +106,30 @@ export function HeroSection({ heroImages }: HeroSectionProps) {
 							zIndex={1}
 						>
 							<VStack spacing={4} align="center" w="100%">
-								{/* Media Toggle */}
-								<MediaToggle mode={mediaMode} onSelect={setMediaMode} />
+								<Box
+									display="inline-flex"
+									borderRadius="full"
+									px={5}
+									py={2}
+									border="1px solid"
+									borderColor="whiteAlpha.300"
+									fontFamily="body"
+									fontSize={{ base: "xs", md: "sm" }}
+									fontWeight={600}
+									letterSpacing="wide"
+									color="gray.900"
+									bg="primary.500"
+								>
+									Watch Our Story
+								</Box>
 
-								{/* Media Widget */}
 								<Box
 									w="100%"
-									minH={{ base: "400px", md: "480px", lg: "500px" }}
-									display="flex"
-									flexDirection="column"
-									alignItems="center"
+									maxW="600px"
+									mx="auto"
+									h={{ base: "400px", md: "480px", lg: "500px" }}
 								>
-									{mediaMode === "gallery" && hasImages ? (
-										<Box w="100%" maxW="600px" mx="auto">
-											<FeaturedPhotoGallery images={heroImages} />
-										</Box>
-									) : mediaMode === "video" ? (
-										<Box
-											w="100%"
-											maxW="600px"
-											mx="auto"
-											h={{ base: "400px", md: "480px", lg: "500px" }}
-										>
-											<VideoComingSoon />
-										</Box>
-									) : null}
+									<VideoComingSoon />
 								</Box>
 							</VStack>
 						</Box>
