@@ -130,20 +130,20 @@ export function GuestSearchResultsList({
 	return (
 		<RSVPCard>
 			<VStack spacing={3} p={{ base: 4, md: 5 }} align="stretch">
-				<RSVPStepLabel>Step 1 of 2 — Find Your Name</RSVPStepLabel>
+				<RSVPStepLabel>Step 1 of 2 — Pick your name</RSVPStepLabel>
 
 				<RSVPCardHeader
 					icon={SearchIcon}
-					title="Multiple Guests Found"
+					title="We found a few names"
 					subtitle={`${guests.length} ${guests.length === 1 ? "match" : "matches"}`}
 				/>
 
 				<RSVPDivider />
 
 				<RSVPHelperText>
-					Tap the name on your invitation. Matching text is{" "}
+					Tap the name on your invitation. Your typed name is shown in{" "}
 					<Text as="span" fontWeight="bold" color="secondary.600">
-						highlighted
+						bold
 					</Text>
 					.
 				</RSVPHelperText>
@@ -222,14 +222,15 @@ export function GuestSearchResultsList({
 											fontSize="sm"
 											fontWeight="semibold"
 											flexShrink={0}
-											fontFamily="display"
+											fontFamily="body"
 										>
 											{initial}
 										</Flex>
 
 										<Box flex={1} minW={0}>
 											<Text
-												fontSize={{ base: "sm", md: "md" }}
+												fontFamily="body"
+												fontSize={{ base: "md", md: "lg" }}
 												fontWeight="semibold"
 												color="gray.800"
 												lineHeight="short"
@@ -242,8 +243,9 @@ export function GuestSearchResultsList({
 											</Text>
 											{showMembers && (
 												<Text
-													fontSize="xs"
-													color="gray.500"
+													fontFamily="body"
+													fontSize={{ base: "sm", md: "md" }}
+													color="gray.600"
 													mt={0.5}
 													lineHeight="short"
 													noOfLines={2}
@@ -280,7 +282,8 @@ export function GuestSearchResultsList({
 						py={1}
 						color="secondary.500"
 						fontWeight="medium"
-						fontSize="sm"
+						fontFamily="body"
+						fontSize={{ base: "md", md: "lg" }}
 						onClick={scrollDown}
 						rightIcon={<Icon as={ChevronDownIcon} boxSize={4} />}
 						_hover={{ bg: "secondary.50" }}
@@ -298,7 +301,7 @@ export function GuestSearchResultsList({
 						onClick={onRefineSearch}
 						{...RSVP_OUTLINE_BUTTON_PROPS}
 					>
-						Search with a Different Name
+						Try a Different Name
 					</AnimatedButton>
 				)}
 			</VStack>

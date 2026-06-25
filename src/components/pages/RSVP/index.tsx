@@ -1,16 +1,21 @@
 "use client";
 
 import { Box, Container, Text, VStack } from "@chakra-ui/react";
-import { ConfigService } from "@/services";
+import { ConfigService, DateService } from "@/services";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { GuestSearch } from "./GuestSearch";
 import { getAssetPath } from "@/lib/asset-path";
-import { RSVPDivider, RSVPNoteText } from "./RSVPPrimitives";
+import { RSVPDivider, RSVPNoteText, RSVPStepsGuide } from "./RSVPPrimitives";
 
 export function RSVPSection() {
 	const config = ConfigService.getConfig();
 	const { rsvp } = config.content;
 	const rsvpBgPath = getAssetPath("/images/assets/RSVP-bg.webp");
+	const deadlineDate = DateService.formatDate(rsvp.deadline, {
+		month: "long",
+		day: "numeric",
+		year: "numeric",
+	});
 
 	return (
 		<Box
@@ -47,40 +52,38 @@ export function RSVPSection() {
 					px={{ base: 5, md: 8 }}
 					py={{ base: 7, md: 10 }}
 				>
-					<VStack spacing={4}>
-						<VStack spacing={2} align="center" w="100%">
-							<SectionTitle color="secondary.600" mb={0}>
+					<VStack spacing={5}>
+						<VStack spacing={3} align="center" w="100%">
+							<SectionTitle
+								color="secondary.600"
+								mb={0}
+								subtitle="Let us know if you can join us."
+							>
 								{rsvp.title}
 							</SectionTitle>
 
 							<Text
-								fontSize={{ base: "md", md: "lg" }}
+								fontFamily="body"
+								fontSize={{ base: "lg", md: "xl" }}
 								textAlign="center"
 								fontWeight={500}
 								color="gray.700"
 								maxW="lg"
 								lineHeight="tall"
 							>
-								{rsvp.message.split("July 14th, 2026").map((part, i, arr) =>
-									i < arr.length - 1 ? (
-										// eslint-disable-next-line react/no-array-index-key
-										<span key={i}>
-											{part}
-											<Text
-												as="span"
-												fontWeight={700}
-												color="secondary.600"
-												textDecoration="underline"
-											>
-												July 14th, 2026
-											</Text>
-										</span>
-									) : (
-										part
-									)
-								)}
+								Please reply by{" "}
+								<Text as="span" fontWeight="bold" color="secondary.600">
+									{deadlineDate}
+								</Text>
 							</Text>
 						</VStack>
+
+						<RSVPStepsGuide
+							steps={[
+								'Type your name below, then tap "Look Up My Name".',
+								"Fill out the short form that opens.",
+							]}
+						/>
 
 						<RSVPDivider />
 
@@ -89,7 +92,7 @@ export function RSVPSection() {
 						</Box>
 
 						<RSVPNoteText>
-							Can&apos;t make it? Please let us know so we can plan accordingly.
+							Can&apos;t come? Please still let us know so we can plan ahead.
 						</RSVPNoteText>
 					</VStack>
 				</Box>

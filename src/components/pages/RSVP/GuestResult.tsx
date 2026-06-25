@@ -24,7 +24,7 @@ export function GuestResult({
 	guest,
 	stepLabel,
 	onWrongGuest,
-	wrongGuestLabel = "This Isn't My Invitation",
+	wrongGuestLabel = "This Is Not My Name",
 }: GuestResultProps) {
 	const seatCount = guest.allowedSeats ?? guest.members?.length ?? 1;
 	const hasMultipleMembers = guest.members && guest.members.length > 1;
@@ -38,7 +38,7 @@ export function GuestResult({
 
 				<RSVPCardHeader
 					icon={CheckCircleIcon}
-					title="You're Invited!"
+					title="We found your name!"
 					iconBg="secondary.50"
 					iconColor="secondary.400"
 				/>
@@ -47,14 +47,13 @@ export function GuestResult({
 
 				<Box textAlign="center">
 					<Text
-						fontSize="xs"
-						fontWeight="medium"
-						color="gray.400"
-						letterSpacing="wider"
-						textTransform="uppercase"
+						fontFamily="body"
+						fontSize="sm"
+						fontWeight="semibold"
+						color="gray.500"
 						mb={2}
 					>
-						{hasMultipleMembers ? "Honored Guests" : "Honored Guest"}
+						{hasMultipleMembers ? "Names on your invitation" : "Your name"}
 					</Text>
 
 					{isSingleMember ? (
@@ -63,7 +62,7 @@ export function GuestResult({
 							fontWeight="semibold"
 							color="gray.800"
 							lineHeight="shorter"
-							fontFamily="display"
+							fontFamily="body"
 						>
 							{singleName}
 						</Text>
@@ -84,7 +83,7 @@ export function GuestResult({
 										fontWeight="medium"
 										color="gray.800"
 										lineHeight="short"
-										fontFamily="display"
+										fontFamily="body"
 									>
 										{member}
 									</Text>
@@ -100,13 +99,12 @@ export function GuestResult({
 					<>
 						<Flex align="center" justify="center" gap={3} py={1}>
 							<Text
-								fontSize="xs"
-								fontWeight="medium"
-								color="gray.400"
-								letterSpacing="wider"
-								textTransform="uppercase"
+								fontFamily="body"
+								fontSize="sm"
+								fontWeight="semibold"
+								color="gray.500"
 							>
-								Reserved Seats
+								Seats saved for you
 							</Text>
 							<HStack
 								spacing={1.5}
@@ -128,7 +126,8 @@ export function GuestResult({
 								</Text>
 								<Text
 									fontSize={{ base: "sm", md: "md" }}
-									color="gray.500"
+									color="gray.600"
+									fontFamily="body"
 									fontWeight="medium"
 								>
 									{seatCount === 1 ? "seat" : "seats"}
@@ -138,7 +137,7 @@ export function GuestResult({
 
 						{seatCount > 1 && (
 							<RSVPHelperText>
-								Total of {seatCount} seats reserved for your party.
+								{seatCount} seats are saved for your group.
 							</RSVPHelperText>
 						)}
 					</>

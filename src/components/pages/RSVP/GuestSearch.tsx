@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { VStack, Box, Link } from "@chakra-ui/react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { VStack, Box, Link, useToast } from "@chakra-ui/react";
 import { EditIcon, RepeatIcon } from "@chakra-ui/icons";
 import { GuestService, Guest } from "@/services";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
@@ -9,6 +9,8 @@ import { GuestSearchInput } from "./GuestSearchInput";
 import { GuestResult } from "./GuestResult";
 import { GuestSearchResultsList } from "./GuestSearchResultsList";
 import { NotFoundMessage } from "./NotFoundMessage";
+import { RSVPSearchAlert } from "./RSVPSearchAlert";
+import { RSVPScrollHint } from "./RSVPScrollHint";
 import {
 	RSVPCard,
 	RSVPStepLabel,
@@ -18,20 +20,121 @@ import {
 	RSVP_OUTLINE_BUTTON_PROPS,
 } from "./RSVPPrimitives";
 
+const SCROLL_HINT_DELAY_MS = 2500;
+
 export interface GuestSearchProps {
 	formUrl: string;
 }
 
+function getSearchAlert(
+	results: Guest[],
+	selectedGuest: Guest | null,
+): { status: "success" | "info" | "warning"; title: string; description: string } | null {
+	if (results.length === 0) {
+		return {
+			status: "warning",
+			title: "Name not found",
+			description: "Scroll down for tips on what to try.",
+		};
+	}
+
+	if (selectedGuest) {
+		return {
+			status: "success",
+			title: "We found your name!",
+			description: "Scroll down to finish your reply.",
+		};
+	}
+
+	return {
+		status: "info",
+		title: `We found ${results.length} names`,
+		description: "Scroll down to pick yours.",
+	};
+}
+
 export function GuestSearch({ formUrl }: GuestSearchProps) {
+	const toast = useToast();
+	const resultsRef = useRef<HTMLDivElement>(null);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [searchedTerm, setSearchedTerm] = useState("");
 	const [matchingGuests, setMatchingGuests] = useState<Guest[]>([]);
 	const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null);
 	const [hasSearched, setHasSearched] = useState(false);
+	const [showScrollHint, setShowScrollHint] = useState(false);
+
+	const searchAlert = useMemo(
+		() => (hasSearched ? getSearchAlert(matchingGuests, selectedGuest) : null),
+		[hasSearched, matchingGuests, selectedGuest],
+	);
+
+	const notifySearchResult = useCallback(
+		(results: Guest[], selected: Guest | null) => {
+			const alert = getSearchAlert(results, selected);
+			if (!alert) return;
+
+			toast({
+				title: alert.title,
+				description: alert.description,
+				status: alert.status,
+				duration: 4000,
+				isClosable: true,
+				position: "top",
+			});
+		},
+		[toast],
+	);
+
+	const scheduleScrollHint = useCallback(() => {
+		setShowScrollHint(false);
+
+		const timer = window.setTimeout(() => {
+			const el = resultsRef.current;
+			if (!el) return;
+
+			const rect = el.getBoundingClientRect();
+			const visibleHeight =
+				Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+			const visibleRatio = visibleHeight / rect.height;
+
+			if (visibleRatio < 0.35) {
+				setShowScrollHint(true);
+			}
+		}, SCROLL_HINT_DELAY_MS);
+
+		return () => window.clearTimeout(timer);
+	}, []);
+
+	useEffect(() => {
+		if (!hasSearched) {
+			setShowScrollHint(false);
+			return;
+		}
+
+		return scheduleScrollHint();
+	}, [hasSearched, matchingGuests, selectedGuest, scheduleScrollHint]);
+
+	useEffect(() => {
+		const el = resultsRef.current;
+		if (!el || !showScrollHint) return;
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setShowScrollHint(false);
+				}
+			},
+			{ threshold: 0.15, rootMargin: "-40px 0px 0px 0px" },
+		);
+
+		observer.observe(el);
+		return () => observer.disconnect();
+	}, [showScrollHint, hasSearched, matchingGuests, selectedGuest]);
 
 	const handleSearch = () => {
 		setHasSearched(true);
 		setSearchedTerm(searchTerm);
+		setShowScrollHint(false);
 
 		try {
 			if (!searchTerm.trim()) {
@@ -44,18 +147,29 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 			const results = GuestService.searchGuest(searchTerm);
 			setMatchingGuests(results);
 
+			let selected: Guest | null = null;
 			if (results.length === 0) {
-				setSelectedGuest(null);
+				selected = null;
 			} else if (results.length === 1) {
-				setSelectedGuest(results[0]);
+				selected = results[0];
 			} else {
-				const exactMatch = GuestService.findGuestByMemberName(searchTerm);
-				setSelectedGuest(exactMatch ?? null);
+				selected = GuestService.findGuestByMemberName(searchTerm) ?? null;
 			}
+
+			setSelectedGuest(selected);
+			notifySearchResult(results, selected);
 		} catch (err) {
 			setMatchingGuests([]);
 			setSelectedGuest(null);
 			console.error("Guest search error:", err);
+			toast({
+				title: "Something went wrong",
+				description: "Please try again in a moment.",
+				status: "error",
+				duration: 4000,
+				isClosable: true,
+				position: "top",
+			});
 		}
 	};
 
@@ -65,130 +179,151 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 		setMatchingGuests([]);
 		setSelectedGuest(null);
 		setHasSearched(false);
+		setShowScrollHint(false);
 	};
 
 	const handleRefineSearch = () => {
 		setMatchingGuests([]);
 		setSelectedGuest(null);
 		setHasSearched(false);
+		setShowScrollHint(false);
 	};
 
 	const handleBackToList = () => {
 		setSelectedGuest(null);
 	};
 
+	const handleGuestSelect = (guest: Guest) => {
+		setSelectedGuest(guest);
+		notifySearchResult(matchingGuests, guest);
+	};
+
 	return (
-		<VStack spacing={4} w="100%" align="stretch">
-			<GuestSearchInput
-				value={searchTerm}
-				onChange={setSearchTerm}
-				onSearch={handleSearch}
-			/>
+		<>
+			<VStack spacing={4} w="100%" align="stretch">
+				<GuestSearchInput
+					value={searchTerm}
+					onChange={setSearchTerm}
+					onSearch={handleSearch}
+				/>
 
-			{hasSearched && (
-				<Box w="100%">
-					{matchingGuests.length > 1 && !selectedGuest ? (
-						<GuestSearchResultsList
-							guests={matchingGuests}
-							searchTerm={searchedTerm}
-							onSelect={setSelectedGuest}
-							onRefineSearch={handleRefineSearch}
-						/>
-					) : selectedGuest ? (
-						<VStack spacing={4} w="100%">
-							<GuestResult
-								guest={selectedGuest}
-								stepLabel={
-									matchingGuests.length > 1
-										? "Step 2 of 2 — Confirm Your Invitation"
-										: "Step 2 of 2 — Your Invitation"
-								}
-								onWrongGuest={
-									matchingGuests.length > 1
-										? handleBackToList
-										: handleReset
-								}
-								wrongGuestLabel={
-									matchingGuests.length > 1
-										? "Go Back to Guest List"
-										: "This Isn't My Invitation"
-								}
+				{searchAlert && (
+					<RSVPSearchAlert
+						status={searchAlert.status}
+						title={searchAlert.title}
+						description={searchAlert.description}
+					/>
+				)}
+
+				{hasSearched && (
+					<Box w="100%" ref={resultsRef}>
+						{matchingGuests.length > 1 && !selectedGuest ? (
+							<GuestSearchResultsList
+								guests={matchingGuests}
+								searchTerm={searchedTerm}
+								onSelect={handleGuestSelect}
+								onRefineSearch={handleRefineSearch}
 							/>
+						) : selectedGuest ? (
+							<VStack spacing={4} w="100%">
+								<GuestResult
+									guest={selectedGuest}
+									stepLabel={
+										matchingGuests.length > 1
+											? "Step 2 of 2 — Check your name"
+											: "Step 2 of 2"
+									}
+									onWrongGuest={
+										matchingGuests.length > 1
+											? handleBackToList
+											: handleReset
+									}
+									wrongGuestLabel={
+										matchingGuests.length > 1
+											? "Go Back to the List"
+											: "This Is Not My Name"
+									}
+								/>
 
-							<RSVPCard>
-								<VStack spacing={3} p={{ base: 4, md: 5 }} align="stretch">
-									<RSVPStepLabel>Complete Your RSVP</RSVPStepLabel>
+								<RSVPCard>
+									<VStack spacing={3} p={{ base: 4, md: 5 }} align="stretch">
+										<RSVPStepLabel>Almost done</RSVPStepLabel>
 
-									<RSVPDivider />
+										<RSVPDivider />
 
-									<RSVPHelperText>
-										When you are ready, tap the button below to open the
-										RSVP form.
-									</RSVPHelperText>
+										<RSVPHelperText>
+											Tap the button below to open the reply form. It will open
+											in a new tab.
+										</RSVPHelperText>
 
-									<Link
-										href={formUrl}
-										target="_blank"
-										rel="noopener noreferrer"
-										_hover={{ textDecoration: "none" }}
-										w="100%"
-									>
-										<AnimatedButton
-											size="lg"
-											variant="solid"
-											bg="secondary.500"
-											color="white"
-											leftIcon={<EditIcon />}
-											px={{ base: 8, md: 10 }}
-											py={{ base: 6, md: 7 }}
-											minH="52px"
-											fontSize={{ base: "md", md: "lg" }}
-											fontWeight="semibold"
+										<Link
+											href={formUrl}
+											target="_blank"
+											rel="noopener noreferrer"
+											_hover={{ textDecoration: "none" }}
 											w="100%"
-											borderRadius="xl"
-											boxShadow="0 4px 16px rgba(192,57,43,0.3)"
-											_hover={{
-												bg: "secondary.600",
-												boxShadow: "0 6px 24px rgba(192,57,43,0.4)",
-												transform: "translateY(-2px)",
-											}}
 										>
-											Open RSVP Form
+											<AnimatedButton
+												size="lg"
+												variant="solid"
+												bg="secondary.500"
+												color="white"
+												leftIcon={<EditIcon />}
+												px={{ base: 8, md: 10 }}
+												py={{ base: 6, md: 7 }}
+												minH="52px"
+												fontSize={{ base: "md", md: "lg" }}
+												fontFamily="body"
+												fontWeight="semibold"
+												w="100%"
+												borderRadius="xl"
+												boxShadow="0 4px 16px rgba(192,57,43,0.3)"
+												_hover={{
+													bg: "secondary.600",
+													boxShadow: "0 6px 24px rgba(192,57,43,0.4)",
+													transform: "translateY(-2px)",
+												}}
+											>
+												Go to Reply Form
+											</AnimatedButton>
+										</Link>
+
+										<RSVPNoteText>
+											You can come back here anytime if you need to look up your
+											name again.
+										</RSVPNoteText>
+
+										<AnimatedButton
+											w="100%"
+											minH="44px"
+											leftIcon={<RepeatIcon />}
+											onClick={handleReset}
+											{...RSVP_OUTLINE_BUTTON_PROPS}
+										>
+											Try a Different Name
 										</AnimatedButton>
-									</Link>
+									</VStack>
+								</RSVPCard>
+							</VStack>
+						) : (
+							<VStack spacing={4} w="100%">
+								<NotFoundMessage searchTerm={searchedTerm} />
 
-									<RSVPNoteText>
-										This opens in a new tab. You can return here anytime.
-									</RSVPNoteText>
+								<AnimatedButton
+									w="100%"
+									minH="44px"
+									onClick={handleReset}
+									{...RSVP_OUTLINE_BUTTON_PROPS}
+								>
+									Try Again
+								</AnimatedButton>
+							</VStack>
+						)}
+					</Box>
+				)}
+			</VStack>
 
-									<AnimatedButton
-										w="100%"
-										minH="44px"
-										leftIcon={<RepeatIcon />}
-										onClick={handleReset}
-										{...RSVP_OUTLINE_BUTTON_PROPS}
-									>
-										Search with a Different Name
-									</AnimatedButton>
-								</VStack>
-							</RSVPCard>
-						</VStack>
-					) : (
-						<VStack spacing={4} w="100%">
-							<NotFoundMessage searchTerm={searchedTerm} />
-
-							<AnimatedButton
-								w="100%"
-								minH="44px"
-								onClick={handleReset}
-								{...RSVP_OUTLINE_BUTTON_PROPS}
-							>
-								Try Again
-							</AnimatedButton>
-						</VStack>
-					)}
-				</Box>
-			)}
-		</VStack>
+			<RSVPScrollHint targetRef={resultsRef} show={showScrollHint} />
+		</>
 	);
 }

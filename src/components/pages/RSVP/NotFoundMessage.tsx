@@ -19,7 +19,7 @@ export function NotFoundMessage({ searchTerm }: NotFoundMessageProps) {
 			<VStack spacing={3} p={{ base: 4, md: 5 }} align="stretch">
 				<RSVPCardHeader
 					icon={WarningTwoIcon}
-					title="Guest Not Found"
+					title="Name not found"
 					iconBg="secondary.50"
 					iconColor="secondary.500"
 				/>
@@ -28,11 +28,11 @@ export function NotFoundMessage({ searchTerm }: NotFoundMessageProps) {
 
 				{searchTerm && (
 					<RSVPHelperText>
-						We couldn&apos;t locate &ldquo;
+						We could not find &ldquo;
 						<Text as="span" fontWeight="semibold" color="gray.800">
 							{searchTerm}
 						</Text>
-						&rdquo; in our guest list.
+						&rdquo; on our guest list.
 					</RSVPHelperText>
 				)}
 
@@ -45,24 +45,23 @@ export function NotFoundMessage({ searchTerm }: NotFoundMessageProps) {
 				>
 					<VStack spacing={2} align="stretch">
 						<Text
-							fontSize="xs"
-							color="gray.400"
-							fontWeight="medium"
+							fontFamily="body"
+							fontSize="sm"
+							fontWeight="semibold"
+							color="secondary.600"
 							textAlign="center"
-							letterSpacing="wider"
-							textTransform="uppercase"
 						>
-							Please Try
+							Please try
 						</Text>
-						<VStack spacing={1.5} align="start" pl={1}>
-							<Text fontSize="sm" color="gray.600">
-								♡ Verify the spelling of your name
+						<VStack spacing={2} align="start" pl={1}>
+							<Text fontFamily="body" fontSize={{ base: "md", md: "lg" }} color="gray.700">
+								• Check the spelling of your name
 							</Text>
-							<Text fontSize="sm" color="gray.600">
-								♡ Use your complete name as written on the invitation
+							<Text fontFamily="body" fontSize={{ base: "md", md: "lg" }} color="gray.700">
+								• Use your full name as written on the invitation
 							</Text>
-							<Text fontSize="sm" color="gray.600">
-								♡ Contact us if you believe this is an oversight
+							<Text fontFamily="body" fontSize={{ base: "md", md: "lg" }} color="gray.700">
+								• Contact us if you think this is a mistake
 							</Text>
 						</VStack>
 					</VStack>

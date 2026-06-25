@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Text, HStack, VStack, Icon } from "@chakra-ui/react";
+import { Box, Text, HStack, VStack, Icon, Flex } from "@chakra-ui/react";
 import type { ElementType } from "react";
 
 export const RSVP_OUTLINE_BUTTON_PROPS = {
@@ -9,7 +9,8 @@ export const RSVP_OUTLINE_BUTTON_PROPS = {
 	borderColor: "secondary.300",
 	color: "secondary.600",
 	fontWeight: "semibold",
-	fontSize: "sm",
+	fontSize: { base: "md", md: "lg" },
+	fontFamily: "body",
 	borderRadius: "xl",
 	_hover: {
 		bg: "purple.50",
@@ -45,12 +46,11 @@ interface RSVPStepLabelProps {
 export function RSVPStepLabel({ children }: RSVPStepLabelProps) {
 	return (
 		<Text
-			fontSize="xs"
+			fontFamily="body"
+			fontSize="sm"
 			fontWeight="semibold"
-			color="primary.400"
+			color="secondary.600"
 			textAlign="center"
-			letterSpacing="wider"
-			textTransform="uppercase"
 		>
 			{children}
 		</Text>
@@ -89,14 +89,14 @@ export function RSVPCardHeader({
 				<Text
 					fontSize={{ base: "lg", md: "xl" }}
 					fontWeight="semibold"
-					color="secondary.500"
-					fontFamily="heading"
+					color="secondary.600"
+					fontFamily="body"
 					lineHeight="short"
 				>
 					{title}
 				</Text>
 				{subtitle && (
-					<Text fontSize="xs" color="gray.500">
+					<Text fontFamily="body" fontSize="sm" color="gray.600">
 						{subtitle}
 					</Text>
 				)}
@@ -115,7 +115,13 @@ interface RSVPHelperTextProps {
 
 export function RSVPHelperText({ children }: RSVPHelperTextProps) {
 	return (
-		<Text fontSize="sm" color="gray.600" textAlign="center" lineHeight="tall">
+		<Text
+			fontFamily="body"
+			fontSize={{ base: "md", md: "lg" }}
+			color="gray.700"
+			textAlign="center"
+			lineHeight="tall"
+		>
 			{children}
 		</Text>
 	);
@@ -127,8 +133,72 @@ interface RSVPNoteTextProps {
 
 export function RSVPNoteText({ children }: RSVPNoteTextProps) {
 	return (
-		<Text fontSize="sm" color="gray.500" textAlign="center" lineHeight="tall">
+		<Text
+			fontFamily="body"
+			fontSize={{ base: "sm", md: "md" }}
+			color="gray.600"
+			textAlign="center"
+			lineHeight="tall"
+		>
 			{children}
 		</Text>
+	);
+}
+
+interface RSVPStepsGuideProps {
+	steps: string[];
+}
+
+export function RSVPStepsGuide({ steps }: RSVPStepsGuideProps) {
+	return (
+		<Box
+			w="100%"
+			bg="purple.50"
+			borderRadius="xl"
+			px={{ base: 4, md: 5 }}
+			py={{ base: 3.5, md: 4 }}
+			border="1px solid"
+			borderColor="purple.100"
+		>
+			<Text
+				fontFamily="body"
+				fontSize="sm"
+				fontWeight="semibold"
+				color="secondary.600"
+				textAlign="center"
+				mb={3}
+			>
+				How to reply
+			</Text>
+			<VStack spacing={2.5} align="stretch">
+				{steps.map((step, index) => (
+					<HStack key={step} spacing={3} align="flex-start">
+						<Flex
+							align="center"
+							justify="center"
+							boxSize={7}
+							borderRadius="full"
+							bg="secondary.500"
+							color="white"
+							fontFamily="body"
+							fontSize="sm"
+							fontWeight="bold"
+							flexShrink={0}
+						>
+							{index + 1}
+						</Flex>
+						<Text
+							fontFamily="body"
+							fontSize={{ base: "md", md: "lg" }}
+							color="gray.700"
+							lineHeight="tall"
+							pt={0.5}
+						>
+							{step}
+						</Text>
+					</HStack>
+				))}
+			</VStack>
+		</Box>
 	);
 }

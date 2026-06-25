@@ -10,11 +10,13 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
 import { ChangeEvent } from "react";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import {
 	RSVPCard,
 	RSVPCardHeader,
 	RSVPDivider,
 	RSVPHelperText,
+	RSVPStepLabel,
 } from "./RSVPPrimitives";
 
 export interface GuestSearchInputProps {
@@ -30,8 +32,8 @@ export function GuestSearchInput({
 	value,
 	onChange,
 	onSearch,
-	placeholder = "Enter your name",
-	helperText = "Search for your name to view your invitation details",
+	placeholder = "Example: Mary Beatrix",
+	helperText = "Use the name printed on your invitation card.",
 	isLoading = false,
 }: GuestSearchInputProps) {
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,8 +52,10 @@ export function GuestSearchInput({
 
 	return (
 		<RSVPCard>
-			<VStack spacing={3} p={{ base: 4, md: 5 }} align="stretch">
-				<RSVPCardHeader icon={SearchIcon} title="Find Your Invitation" />
+			<VStack spacing={4} p={{ base: 4, md: 5 }} align="stretch">
+				<RSVPStepLabel>Step 1 of 2</RSVPStepLabel>
+
+				<RSVPCardHeader icon={SearchIcon} title="Type Your Name" />
 
 				<RSVPDivider />
 
@@ -59,7 +63,7 @@ export function GuestSearchInput({
 
 				<InputGroup size={{ base: "md", md: "lg" }}>
 					<InputLeftElement pointerEvents="none" height="100%">
-						<SearchIcon color="primary.400" boxSize={4} />
+						<SearchIcon color="primary.400" boxSize={5} />
 					</InputLeftElement>
 					<Input
 						value={value}
@@ -71,6 +75,7 @@ export function GuestSearchInput({
 						border="1.5px solid"
 						borderColor="purple.100"
 						borderRadius="xl"
+						fontFamily="body"
 						_hover={{
 							borderColor: "secondary.300",
 						}}
@@ -78,22 +83,22 @@ export function GuestSearchInput({
 							borderColor: "secondary.400",
 							boxShadow: "0 0 0 3px rgba(192,57,43,0.12)",
 						}}
-						fontSize={{ base: "md", md: "lg" }}
+						fontSize={{ base: "lg", md: "xl" }}
 						px={12}
 						py={{ base: 6, md: 7 }}
-						minH="48px"
+						minH="52px"
 						disabled={isLoading}
 						fontWeight="medium"
 						boxShadow="0 1px 6px rgba(195,177,225,0.12)"
 						_placeholder={{
 							color: "gray.400",
-							fontStyle: "italic",
 						}}
+						aria-label="Your name"
 					/>
 					{value && (
 						<InputRightElement height="100%" paddingRight={2}>
 							<IconButton
-								aria-label="Clear search"
+								aria-label="Clear name"
 								icon={<CloseIcon />}
 								size="sm"
 								variant="ghost"
@@ -105,6 +110,33 @@ export function GuestSearchInput({
 						</InputRightElement>
 					)}
 				</InputGroup>
+
+				<AnimatedButton
+					w="100%"
+					minH="52px"
+					fontSize={{ base: "md", md: "lg" }}
+					fontFamily="body"
+					fontWeight="semibold"
+					onClick={onSearch}
+					isLoading={isLoading}
+					isDisabled={!value.trim()}
+					leftIcon={<SearchIcon />}
+					bg="secondary.500"
+					color="white"
+					borderRadius="xl"
+					boxShadow="0 4px 16px rgba(192,57,43,0.3)"
+					_hover={{
+						bg: "secondary.600",
+						boxShadow: "0 6px 24px rgba(192,57,43,0.4)",
+					}}
+					_disabled={{
+						opacity: 0.5,
+						cursor: "not-allowed",
+						_hover: { bg: "secondary.500" },
+					}}
+				>
+					Look Up My Name
+				</AnimatedButton>
 			</VStack>
 		</RSVPCard>
 	);
