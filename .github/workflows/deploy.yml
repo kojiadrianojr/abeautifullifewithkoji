@@ -53,6 +53,17 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
+      # Guest list is private and gitignored — restore it from secrets so it is
+      # baked into the server bundle (used only by /api/guests/search at runtime).
+      - name: Write guest list
+        env:
+          GUESTS_BEA_JSON: ${{ secrets.GUESTS_BEA_JSON }}
+          GUESTS_KOJI_JSON: ${{ secrets.GUESTS_KOJI_JSON }}
+        run: |
+          mkdir -p config/guests
+          printf '%s' "$GUESTS_BEA_JSON" > config/guests/bea.json
+          printf '%s' "$GUESTS_KOJI_JSON" > config/guests/koji.json
+
       # The prebuild hook (sync-images + optimize-images) runs automatically
       # via the "prebuild" npm script inside `vercel build`.
       - name: Build project

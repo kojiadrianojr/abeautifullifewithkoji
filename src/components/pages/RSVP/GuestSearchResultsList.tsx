@@ -12,7 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon, ChevronDownIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
-import { Guest, GuestService } from "@/services";
+import type { Guest } from "@/services";
+import { getGuestDisplayName } from "@/lib/guestDisplay";
 import {
 	RSVPCard,
 	RSVPStepLabel,
@@ -176,7 +177,7 @@ export function GuestSearchResultsList({
 						aria-label="Matching guest invitations"
 					>
 						{guests.map((guest) => {
-							const displayName = GuestService.getGuestDisplayName(guest);
+							const displayName = getGuestDisplayName(guest);
 							const showMembers =
 								guest.groupName &&
 								guest.members &&

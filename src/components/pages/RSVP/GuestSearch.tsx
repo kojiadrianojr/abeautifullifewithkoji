@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { VStack, Box, Link, useToast } from "@chakra-ui/react";
 import { EditIcon, RepeatIcon } from "@chakra-ui/icons";
-import { GuestService, Guest } from "@/services";
+import type { Guest } from "@/services";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { GuestSearchInput } from "./GuestSearchInput";
 import { GuestResult } from "./GuestResult";
@@ -21,9 +21,23 @@ import {
 } from "./RSVPPrimitives";
 
 const SCROLL_HINT_DELAY_MS = 2500;
+const MIN_QUERY_LENGTH = 3;
 
 export interface GuestSearchProps {
 	formUrl: string;
+}
+
+function findExactMatch(guests: Guest[], term: string): Guest | null {
+	const normalized = term.toLowerCase().trim();
+	return (
+		guests.find((guest) => {
+			if (guest.fullName?.toLowerCase() === normalized) return true;
+			if (guest.members) {
+				return guest.members.some((member) => member.toLowerCase() === normalized);
+			}
+			return false;
+		}) ?? null
+	);
 }
 
 function getSearchAlert(
@@ -61,11 +75,15 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 	const [matchingGuests, setMatchingGuests] = useState<Guest[]>([]);
 	const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null);
 	const [hasSearched, setHasSearched] = useState(false);
+	const [isSearching, setIsSearching] = useState(false);
 	const [showScrollHint, setShowScrollHint] = useState(false);
 
 	const searchAlert = useMemo(
-		() => (hasSearched ? getSearchAlert(matchingGuests, selectedGuest) : null),
-		[hasSearched, matchingGuests, selectedGuest],
+		() =>
+			hasSearched && !isSearching
+				? getSearchAlert(matchingGuests, selectedGuest)
+				: null,
+		[hasSearched, isSearching, matchingGuests, selectedGuest],
 	);
 
 	const notifySearchResult = useCallback(
@@ -131,29 +149,53 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 		return () => observer.disconnect();
 	}, [showScrollHint, hasSearched, matchingGuests, selectedGuest]);
 
-	const handleSearch = () => {
+	const handleSearch = async () => {
+		const trimmed = searchTerm.trim();
+
+		if (!trimmed) {
+			setMatchingGuests([]);
+			setSelectedGuest(null);
+			setHasSearched(false);
+			return;
+		}
+
+		if (trimmed.length < MIN_QUERY_LENGTH) {
+			toast({
+				title: "Keep typing",
+				description: `Please enter at least ${MIN_QUERY_LENGTH} characters to search.`,
+				status: "info",
+				duration: 4000,
+				isClosable: true,
+				position: "top",
+			});
+			return;
+		}
+
+		setIsSearching(true);
 		setHasSearched(true);
-		setSearchedTerm(searchTerm);
+		setSearchedTerm(trimmed);
 		setShowScrollHint(false);
 
 		try {
-			if (!searchTerm.trim()) {
-				setMatchingGuests([]);
-				setSelectedGuest(null);
-				setHasSearched(false);
-				return;
+			const response = await fetch("/api/guests/search", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ query: trimmed }),
+			});
+
+			if (!response.ok) {
+				throw new Error(`Search request failed with status ${response.status}`);
 			}
 
-			const results = GuestService.searchGuest(searchTerm);
+			const data = (await response.json()) as { guests?: Guest[] };
+			const results = data.guests ?? [];
 			setMatchingGuests(results);
 
 			let selected: Guest | null = null;
-			if (results.length === 0) {
-				selected = null;
-			} else if (results.length === 1) {
+			if (results.length === 1) {
 				selected = results[0];
-			} else {
-				selected = GuestService.findGuestByMemberName(searchTerm) ?? null;
+			} else if (results.length > 1) {
+				selected = findExactMatch(results, trimmed);
 			}
 
 			setSelectedGuest(selected);
@@ -170,6 +212,8 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 				isClosable: true,
 				position: "top",
 			});
+		} finally {
+			setIsSearching(false);
 		}
 	};
 
@@ -205,6 +249,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 					value={searchTerm}
 					onChange={setSearchTerm}
 					onSearch={handleSearch}
+					isLoading={isSearching}
 				/>
 
 				{searchAlert && (
@@ -215,7 +260,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 					/>
 				)}
 
-				{hasSearched && (
+				{hasSearched && !isSearching && (
 					<Box w="100%" ref={resultsRef}>
 						{matchingGuests.length > 1 && !selectedGuest ? (
 							<GuestSearchResultsList

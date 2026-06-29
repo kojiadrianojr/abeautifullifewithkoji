@@ -5,7 +5,7 @@
 export { DateService } from "./dateService";
 export { ConfigService } from "./configService";
 export { NavigationService } from "./navigationService";
-export { GuestService } from "./guestService";
+export { getGuestDisplayName } from "./guestService";
 export { FAQService } from "./faqService";
 
 // Image service functions are server-side only.

@@ -58,6 +58,51 @@ This endpoint requires:
 
 ---
 
+## Guest Search API
+
+### `POST /api/guests/search`
+
+Searches the private guest list server-side and returns only the matching guests. The full guest list is never sent to the browser — it is loaded server-only from `config/guests/*.json` (gitignored, injected at build via CI secrets).
+
+**Request Body (JSON):**
+```json
+{ "query": "Maria Beatriz" }
+```
+
+**Validation:**
+- `query` is required and must be a string
+- Minimum length: 3 characters (after trimming)
+- Maximum length: 80 characters
+
+**Matching:**
+- Typo-tolerant fuzzy match (Levenshtein distance) across `fullName`, `groupName`, and `members`
+- Edit-distance tolerance scales with query length (stricter for short queries)
+- Results are ranked by closeness and capped (max 8) to limit enumeration
+
+**Response (200):**
+```json
+{
+  "guests": [
+    { "id": "1", "fullName": "Maria Beatriz", "allowedSeats": 1 }
+  ]
+}
+```
+
+**Response Codes:**
+- `200` - Success (`guests` may be an empty array)
+- `400` - Missing/invalid query, or below the minimum length
+- `429` - Rate limited (too many requests)
+
+**Security:**
+- Guest data is server-only; it is not bundled into client JavaScript
+- Responses send `Cache-Control: no-store` (also enforced in `vercel.json`)
+- Best-effort in-memory per-IP rate limiting (per serverless instance). For durable limiting across instances, back it with an external store (e.g. Upstash Redis)
+
+**Notes:**
+- Requires a server runtime (Vercel or Docker). A static export / GitHub Pages deployment cannot host this route.
+
+---
+
 ## Cache Management API
 
 ### `GET /api/cache/clear`
