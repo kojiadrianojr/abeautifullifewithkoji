@@ -40,8 +40,9 @@ service-account-key.json
 /public/images/prenup/
 /public/images/dress-code/
 
-# Guest list — private data, injected at build via CI secrets (see deploy.yml).
+# Private config & guest list — injected at build via CI secrets (see deploy.yml).
 # Keep your real files locally; they must never be committed.
+config/wedding.json
 config/guests/bea.json
 config/guests/koji.json
 
