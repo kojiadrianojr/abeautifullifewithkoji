@@ -74,6 +74,12 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          # Private config — consumed by next.config.ts to restore gitignored
+          # JSON files before webpack compiles. Also set these in the Vercel
+          # dashboard so direct (non-CI) Vercel builds work the same way.
+          WEDDING_JSON: ${{ secrets.WEDDING_JSON }}
+          GUESTS_BEA_JSON: ${{ secrets.GUESTS_BEA_JSON }}
+          GUESTS_KOJI_JSON: ${{ secrets.GUESTS_KOJI_JSON }}
           # Build-time secrets (used by prebuild scripts, not stored in Vercel dashboard)
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
