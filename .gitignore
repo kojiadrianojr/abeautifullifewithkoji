@@ -49,6 +49,9 @@ config/guests/koji.json
 # Guest list backups
 config/guests.backup.*.json
 
+# Git history rewrite backups (created during history scrubbing)
+history-backup-*.bundle
+
 # vercel
 .vercel
 
