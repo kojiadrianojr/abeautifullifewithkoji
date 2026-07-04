@@ -35,13 +35,22 @@ jobs:
         id: date
         run: echo "week=$(date +'%Y-%U')" >> "$GITHUB_OUTPUT"
 
+      # Only cache the Google Drive–synced collections. public/images/assets and
+      # any root-level images are committed to git and must NOT be cached, or the
+      # restore step would clobber freshly-committed assets (e.g. hero-bg-*.webp)
+      # with a stale copy from an earlier build this week.
       - name: Cache public images
         uses: actions/cache@v4
         with:
-          path: public/images
-          key: ${{ runner.os }}-images-${{ steps.date.outputs.week }}
+          path: |
+            public/images/hero-album
+            public/images/gallery
+            public/images/throwback
+            public/images/prenup
+            public/images/dress-code
+          key: ${{ runner.os }}-drive-images-${{ steps.date.outputs.week }}
           restore-keys: |
-            ${{ runner.os }}-images-
+            ${{ runner.os }}-drive-images-
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
@@ -101,4 +110,29 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      # Prime Vercel's edge cache and warm the serverless function so the site is
+      # fast the moment it goes live. Best-effort: warm failures never fail the deploy.
+      - name: Warm cache
+        env:
+          PROD_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOYMENT_URL }}
+        run: |
+          IS_PROD=${{ github.ref == 'refs/heads/main' }}
+          TARGET="$DEPLOY_URL"
+          if [ "$IS_PROD" = "true" ] && [ -n "$PROD_URL" ]; then
+            TARGET="$PROD_URL"
+          fi
+          echo "Warming $TARGET"
+          # Retry root until 200 (edge HTML) — deploy alias may lag a few s
+          for i in $(seq 1 5); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -A 'ci-cache-warm' "$TARGET/")
+            echo "  GET / -> $code (attempt $i)"
+            [ "$code" = "200" ] && break
+            sleep 5
+          done
+          # Warm search lambda (no-store: kills cold start, not cached)
+          curl -s -o /dev/null -w '  POST /api/guests/search -> %{http_code}\n' \
+            -X POST -H 'Content-Type: application/json' \
+            --data '{"query":"__warm__"}' "$TARGET/api/guests/search" || true
 
