@@ -52,7 +52,7 @@ jobs:
       # plus sources/config so a code change gets a fresh-but-warm cache, with a
       # lockfile-only restore-key fallback for partial reuse.
       - name: Cache Next.js build cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**/*.{ts,tsx}', 'config/**/*.json') }}
@@ -70,7 +70,7 @@ jobs:
       # restore step would clobber freshly-committed assets (e.g. hero-bg-*.webp)
       # with a stale copy from an earlier build this week.
       - name: Cache public images
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             public/images/hero-album
