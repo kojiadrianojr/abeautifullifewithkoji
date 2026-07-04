@@ -24,6 +24,10 @@ ENV IMAGE_SOURCE_TYPE=$IMAGE_SOURCE_TYPE
 # Set environment variable for production
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Emit the standalone server bundle (.next/standalone) that the runner stage
+# copies below. Gated behind this flag so Vercel builds keep the default output.
+ENV BUILD_STANDALONE 1
+
 # Build the application (runs prebuild: sync-images [no-op for local] + optimize-images)
 RUN npm run build
 

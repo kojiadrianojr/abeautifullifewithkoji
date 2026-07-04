@@ -28,7 +28,12 @@ writeIfMissing('config/guests/koji.json', process.env.GUESTS_KOJI_JSON);
 const nextConfig: NextConfig = {
   // Emit a self-contained server bundle at .next/standalone/server.js so the
   // multi-stage Dockerfile can run `node server.js` without the full toolchain.
-  output: 'standalone',
+  //
+  // ONLY enable for the Docker build (BUILD_STANDALONE=1). On Vercel, `vercel
+  // build --prebuilt` must use the default output — the standalone layout is
+  // not served correctly by Vercel's runtime and makes the whole deployment
+  // return 503 (both SSR routes and static assets).
+  output: process.env.BUILD_STANDALONE === '1' ? 'standalone' : undefined,
   images: {
     formats: ['image/webp', 'image/avif'],
   },
