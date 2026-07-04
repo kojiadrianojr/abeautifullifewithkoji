@@ -162,10 +162,13 @@ jobs:
           fi
           echo "Smoke testing $TARGET"
 
-          # 1) GET / must return 200. Retry to tolerate alias/propagation lag.
+          # 1) GET / must return 200. Follow redirects (-L) so a canonical
+          #    host/trailing-slash redirect (e.g. apex -> www, 308) is resolved
+          #    to its final 200 instead of failing the check. Retry to tolerate
+          #    alias/propagation lag.
           root_code=""
           for i in $(seq 1 6); do
-            root_code=$(curl -s -o /dev/null -w '%{http_code}' -A 'ci-smoke' "$TARGET/")
+            root_code=$(curl -sL -o /dev/null -w '%{http_code}' -A 'ci-smoke' "$TARGET/")
             echo "  GET / -> $root_code (attempt $i)"
             [ "$root_code" = "200" ] && break
             sleep 5
@@ -180,7 +183,7 @@ jobs:
           # 2) POST /api/guests/search must be alive: a valid-ish request should
           #    return 200 (results) or 400 (validation) — anything 5xx means the
           #    route/runtime is broken. 429 (rate limited) is also acceptable.
-          search_code=$(curl -s -o /dev/null -w '%{http_code}' \
+          search_code=$(curl -sL -o /dev/null -w '%{http_code}' \
             -X POST -H 'Content-Type: application/json' \
             --data '{"query":"smoke-test"}' "$TARGET/api/guests/search")
           echo "  POST /api/guests/search -> $search_code"
