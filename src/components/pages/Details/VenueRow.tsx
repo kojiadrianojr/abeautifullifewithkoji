@@ -35,8 +35,8 @@ export function VenueRow({
 	const imageBlock = (
 		<Box
 			flexShrink={0}
-			w={{ base: "full", md: "380px", lg: "420px" }}
-			maxW={{ base: "360px", md: "420px" }}
+			w={{ base: "full", md: "440px", lg: "500px" }}
+			maxW={{ base: "400px", md: "500px" }}
 			mx={{ base: "auto", md: "unset" }}
 			bg={detailsBg}
 		>

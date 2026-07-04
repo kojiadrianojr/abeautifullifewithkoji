@@ -16,7 +16,7 @@ export function VenueImageSlot({ label, src, alt }: VenueImageSlotProps) {
 	return (
 		<Box
 			w="full"
-			h={{ base: "340px", md: "400px", lg: "420px" }}
+			h={{ base: "400px", md: "480px", lg: "540px" }}
 			display="flex"
 			alignItems="center"
 			justifyContent="center"

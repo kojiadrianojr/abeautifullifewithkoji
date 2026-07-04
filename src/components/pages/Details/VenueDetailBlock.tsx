@@ -88,18 +88,19 @@ export function VenueTypography({
 				textTransform="uppercase"
 				color="gray.800"
 				lineHeight={{ base: 1.45, md: 1.5 }}
-				maxW={{ base: "280px", md: "300px" }}
+				maxW={{ base: "320px", md: "360px" }}
 			>
 				{displayName}
 			</Text>
 
 			<Text
 				fontFamily="display"
-				fontSize={{ base: "sm", md: "md" }}
+				fontSize={{ base: "md", md: "lg" }}
 				fontStyle="italic"
 				fontWeight="normal"
 				color="gray.500"
 				lineHeight="short"
+				whiteSpace="nowrap"
 			>
 				{locationLabel}
 			</Text>
@@ -108,10 +109,11 @@ export function VenueTypography({
 				<Text
 					as="p"
 					fontFamily="display"
-					fontSize="xs"
+					fontSize={{ base: "xs", md: "sm" }}
 					fontStyle="italic"
 					fontWeight="normal"
 					color="gray.500"
+					whiteSpace="nowrap"
 				>
 					{time}
 				</Text>
