@@ -1,0 +1,42 @@
+name: CodeQL
+
+# Static analysis for JavaScript/TypeScript. Runs on pushes/PRs to main and on
+# a weekly schedule so newly disclosed query packs catch regressions over time.
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  schedule:
+    # Mondays at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    # Least privilege for CodeQL: upload results + read code/actions metadata.
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+
+      # No build step: JS/TS is analyzed directly from source, so this stays
+      # fast and needs none of the Google Drive / Vercel build secrets.
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:javascript-typescript'

@@ -1,0 +1,58 @@
+name: Docker build
+
+# Verifies the self-host Docker image builds end-to-end (incl. `next build`
+# with output: 'standalone') WITHOUT any Google/Vercel secrets. The image is
+# only built to validate it — it is never pushed anywhere.
+on:
+  pull_request:
+    branches: ['main']
+    paths-ignore:
+      - '**.md'
+      - 'documentation/**'
+      - 'ai-docs/**'
+      - 'LICENSE'
+      - '.gitignore'
+  workflow_dispatch:
+
+concurrency:
+  group: docker-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+# Least privilege: only needs to read the repo (no registry push).
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # config/wedding.json and config/guests/*.json are gitignored but are
+      # imported by the app, so `next build` inside the image needs them in the
+      # build context. Provide secret-free placeholders (real self-host builds
+      # supply their own files or the WEDDING_JSON/GUESTS_*_JSON env vars).
+      - name: Create placeholder config
+        run: |
+          cp config/wedding.example.json config/wedding.json
+          mkdir -p config/guests
+          echo '{"guests":[]}' > config/guests/bea.json
+          echo '{"guests":[]}' > config/guests/koji.json
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: false
+          # IMAGE_SOURCE_TYPE=local makes sync-images.ts a no-op so the build
+          # needs no Google Drive credentials.
+          build-args: |
+            IMAGE_SOURCE_TYPE=local
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -15,10 +15,16 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Default image source to "local" so the build never requires Google Drive
+# credentials (sync-images.ts becomes a no-op). Override for a Drive-synced
+# build with: docker build --build-arg IMAGE_SOURCE_TYPE=google-drive ...
+ARG IMAGE_SOURCE_TYPE=local
+ENV IMAGE_SOURCE_TYPE=$IMAGE_SOURCE_TYPE
+
 # Set environment variable for production
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Build the application
+# Build the application (runs prebuild: sync-images [no-op for local] + optimize-images)
 RUN npm run build
 
 # Production image, copy all the files and run next

@@ -26,6 +26,9 @@ writeIfMissing('config/guests/bea.json', process.env.GUESTS_BEA_JSON);
 writeIfMissing('config/guests/koji.json', process.env.GUESTS_KOJI_JSON);
 
 const nextConfig: NextConfig = {
+  // Emit a self-contained server bundle at .next/standalone/server.js so the
+  // multi-stage Dockerfile can run `node server.js` without the full toolchain.
+  output: 'standalone',
   images: {
     formats: ['image/webp', 'image/avif'],
   },

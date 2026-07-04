@@ -9,6 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "validate-config": "tsx scripts/validate-config.ts",
     "export": "next build",
     "sync-images": "tsx scripts/sync-images.ts",
     "test-drive": "tsx scripts/test-google-drive.ts",
@@ -29,7 +31,8 @@
     "react-countdown": "^2.3.6",
     "react-dom": "^19.0.0",
     "react-icons": "^5.0.1",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@types/node": "^22",

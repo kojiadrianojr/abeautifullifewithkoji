@@ -1,0 +1,79 @@
+name: CI
+
+# Fast, secret-free validation gate. Runs on every PR and push to main so
+# broken code is caught before the (slower, secret-dependent) deploy workflow.
+# This job never touches Google Drive or Vercel, so it must NOT run prebuild/
+# build — it only lints, typechecks, validates config, and audits dependencies.
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+# Least privilege: this workflow only reads the repo.
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Lint, typecheck & config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # config/wedding.json and config/guests/*.json are gitignored but are
+      # statically imported (server-only) by the app, so tsc/lint fail to
+      # resolve the modules without them. Restore secret-free placeholders:
+      # the committed wedding.example.json mirrors the real shape, and empty
+      # guest lists satisfy the `as GuestsFile` cast. No secrets required.
+      - name: Create placeholder config
+        run: |
+          cp config/wedding.example.json config/wedding.json
+          mkdir -p config/guests
+          echo '{"guests":[]}' > config/guests/bea.json
+          echo '{"guests":[]}' > config/guests/koji.json
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Validate config JSON
+        run: npm run validate-config
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Fail the job only on high/critical advisories. Low/moderate findings
+      # are surfaced in the log but do not block (run `npm audit` for details).
+      - name: Audit dependencies (high+)
+        run: npm audit --audit-level=high

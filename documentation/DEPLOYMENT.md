@@ -1,90 +1,46 @@
 # Deployment Guide
 
-This guide covers various deployment options for your wedding website.
+This guide covers deployment options for your wedding website.
 
-## Option 1: GitHub Pages (Free & Simple)
+> **Important:** This app is **not** a static site. The RSVP flow uses a
+> server-only API route (`POST /api/guests/search`) that runs Node.js at
+> request time. Any static-only host (GitHub Pages, plain cPanel, a static
+> Netlify publish of `.next`) **cannot** run it. Use a host that supports the
+> Next.js server runtime: Vercel (the current setup) or Docker.
 
-**✨ This project is pre-configured for GitHub Pages deployment!**
+## How this project actually deploys
 
-GitHub Pages offers free hosting with custom domain support, SSL, and automated deployments.
+Production deploys run through **GitHub Actions → Vercel**
+(`.github/workflows/deploy.yml`), not Vercel's git integration. `vercel.json`
+sets `git.deploymentEnabled: false`, so pushing to GitHub does **not** trigger a
+Vercel-side deploy on its own — the workflow builds and deploys via the Vercel
+CLI using repository secrets. See
+[GITHUB_SECRETS_SETUP.md](./GITHUB_SECRETS_SETUP.md) for the required secrets.
 
-### Quick Start:
+## Option 1: Vercel via GitHub Actions (current & recommended)
 
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Deploy to GitHub Pages"
-   git push origin main
-   ```
+The repository is already wired for this. On push/PR to `main` (and manual
+`workflow_dispatch`), the workflow:
 
-2. **Enable GitHub Pages**
-   - Go to repository **Settings** → **Pages**
-   - Under **Build and deployment**, select **GitHub Actions**
+1. Installs dependencies and restores private config from secrets
+   (`WEDDING_JSON`, `GUESTS_BEA_JSON`, `GUESTS_KOJI_JSON`).
+2. Runs `vercel pull` / `vercel build` / `vercel deploy --prebuilt`
+   (production on `main`, preview otherwise).
+3. Runs a post-deploy smoke test that fails the job if the site is unhealthy.
 
-3. **Configure Custom Domain** (abeautifullifewithkoji.com)
-   - Add domain in GitHub Pages settings
-   - Configure DNS A records:
-     ```
-     185.199.108.153
-     185.199.109.153
-     185.199.110.153
-     185.199.111.153
-     ```
+### One-time setup
 
-**📚 Full Guide:** See [GITHUB_PAGES_DEPLOYMENT.md](./GITHUB_PAGES_DEPLOYMENT.md) for complete instructions.
+1. **Create the Vercel project** and note the org/project IDs.
+2. **Add GitHub secrets** (repo → Settings → Secrets and variables → Actions):
+   `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `WEDDING_JSON`,
+   `GUESTS_BEA_JSON`, `GUESTS_KOJI_JSON`, plus any `GOOGLE_*` / `NEXT_PUBLIC_*`
+   values you use. See [GITHUB_SECRETS_SETUP.md](./GITHUB_SECRETS_SETUP.md).
+3. **Custom Domain** (optional): add it in Vercel Project → Settings → Domains
+   and update your DNS records as instructed.
 
-**Cost**: **FREE** (including custom domain & SSL)
+**Cost**: Free for personal projects.
 
----
-
-## Option 2: Vercel (Excellent for Next.js)
-
-Vercel offers the simplest deployment for Next.js applications with automatic SSL and global CDN.
-
-### Steps:
-
-1. **Push to GitHub**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin YOUR_GITHUB_REPO
-   git push -u origin main
-   ```
-
-2. **Deploy on Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository
-   - Click "Deploy"
-
-3. **Custom Domain** (Optional)
-   - Go to Project Settings → Domains
-   - Add your custom domain
-   - Update DNS records as instructed
-
-**Cost**: Free for personal projects
-
-## Option 3: Netlify
-
-Similar to Vercel, great for static sites with easy continuous deployment.
-
-### Steps:
-
-1. **Push to GitHub** (same as above)
-
-2. **Deploy on Netlify**
-   - Go to [netlify.com](https://netlify.com)
-   - Click "New site from Git"
-   - Connect to your repository
-   - Build settings:
-     - Build command: `npm run build`
-     - Publish directory: `.next`
-   - Click "Deploy site"
-
-**Cost**: Free for personal projects
-
-## Option 3: Docker on Your Own Server
+## Option 2: Docker on Your Own Server
 
 Deploy using Docker on any server with Docker installed.
 
@@ -155,69 +111,28 @@ Deploy using Docker on any server with Docker installed.
 
 **Cost**: Server costs vary ($5-20/month for basic VPS)
 
-## Option 4: AWS Amplify
+## Other platforms
 
-Good for AWS users with automatic deployments.
+Any host that runs the **Next.js server runtime** can serve this app (the
+server-only RSVP API route rules out static-only hosts). Examples:
 
-### Steps:
+- **AWS Amplify** — connect the GitHub repo and use the default Next.js SSR
+  build; do **not** publish `.next` as static artifacts.
+- **Netlify** — works only with Netlify's Next.js runtime (SSR), not a plain
+  static publish of `.next`.
 
-1. **Push to GitHub** (same as Option 1)
-
-2. **Deploy on AWS Amplify**
-   - Log into AWS Console
-   - Go to AWS Amplify
-   - Click "New app" → "Host web app"
-   - Connect your GitHub repository
-   - Configure build settings:
-     ```yaml
-     version: 1
-     frontend:
-       phases:
-         preBuild:
-           commands:
-             - npm install
-         build:
-           commands:
-             - npm run build
-       artifacts:
-         baseDirectory: .next
-         files:
-           - '**/*'
-       cache:
-         paths:
-           - node_modules/**/*
-     ```
-   - Deploy
-
-**Cost**: Pay as you go (usually under $1/month for small sites)
-
-## Option 5: Traditional Hosting (cPanel)
-
-If you have traditional web hosting, you can build and upload the static files.
-
-### Steps:
-
-1. **Build the site**
-   ```bash
-   npm run build
-   npm run export  # Note: You'll need to add this script
-   ```
-
-2. **Upload files**
-   - Upload the `out/` directory to your hosting
-   - Make sure `.htaccess` handles routing
-
-**Note**: This requires additional configuration and is less recommended for Next.js apps.
+> **Static export / cPanel is not supported.** `npm run export` in this project
+> just runs `next build` (there is no `output: 'export'` config and no `out/`
+> directory), and the RSVP API route cannot run on static hosting. Use Vercel
+> or Docker instead.
 
 ## Choosing the Right Option
 
 | Option | Best For | Difficulty | Cost |
 |--------|----------|------------|------|
-| **GitHub Pages** | **Free hosting** | ⭐ **Easy** | **FREE** |
-| Vercel | Most users | ⭐ Easy | Free |
-| Netlify | Static sites | ⭐ Easy | Free |
-| Docker | Full control | ⭐⭐⭐ Advanced | $5-20/mo |
-| AWS Amplify | AWS users | ⭐⭐ Moderate | ~$1/mo |
+| **Vercel (GitHub Actions)** | **Current setup, most users** | ⭐ **Easy** | **Free** |
+| Docker | Full control / self-host | ⭐⭐⭐ Advanced | $5-20/mo |
+| AWS Amplify / Netlify (SSR) | Existing platform users | ⭐⭐ Moderate | ~$1/mo+ |
 
 ## Post-Deployment Checklist
 
@@ -237,13 +152,17 @@ After deploying:
 
 After making changes:
 
-### For Vercel/Netlify/AWS Amplify:
+### For Vercel (GitHub Actions):
 ```bash
 git add .
-git commit -m "Update wedding details"
-git push
+git commit -m "Update: wedding details"
+git push origin main
 ```
-Your site will automatically redeploy!
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and
+deploys to Vercel production (and runs the post-deploy smoke test). Deploys are
+driven by the workflow — Vercel's own git integration is disabled
+(`git.deploymentEnabled: false`), so a push alone does not deploy without the
+Action running.
 
 ### For Docker:
 ```bash
@@ -256,9 +175,9 @@ docker-compose up -d --build
 
 ## Custom Domain Setup
 
-### Vercel/Netlify:
-1. Go to project settings
-2. Add custom domain
+### Vercel:
+1. Go to Project → Settings → Domains
+2. Add your custom domain
 3. Update DNS records at your domain registrar:
    - Type: A Record
    - Name: @ or www
@@ -266,7 +185,7 @@ docker-compose up -d --build
 
 ### Docker with Nginx:
 1. Point your domain's A record to your server IP
-2. Follow the Nginx configuration in Option 3 above
+2. Follow the Nginx configuration in Option 2 (Docker) above
 
 ## Troubleshooting
 

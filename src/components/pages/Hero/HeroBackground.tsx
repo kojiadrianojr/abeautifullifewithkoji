@@ -6,8 +6,8 @@ import { getAssetPath } from "@/lib/asset-path";
 // Bump HERO_BG_VERSION whenever the wallpaper files are replaced so browsers
 // re-fetch instead of serving a stale cached copy under the same filename.
 const HERO_BG_VERSION = "2";
-export const HERO_BG_MOBILE = `/images/assets/hero-bg-mobile.webp?v=${HERO_BG_VERSION}`;
-export const HERO_BG_DESKTOP = `/images/assets/hero-bg-desktop.webp?v=${HERO_BG_VERSION}`;
+export const HERO_BG_MOBILE = `/images/assets/hero-bg-mobile-${HERO_BG_VERSION}.webp`;
+export const HERO_BG_DESKTOP = `/images/assets/hero-bg-desktop-${HERO_BG_VERSION}.webp`;
 
 export function HeroBackground() {
 	return (

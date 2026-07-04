@@ -1,0 +1,155 @@
+{
+  "wedding": {
+    "couple": {
+      "partner1": {
+        "firstName": "Partner",
+        "lastName": "One"
+      },
+      "partner2": {
+        "firstName": "Partner",
+        "lastName": "Two"
+      }
+    },
+    "date": "2099-01-01",
+    "time": "1:00PM",
+    "datetime": "2099-01-01T13:00:00",
+    "venue": {
+      "ceremony": {
+        "name": "Ceremony Venue",
+        "displayName": "Ceremony Venue",
+        "locationLabel": "City, Region",
+        "address": "Ceremony address",
+        "time": "1:00 PM",
+        "googleMapsUrl": "https://maps.example.com/ceremony",
+        "image": "/images/assets/church.webp",
+        "imageAlt": "Ceremony venue"
+      },
+      "reception": {
+        "name": "Reception Venue",
+        "displayName": "Reception Venue",
+        "locationLabel": "City, Region",
+        "address": "Reception address",
+        "time": "4:00 PM",
+        "googleMapsUrl": "https://maps.example.com/reception",
+        "image": "/images/assets/venue.webp",
+        "imageAlt": "Reception venue"
+      }
+    }
+  },
+  "content": {
+    "splashScreen": {
+      "enabled": true
+    },
+    "hero": {
+      "enabled": true,
+      "tagline": "Join Us In Celebrating Our Love"
+    },
+    "milestones": {
+      "enabled": true,
+      "title": "Milestones",
+      "timeline": [
+        {
+          "year": "2099",
+          "title": "Milestone title",
+          "description": "Milestone description."
+        }
+      ],
+      "qa": [
+        {
+          "question": "Question?",
+          "answer": "Answer."
+        }
+      ]
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "Prenup Photos"
+    },
+    "schedule": {
+      "enabled": true,
+      "title": "Schedule",
+      "events": [
+        {
+          "time": "1:00 PM",
+          "label": "Welcome!",
+          "title": "Guest Arrival",
+          "description": "Event description."
+        }
+      ]
+    },
+    "details": {
+      "enabled": true,
+      "titlePrefix": "The",
+      "title": "Venue Details"
+    },
+    "dressCode": {
+      "enabled": true,
+      "title": "Dress Code",
+      "subtitle": "Garden Formal",
+      "description": "Dress code description."
+    },
+    "rsvp": {
+      "enabled": true,
+      "title": "RSVP",
+      "deadline": "2099-01-01",
+      "formUrl": "https://forms.example.com/rsvp",
+      "message": "Please reply by the deadline."
+    },
+    "entourage": {
+      "enabled": true,
+      "title": "Nuptials",
+      "description": "The Entourage",
+      "parents": {
+        "groom": [{ "name": "Name", "role": "Father of the Groom" }],
+        "bride": [{ "name": "Name", "role": "Father of the Bride" }]
+      },
+      "principalSponsors": {
+        "men": [{ "name": "Name" }],
+        "women": [{ "name": "Name" }]
+      },
+      "bestMen": [{ "name": "Name" }],
+      "maidsOfHonor": [{ "name": "Name" }],
+      "groomsmen": [{ "name": "Name" }],
+      "bridesmaids": [{ "name": "Name" }],
+      "secondarySponsors": {
+        "candle": {
+          "man": { "name": "Name" },
+          "woman": { "name": "Name" }
+        },
+        "veil": {
+          "man": { "name": "Name" },
+          "woman": { "name": "Name" }
+        },
+        "cord": {
+          "man": { "name": "Name" },
+          "woman": { "name": "Name" }
+        }
+      },
+      "bearers": {
+        "coin": { "name": "Name" },
+        "bible": { "name": "Name" },
+        "ring": { "name": "Name" }
+      },
+      "flowers": {
+        "flowerGirl": { "name": "Name" },
+        "flowerLady": { "name": "Name" }
+      }
+    },
+    "faq": {
+      "enabled": true,
+      "title": "FAQ",
+      "questions": [
+        {
+          "question": "Question?",
+          "answer": "Answer."
+        }
+      ]
+    }
+  },
+  "contact": {
+    "email": "hello@example.com"
+  },
+  "social": {
+    "hashtag": "#example"
+  }
+}

@@ -1,10 +1,28 @@
 name: Deploy to Vercel
 
 on:
+  # Skip deploys for docs-only changes to save build minutes / Vercel deploys.
+  # NOTE: paths-ignore makes the whole workflow "not run" for these paths. If
+  # this workflow is ever made a REQUIRED status check via branch protection,
+  # a skipped run reports no status and can block merges. In that case, switch
+  # to a path-filter + skip-job pattern (e.g. dorny/paths-filter) that always
+  # runs the job but no-ops it, instead of paths-ignore.
   push:
     branches: ['main']
+    paths-ignore:
+      - '**.md'
+      - 'documentation/**'
+      - 'ai-docs/**'
+      - 'LICENSE'
+      - '.gitignore'
   pull_request:
     branches: ['main']
+    paths-ignore:
+      - '**.md'
+      - 'documentation/**'
+      - 'ai-docs/**'
+      - 'LICENSE'
+      - '.gitignore'
   workflow_dispatch:
 
 # Prevent concurrent production deployments; preview deploys can run in parallel.
@@ -28,6 +46,18 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+
+      # Persist Next.js's build cache across runs to speed up `next build`
+      # (incremental compilation, webpack module cache). Keyed on the lockfile
+      # plus sources/config so a code change gets a fresh-but-warm cache, with a
+      # lockfile-only restore-key fallback for partial reuse.
+      - name: Cache Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**/*.{ts,tsx}', 'config/**/*.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
 
       # Cache the weekly image sync so sync-images.ts skips re-downloading
       # unchanged assets from Google Drive on every commit.
@@ -135,4 +165,54 @@ jobs:
           curl -s -o /dev/null -w '  POST /api/guests/search -> %{http_code}\n' \
             -X POST -H 'Content-Type: application/json' \
             --data '{"query":"__warm__"}' "$TARGET/api/guests/search" || true
+
+      # Authoritative post-deploy health check. Unlike "Warm cache" above, this
+      # step FAILS the job if the freshly deployed site is not actually serving,
+      # so a broken deploy surfaces immediately instead of silently going live.
+      - name: Smoke test
+        env:
+          PROD_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOYMENT_URL }}
+        run: |
+          IS_PROD=${{ github.ref == 'refs/heads/main' }}
+          TARGET="$DEPLOY_URL"
+          if [ "$IS_PROD" = "true" ] && [ -n "$PROD_URL" ]; then
+            TARGET="$PROD_URL"
+          fi
+          echo "Smoke testing $TARGET"
+
+          # 1) GET / must return 200. Retry to tolerate alias/propagation lag.
+          root_code=""
+          for i in $(seq 1 6); do
+            root_code=$(curl -s -o /dev/null -w '%{http_code}' -A 'ci-smoke' "$TARGET/")
+            echo "  GET / -> $root_code (attempt $i)"
+            [ "$root_code" = "200" ] && break
+            sleep 5
+          done
+          if [ "$root_code" != "200" ]; then
+            echo "::error::Smoke test failed: GET / returned $root_code (expected 200)"
+            # To auto-rollback the production alias on failure, invoke here, e.g.:
+            #   vercel rollback --yes --token=${{ secrets.VERCEL_TOKEN }}
+            exit 1
+          fi
+
+          # 2) POST /api/guests/search must be alive: a valid-ish request should
+          #    return 200 (results) or 400 (validation) — anything 5xx means the
+          #    route/runtime is broken. 429 (rate limited) is also acceptable.
+          search_code=$(curl -s -o /dev/null -w '%{http_code}' \
+            -X POST -H 'Content-Type: application/json' \
+            --data '{"query":"smoke-test"}' "$TARGET/api/guests/search")
+          echo "  POST /api/guests/search -> $search_code"
+          case "$search_code" in
+            200|400|429)
+              echo "  Search route is alive."
+              ;;
+            *)
+              echo "::error::Smoke test failed: POST /api/guests/search returned $search_code (expected 200/400/429)"
+              # Optional auto-rollback hook (see note above).
+              exit 1
+              ;;
+          esac
+
+          echo "✅ Smoke test passed."
 

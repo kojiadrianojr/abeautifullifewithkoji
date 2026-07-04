@@ -5,3 +5,11 @@ docker-compose.yml
 
 # Keep this file
 !.dockerignore
+
+# Host build artifacts — never copy these into the image. The builder stage
+# installs its own node_modules and runs its own build; copying host copies
+# (wrong-platform binaries, stale output) would corrupt the image.
+node_modules
+.next
+.git
+npm-debug.log*
