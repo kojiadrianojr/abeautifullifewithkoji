@@ -30,6 +30,11 @@ concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+# Least privilege: deploy auths to Vercel via VERCEL_TOKEN, so GITHUB_TOKEN
+# only needs to read the repo.
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -141,34 +146,10 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      # Prime Vercel's edge cache and warm the serverless function so the site is
-      # fast the moment it goes live. Best-effort: warm failures never fail the deploy.
-      - name: Warm cache
-        env:
-          PROD_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
-          DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOYMENT_URL }}
-        run: |
-          IS_PROD=${{ github.ref == 'refs/heads/main' }}
-          TARGET="$DEPLOY_URL"
-          if [ "$IS_PROD" = "true" ] && [ -n "$PROD_URL" ]; then
-            TARGET="$PROD_URL"
-          fi
-          echo "Warming $TARGET"
-          # Retry root until 200 (edge HTML) — deploy alias may lag a few s
-          for i in $(seq 1 5); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' -A 'ci-cache-warm' "$TARGET/")
-            echo "  GET / -> $code (attempt $i)"
-            [ "$code" = "200" ] && break
-            sleep 5
-          done
-          # Warm search lambda (no-store: kills cold start, not cached)
-          curl -s -o /dev/null -w '  POST /api/guests/search -> %{http_code}\n' \
-            -X POST -H 'Content-Type: application/json' \
-            --data '{"query":"__warm__"}' "$TARGET/api/guests/search" || true
-
-      # Authoritative post-deploy health check. Unlike "Warm cache" above, this
-      # step FAILS the job if the freshly deployed site is not actually serving,
-      # so a broken deploy surfaces immediately instead of silently going live.
+      # Authoritative post-deploy health check: also warms the edge cache and the
+      # search lambda (the GET/POST retries below double as cache warming), and
+      # FAILS the job if the freshly deployed site is not actually serving, so a
+      # broken deploy surfaces immediately instead of silently going live.
       - name: Smoke test
         env:
           PROD_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
