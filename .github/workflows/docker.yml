@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # config/wedding.json and config/guests/*.json are gitignored but are
       # imported by the app, so `next build` inside the image needs them in the
