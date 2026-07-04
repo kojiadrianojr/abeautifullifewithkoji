@@ -77,26 +77,36 @@ Searches the private guest list server-side and returns only the matching guests
 **Matching:**
 - Typo-tolerant fuzzy match (Levenshtein distance) across `fullName`, `groupName`, and `members`
 - Edit-distance tolerance scales with query length (stricter for short queries)
-- Results are ranked by closeness and capped (max 8) to limit enumeration
+- Token-subset matching: each word of a multi-word query must match a word in the name (order-independent), so partial names with omitted middle names/initials still match (e.g. "Klyde Rayel" matches "Klyde Reinier J. Rayel")
+- Results are ranked by closeness and capped (max 6) to limit enumeration
+
+**Anti-data-mining:**
+- Broad/vague queries that match more guests than the cap return no names and set `tooBroad: true`, prompting the guest to enter their full name. This prevents harvesting the guest list with common name fragments.
 
 **Response (200):**
 ```json
 {
   "guests": [
     { "id": "1", "fullName": "Maria Beatriz", "allowedSeats": 1 }
-  ]
+  ],
+  "tooBroad": false
 }
 ```
 
+When the query is too broad, `guests` is empty and `tooBroad` is `true`:
+```json
+{ "guests": [], "tooBroad": true }
+```
+
 **Response Codes:**
-- `200` - Success (`guests` may be an empty array)
+- `200` - Success (`guests` may be an empty array; check `tooBroad`)
 - `400` - Missing/invalid query, or below the minimum length
 - `429` - Rate limited (too many requests)
 
 **Security:**
 - Guest data is server-only; it is not bundled into client JavaScript
 - Responses send `Cache-Control: no-store` (also enforced in `vercel.json`)
-- Best-effort in-memory per-IP rate limiting (per serverless instance). For durable limiting across instances, back it with an external store (e.g. Upstash Redis)
+- Best-effort in-memory per-IP rate limiting (per serverless instance): two windows — 12 requests/minute (burst protection) and 60 requests/hour (slow-enumeration protection). For durable limiting across instances, back it with an external store (e.g. Upstash Redis)
 
 **Notes:**
 - Requires a server runtime (Vercel or Docker). A static export / GitHub Pages deployment cannot host this route.

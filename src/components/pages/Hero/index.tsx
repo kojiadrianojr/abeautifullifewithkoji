@@ -14,7 +14,7 @@ import { FadeIn } from "@/components/ui/animations";
 import { HeroContent } from "./HeroContent";
 import { CountdownBox } from "./CountdownBox";
 import { HeroBackground } from "./HeroBackground";
-import { VideoComingSoon } from "./VideoComingSoon";
+import { HeroVideo } from "./HeroVideo";
 import { ScrollIndicator } from "./ScrollIndicator";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
@@ -39,102 +39,54 @@ export function HeroSection() {
 		>
 			<HeroBackground />
 
-			{/* Content - Side by Side */}
+			{/* Content — centered single column */}
 			<Container
-				maxW="7xl"
+				maxW="3xl"
 				position="relative"
 				zIndex={10}
 				px={4}
-				py={20}
+				py={{ base: 20, md: 24 }}
 				opacity={contentHidden ? 0 : 1}
 				pointerEvents={contentHidden ? "none" : "auto"}
 				transition="opacity 0.5s ease"
-				display="flex"
-				flexDirection="column"
-				alignItems={{ base: "center", lg: "stretch" }}
 			>
-				<Box
-					display="flex"
-					flexDirection={{ base: "column", lg: "row" }}
-					gap={{ base: 10, lg: 16 }}
-					alignItems="center"
-					justifyContent="center"
-				>
-					{/* Text Content — frosted glass panel */}
-					<FadeIn delay={0} duration={1} direction="left" mounted={mounted}>
-						<Box
-							flex={{ base: "0 0 auto", lg: "1" }}
-							maxW={{ base: "100%", lg: "none" }}
-							position="relative"
-							zIndex={2}
-						>
-							<Box
-							bg="rgba(255,255,255,0.07)"
-							backdropFilter="blur(10px)"
-							borderRadius="2xl"
-							p={{ base: 6, md: 8 }}
-							border="1px solid"
-							borderColor="whiteAlpha.100"
-							>
-								<VStack spacing={8} align={{ base: "center", lg: "flex-start" }}>
-									<Box textAlign={{ base: "center", lg: "left" }}>
-										<HeroContent
-											tagline={hero.tagline}
-											coupleNames={ConfigService.getCoupleNames()}
-											weddingDate={ConfigService.formatWeddingDate()}
-											weddingTime={time}
-											venueName={venue.ceremony.name}
-											mounted={mounted}
-										/>
-									</Box>
+				<VStack spacing={{ base: 10, md: 12 }} align="center" w="100%">
+					<FadeIn delay={0} duration={1.2} direction="down" mounted={mounted}>
+						<HeroContent
+							tagline={hero.tagline}
+							coupleNames={ConfigService.getCoupleNames()}
+							weddingDate={ConfigService.formatWeddingDate()}
+							weddingTime={time}
+							venueName={venue.ceremony.name}
+							mounted={mounted}
+						/>
+					</FadeIn>
 
-									<CountdownBox mounted={mounted} />
-								</VStack>
-							</Box>
+					{/* Thin gold divider */}
+					<FadeIn delay={0.3} duration={1} direction="none" mounted={mounted}>
+						<Box
+							mx="auto"
+							w="72px"
+							h="1px"
+							bgGradient="linear(to-r, transparent, primary.400, transparent)"
+							opacity={0.8}
+						/>
+					</FadeIn>
+
+					{/* Video — framed feature */}
+					<FadeIn delay={0.45} duration={1.1} direction="up" mounted={mounted}>
+						<Box w="100%" maxW="680px" mx="auto">
+							<HeroVideo />
 						</Box>
 					</FadeIn>
 
-					{/* Media Panel */}
-					<FadeIn delay={0.2} duration={1} direction="right" mounted={mounted}>
-						<Box
-							flex={{ base: "0 0 auto", lg: "0 0 48%" }}
-							maxW={{ base: "100%", md: "540px", lg: "none" }}
-							w="100%"
-							mx={{ base: "auto", lg: 0 }}
-							alignSelf={{ base: "center", lg: "auto" }}
-							position="relative"
-							zIndex={1}
-						>
-							<VStack spacing={4} align="center" w="100%">
-								<Box
-									display="inline-flex"
-									borderRadius="full"
-									px={5}
-									py={2}
-									border="1px solid"
-									borderColor="whiteAlpha.300"
-									fontFamily="body"
-									fontSize={{ base: "xs", md: "sm" }}
-									fontWeight={600}
-									letterSpacing="wide"
-									color="gray.900"
-									bg="primary.500"
-								>
-									Watch Our Story
-								</Box>
-
-								<Box
-									w="100%"
-									maxW="600px"
-									mx="auto"
-									h={{ base: "400px", md: "480px", lg: "500px" }}
-								>
-									<VideoComingSoon />
-								</Box>
-							</VStack>
+					{/* Countdown */}
+					<FadeIn delay={0.6} duration={1} direction="up" mounted={mounted}>
+						<Box w="100%">
+							<CountdownBox mounted={mounted} />
 						</Box>
 					</FadeIn>
-				</Box>
+				</VStack>
 			</Container>
 
 			{/* Toggle content visibility — bottom-right corner */}

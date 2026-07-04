@@ -43,7 +43,16 @@ function findExactMatch(guests: Guest[], term: string): Guest | null {
 function getSearchAlert(
 	results: Guest[],
 	selectedGuest: Guest | null,
+	tooBroad: boolean,
 ): { status: "success" | "info" | "warning"; title: string; description: string } | null {
+	if (tooBroad) {
+		return {
+			status: "warning",
+			title: "Too many matches",
+			description: "Please enter your full name as printed on your invitation.",
+		};
+	}
+
 	if (results.length === 0) {
 		return {
 			status: "warning",
@@ -74,6 +83,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 	const [searchedTerm, setSearchedTerm] = useState("");
 	const [matchingGuests, setMatchingGuests] = useState<Guest[]>([]);
 	const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null);
+	const [isTooBroad, setIsTooBroad] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
 	const [isSearching, setIsSearching] = useState(false);
 	const [showScrollHint, setShowScrollHint] = useState(false);
@@ -81,14 +91,14 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 	const searchAlert = useMemo(
 		() =>
 			hasSearched && !isSearching
-				? getSearchAlert(matchingGuests, selectedGuest)
+				? getSearchAlert(matchingGuests, selectedGuest, isTooBroad)
 				: null,
-		[hasSearched, isSearching, matchingGuests, selectedGuest],
+		[hasSearched, isSearching, matchingGuests, selectedGuest, isTooBroad],
 	);
 
 	const notifySearchResult = useCallback(
-		(results: Guest[], selected: Guest | null) => {
-			const alert = getSearchAlert(results, selected);
+		(results: Guest[], selected: Guest | null, tooBroad: boolean) => {
+			const alert = getSearchAlert(results, selected, tooBroad);
 			if (!alert) return;
 
 			toast({
@@ -187,9 +197,14 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 				throw new Error(`Search request failed with status ${response.status}`);
 			}
 
-			const data = (await response.json()) as { guests?: Guest[] };
-			const results = data.guests ?? [];
+			const data = (await response.json()) as {
+				guests?: Guest[];
+				tooBroad?: boolean;
+			};
+			const tooBroad = data.tooBroad ?? false;
+			const results = tooBroad ? [] : data.guests ?? [];
 			setMatchingGuests(results);
+			setIsTooBroad(tooBroad);
 
 			let selected: Guest | null = null;
 			if (results.length === 1) {
@@ -199,10 +214,11 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 			}
 
 			setSelectedGuest(selected);
-			notifySearchResult(results, selected);
+			notifySearchResult(results, selected, tooBroad);
 		} catch (err) {
 			setMatchingGuests([]);
 			setSelectedGuest(null);
+			setIsTooBroad(false);
 			console.error("Guest search error:", err);
 			toast({
 				title: "Something went wrong",
@@ -222,6 +238,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 		setSearchedTerm("");
 		setMatchingGuests([]);
 		setSelectedGuest(null);
+		setIsTooBroad(false);
 		setHasSearched(false);
 		setShowScrollHint(false);
 	};
@@ -229,6 +246,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 	const handleRefineSearch = () => {
 		setMatchingGuests([]);
 		setSelectedGuest(null);
+		setIsTooBroad(false);
 		setHasSearched(false);
 		setShowScrollHint(false);
 	};
@@ -239,7 +257,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 
 	const handleGuestSelect = (guest: Guest) => {
 		setSelectedGuest(guest);
-		notifySearchResult(matchingGuests, guest);
+		notifySearchResult(matchingGuests, guest, false);
 	};
 
 	return (
@@ -352,7 +370,10 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 							</VStack>
 						) : (
 							<VStack spacing={4} w="100%">
-								<NotFoundMessage searchTerm={searchedTerm} />
+								<NotFoundMessage
+									searchTerm={searchedTerm}
+									reason={isTooBroad ? "too_broad" : "not_found"}
+								/>
 
 								<AnimatedButton
 									w="100%"

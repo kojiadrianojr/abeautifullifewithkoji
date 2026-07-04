@@ -13,16 +13,18 @@ export function HeroTitle({ tagline, coupleNames, mounted }: HeroTitleProps) {
 	const [name1, name2] = coupleNames.split(" & ");
 
 	return (
-		<VStack spacing={6}>
+		<VStack spacing={5}>
 			<FadeIn delay={0} duration={2} direction="down" mounted={mounted}>
 				<Text
 					fontFamily="display"
 					fontStyle="italic"
-					fontSize={{ base: "md", md: "lg" }}
+					fontSize={{ base: "sm", md: "md" }}
 					fontWeight={400}
-					letterSpacing="0.08em"
-					color="whiteAlpha.900"
+					letterSpacing="0.22em"
+					textTransform="uppercase"
+					color="whiteAlpha.800"
 					textShadow="0 1px 4px rgba(0,0,0,0.5)"
+					textAlign="center"
 				>
 					{tagline}
 				</Text>

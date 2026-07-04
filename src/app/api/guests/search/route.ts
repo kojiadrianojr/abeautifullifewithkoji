@@ -13,9 +13,20 @@ const NO_STORE_HEADERS = { "Cache-Control": "no-store" } as const;
 // Best-effort, per-instance rate limiting. Serverless instances are ephemeral
 // and not shared, so this throttles bursts from a single client without
 // promising global accuracy. Swap for a durable store (e.g. Upstash) if needed.
-const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX_REQUESTS = 20;
-const hits = new Map<string, { count: number; resetAt: number }>();
+// Two windows guard against both rapid bursts and slow enumeration (data mining)
+// of the guest list.
+const RATE_LIMIT_MINUTE_MS = 60_000;
+const RATE_LIMIT_MINUTE_MAX = 12;
+const RATE_LIMIT_HOUR_MS = 3_600_000;
+const RATE_LIMIT_HOUR_MAX = 60;
+
+interface RateWindow {
+	count: number;
+	resetAt: number;
+}
+
+const minuteHits = new Map<string, RateWindow>();
+const hourHits = new Map<string, RateWindow>();
 
 function getClientIp(request: Request): string {
 	const forwarded = request.headers.get("x-forwarded-for");
@@ -23,17 +34,39 @@ function getClientIp(request: Request): string {
 	return request.headers.get("x-real-ip")?.trim() || "unknown";
 }
 
-function isRateLimited(ip: string): boolean {
+function exceedsWindow(
+	store: Map<string, RateWindow>,
+	ip: string,
+	windowMs: number,
+	max: number,
+): boolean {
 	const now = Date.now();
-	const entry = hits.get(ip);
+	const entry = store.get(ip);
 
 	if (!entry || now > entry.resetAt) {
-		hits.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+		store.set(ip, { count: 1, resetAt: now + windowMs });
 		return false;
 	}
 
 	entry.count += 1;
-	return entry.count > RATE_LIMIT_MAX_REQUESTS;
+	return entry.count > max;
+}
+
+function isRateLimited(ip: string): boolean {
+	// Evaluate both windows so each increments on every request.
+	const minuteExceeded = exceedsWindow(
+		minuteHits,
+		ip,
+		RATE_LIMIT_MINUTE_MS,
+		RATE_LIMIT_MINUTE_MAX,
+	);
+	const hourExceeded = exceedsWindow(
+		hourHits,
+		ip,
+		RATE_LIMIT_HOUR_MS,
+		RATE_LIMIT_HOUR_MAX,
+	);
+	return minuteExceeded || hourExceeded;
 }
 
 export async function POST(request: Request) {
@@ -85,7 +118,10 @@ export async function POST(request: Request) {
 		);
 	}
 
-	const guests = searchGuests(trimmed);
+	const { guests, tooBroad } = searchGuests(trimmed);
 
-	return NextResponse.json({ guests }, { status: 200, headers: NO_STORE_HEADERS });
+	return NextResponse.json(
+		{ guests, tooBroad },
+		{ status: 200, headers: NO_STORE_HEADERS },
+	);
 }
