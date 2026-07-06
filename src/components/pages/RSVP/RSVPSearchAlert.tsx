@@ -1,6 +1,11 @@
 "use client";
 
-import { Alert, AlertIcon, AlertDescription, Box } from "@chakra-ui/react";
+import {
+	Alert,
+	AlertIcon,
+	AlertDescription,
+	Text,
+} from "@chakra-ui/react";
 import { FadeIn } from "@/components/ui/animations/FadeIn";
 
 export type RSVPSearchAlertStatus = "success" | "info" | "warning";
@@ -50,32 +55,32 @@ export function RSVPSearchAlert({
 				px={{ base: 4, md: 5 }}
 				py={{ base: 3.5, md: 4 }}
 				boxShadow="0 4px 16px rgba(195,177,225,0.15)"
+				alignItems="center"
 				role="status"
 				aria-live="polite"
 			>
 				<AlertIcon color={styles.iconColor} boxSize={5} />
-				<Box flex="1">
-					<AlertDescription
-						fontFamily="body"
-						fontSize={{ base: "md", md: "lg" }}
-						fontWeight="semibold"
-						color="gray.800"
-						lineHeight="short"
-					>
+				<AlertDescription
+					flex="1"
+					minW={0}
+					fontFamily="body"
+					fontSize={{ base: "md", md: "lg" }}
+					lineHeight="snug"
+				>
+					<Text as="span" fontWeight="semibold" color="gray.800">
 						{title}
-					</AlertDescription>
+					</Text>
 					{description && (
-						<AlertDescription
-							fontFamily="body"
-							fontSize={{ base: "sm", md: "md" }}
-							color="gray.600"
-							mt={1}
-							lineHeight="tall"
-						>
-							{description}
-						</AlertDescription>
+						<>
+							<Text as="span" mx={2} color="gray.400" aria-hidden="true">
+								·
+							</Text>
+							<Text as="span" fontWeight="normal" color="gray.600">
+								{description}
+							</Text>
+						</>
 					)}
-				</Box>
+				</AlertDescription>
 			</Alert>
 		</FadeIn>
 	);

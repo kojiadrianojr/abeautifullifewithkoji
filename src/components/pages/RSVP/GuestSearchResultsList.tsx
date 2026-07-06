@@ -128,9 +128,11 @@ export function GuestSearchResultsList({
 		scrollRef.current?.scrollBy({ top: 96, behavior: "smooth" });
 	};
 
+	const listMaxHeight = { base: "min(240px, 42vh)", md: "min(280px, 38vh)" };
+
 	return (
 		<RSVPCard>
-			<VStack spacing={3} p={{ base: 4, md: 5 }} align="stretch">
+			<VStack spacing={3} p={{ base: 4, md: 5 }} align="stretch" minW={0}>
 				<RSVPStepLabel>Step 1 of 2 — Pick your name</RSVPStepLabel>
 
 				<RSVPCardHeader
@@ -149,7 +151,7 @@ export function GuestSearchResultsList({
 					.
 				</RSVPHelperText>
 
-				<Box position="relative">
+				<Box position="relative" w="100%" minW={0}>
 					{canScroll && !isAtTop && (
 						<Box
 							position="absolute"
@@ -163,103 +165,115 @@ export function GuestSearchResultsList({
 						/>
 					)}
 
-					<VStack
+					<Box
 						ref={scrollRef}
-						spacing={2}
 						w="100%"
-						align="stretch"
-						maxH="260px"
+						minW={0}
+						maxH={listMaxHeight}
 						overflowY="auto"
+						overflowX="hidden"
 						px={0.5}
 						onScroll={updateScrollState}
 						css={SCROLLBAR_CSS}
 						role="listbox"
 						aria-label="Matching guest invitations"
 					>
-						{guests.map((guest) => {
-							const displayName = getGuestDisplayName(guest);
-							const showMembers =
-								guest.groupName &&
-								guest.members &&
-								guest.members.length > 0;
-							const initial =
-								displayName.replace(/^[^A-Za-z]*/, "").charAt(0).toUpperCase() ||
-								"?";
+						<VStack spacing={2} align="stretch" w="100%">
+							{guests.map((guest) => {
+								const displayName = getGuestDisplayName(guest);
+								const showMembers =
+									guest.groupName &&
+									guest.members &&
+									guest.members.length > 0;
+								const initial =
+									displayName.replace(/^[^A-Za-z]*/, "").charAt(0).toUpperCase() ||
+									"?";
 
-							return (
-								<Button
-									key={guest.id}
-									variant="outline"
-									w="100%"
-									h="auto"
-									minH="48px"
-									py={3}
-									px={3.5}
-									borderRadius="xl"
-									borderColor="purple.100"
-									bg="white"
-									boxShadow="0 1px 6px rgba(195,177,225,0.12)"
-									textAlign="left"
-									whiteSpace="normal"
-									onClick={() => onSelect(guest)}
-									role="option"
-									aria-label={`Select ${displayName}`}
-									_hover={{
-										borderColor: "secondary.300",
-										bg: "secondary.50",
-										boxShadow: "0 4px 14px rgba(192,57,43,0.1)",
-									}}
-									_active={{ bg: "secondary.100" }}
-								>
-									<HStack spacing={3} align="center" w="100%">
-										<Flex
-											as="span"
-											align="center"
-											justify="center"
-											boxSize={9}
-											borderRadius="full"
-											bg="purple.50"
-											color="primary.500"
-											fontSize="sm"
-											fontWeight="semibold"
-											flexShrink={0}
-											fontFamily="body"
-										>
-											{initial}
-										</Flex>
-
-										<Box flex={1} minW={0}>
-											<Text
-												fontFamily="body"
-												fontSize={{ base: "md", md: "lg" }}
+								return (
+									<Button
+										key={guest.id}
+										variant="outline"
+										w="100%"
+										maxW="100%"
+										h="auto"
+										minH="48px"
+										py={3}
+										px={3.5}
+										borderRadius="xl"
+										borderColor="purple.100"
+										bg="white"
+										boxShadow="0 1px 6px rgba(195,177,225,0.12)"
+										textAlign="left"
+										whiteSpace="normal"
+										overflow="hidden"
+										justifyContent="flex-start"
+										alignItems="flex-start"
+										flexShrink={0}
+										onClick={() => onSelect(guest)}
+										role="option"
+										aria-label={`Select ${displayName}`}
+										_hover={{
+											borderColor: "secondary.300",
+											bg: "secondary.50",
+											boxShadow: "0 4px 14px rgba(192,57,43,0.1)",
+										}}
+										_active={{ bg: "secondary.100" }}
+									>
+										<HStack spacing={3} align="flex-start" w="100%" minW={0}>
+											<Flex
+												as="span"
+												align="center"
+												justify="center"
+												boxSize={9}
+												borderRadius="full"
+												bg="purple.50"
+												color="primary.500"
+												fontSize="sm"
 												fontWeight="semibold"
-												color="gray.800"
-												lineHeight="short"
-												noOfLines={2}
+												flexShrink={0}
+												fontFamily="body"
+												mt={0.5}
 											>
-												<HighlightMatch
-													text={displayName}
-													searchTerm={searchTerm}
-												/>
-											</Text>
-											{showMembers && (
+												{initial}
+											</Flex>
+
+											<Box flex={1} minW={0} overflow="hidden">
 												<Text
 													fontFamily="body"
-													fontSize={{ base: "sm", md: "md" }}
-													color="gray.600"
-													mt={0.5}
+													fontSize={{ base: "md", md: "lg" }}
+													fontWeight="semibold"
+													color="gray.800"
 													lineHeight="short"
+													wordBreak="break-word"
+													overflowWrap="anywhere"
 													noOfLines={2}
 												>
-													{formatMembers(guest.members!, searchTerm)}
+													<HighlightMatch
+														text={displayName}
+														searchTerm={searchTerm}
+													/>
 												</Text>
-											)}
-										</Box>
-									</HStack>
-								</Button>
-							);
-						})}
-					</VStack>
+												{showMembers && (
+													<Text
+														fontFamily="body"
+														fontSize={{ base: "sm", md: "md" }}
+														color="gray.600"
+														mt={0.5}
+														lineHeight="short"
+														wordBreak="break-word"
+														overflowWrap="anywhere"
+														noOfLines={3}
+													>
+														{formatMembers(guest.members!, searchTerm)}
+													</Text>
+												)}
+											</Box>
+										</HStack>
+									</Button>
+								);
+							})}
+						</VStack>
+					</Box>
 
 					{canScroll && !isAtBottom && (
 						<Box
