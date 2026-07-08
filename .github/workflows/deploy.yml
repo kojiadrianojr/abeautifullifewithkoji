@@ -124,6 +124,12 @@ jobs:
           WEDDING_JSON: ${{ secrets.WEDDING_JSON }}
           GUESTS_BEA_JSON: ${{ secrets.GUESTS_BEA_JSON }}
           GUESTS_KOJI_JSON: ${{ secrets.GUESTS_KOJI_JSON }}
+          # Server-only RSVP form config. next.config.ts writes these into
+          # config/rsvp.json, which verify.ts imports — so the reply-form URL is
+          # baked into the function bundle and available at RUNTIME. (A plain
+          # build-shell env var is NOT readable by the deployed function.)
+          RSVP_FORM_URL: ${{ secrets.RSVP_FORM_URL }}
+          RSVP_FORM_NAME_ENTRY: ${{ secrets.RSVP_FORM_NAME_ENTRY }}
           # Build-time secrets (used by prebuild scripts, not stored in Vercel dashboard)
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}

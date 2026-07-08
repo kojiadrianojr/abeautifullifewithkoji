@@ -3,6 +3,7 @@ import "server-only";
 import crypto from "node:crypto";
 
 import { getGuestDisplayName } from "@/lib/guestDisplay";
+import { getRsvpFormUrl, getRsvpNameEntry } from "@/server/rsvp/formConfig";
 import { getAllGuests } from "./data";
 
 export interface VerifyResult {
@@ -43,12 +44,12 @@ function constantTimeEquals(a: string, b: string): boolean {
  * Returns undefined when `RSVP_FORM_URL` is not configured.
  */
 function buildFormUrl(displayName: string): string | undefined {
-	const base = process.env.RSVP_FORM_URL?.trim();
+	const base = getRsvpFormUrl();
 	if (!base) return undefined;
 
 	try {
 		const url = new URL(base);
-		const nameEntry = process.env.RSVP_FORM_NAME_ENTRY?.trim();
+		const nameEntry = getRsvpNameEntry();
 		if (nameEntry) url.searchParams.set(nameEntry, displayName);
 		return url.toString();
 	} catch {

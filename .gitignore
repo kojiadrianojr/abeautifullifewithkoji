@@ -46,6 +46,10 @@ config/wedding.json
 config/guests/bea.json
 config/guests/koji.json
 
+# Server-only RSVP form config — synthesized by next.config.ts from
+# RSVP_JSON / RSVP_FORM_URL at build. Contains the private reply-form URL.
+config/rsvp.json
+
 # Guest list backups
 config/guests.backup.*.json
 
