@@ -49,6 +49,9 @@ config/guests/koji.json
 # Guest list backups
 config/guests.backup.*.json
 
+# Generated invite-code distribution sheet (contains secret codes)
+config/guests/invite-codes.csv
+
 # Git history rewrite backups (created during history scrubbing)
 history-backup-*.bundle
 

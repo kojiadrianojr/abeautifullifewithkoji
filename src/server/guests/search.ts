@@ -1,6 +1,7 @@
 import "server-only";
 
-import type { Guest } from "@/config/guests/types";
+import type { Guest, PublicGuest } from "@/config/guests/types";
+import { toPublicGuest } from "@/config/guests/types";
 import { getAllGuests } from "./data";
 import { levenshtein } from "./levenshtein";
 
@@ -9,7 +10,7 @@ export const MAX_QUERY_LENGTH = 80;
 export const MAX_RESULTS = 6;
 
 export interface GuestSearchResult {
-	guests: Guest[];
+	guests: PublicGuest[];
 	tooBroad: boolean;
 }
 
@@ -158,5 +159,6 @@ export function searchGuests(searchTerm: string): GuestSearchResult {
 
 	scored.sort((a, b) => a.score - b.score);
 
-	return { guests: scored.map((entry) => entry.guest), tooBroad: false };
+	// Strip the secret invite code before the guests leave the server.
+	return { guests: scored.map((entry) => toPublicGuest(entry.guest)), tooBroad: false };
 }

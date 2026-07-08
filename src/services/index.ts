@@ -13,5 +13,5 @@ export { FAQService } from "./faqService";
 export type { WeddingConfig } from "./configService";
 export type { NavItem } from "./navigationService";
 export { NAV_ITEMS } from "./navigationService";
-export type { Guest } from "./guestService";
+export type { Guest, PublicGuest } from "./guestService";
 export type { FAQQuestion, FAQData } from "./faqService";

@@ -3,7 +3,7 @@
 import { Box, Text, VStack, HStack, Flex } from "@chakra-ui/react";
 import { CheckCircleIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
-import { Guest } from "@/services";
+import { PublicGuest } from "@/services";
 import {
 	RSVPCard,
 	RSVPStepLabel,
@@ -14,7 +14,7 @@ import {
 } from "./RSVPPrimitives";
 
 export interface GuestResultProps {
-	guest: Guest;
+	guest: PublicGuest;
 	stepLabel?: string;
 	onWrongGuest?: () => void;
 	wrongGuestLabel?: string;

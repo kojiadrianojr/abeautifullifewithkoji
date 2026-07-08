@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
-import { VStack, Box, Link, useToast } from "@chakra-ui/react";
-import { EditIcon, RepeatIcon } from "@chakra-ui/icons";
-import type { Guest } from "@/services";
+import { VStack, Box, Link, Input, Text, useToast } from "@chakra-ui/react";
+import { EditIcon, RepeatIcon, LockIcon } from "@chakra-ui/icons";
+import type { PublicGuest } from "@/services";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { GuestSearchInput } from "./GuestSearchInput";
 import { GuestResult } from "./GuestResult";
@@ -23,11 +23,7 @@ import {
 const SCROLL_HINT_DELAY_MS = 2500;
 const MIN_QUERY_LENGTH = 3;
 
-export interface GuestSearchProps {
-	formUrl: string;
-}
-
-function findExactMatch(guests: Guest[], term: string): Guest | null {
+function findExactMatch(guests: PublicGuest[], term: string): PublicGuest | null {
 	const normalized = term.toLowerCase().trim();
 	return (
 		guests.find((guest) => {
@@ -41,8 +37,8 @@ function findExactMatch(guests: Guest[], term: string): Guest | null {
 }
 
 function getSearchAlert(
-	results: Guest[],
-	selectedGuest: Guest | null,
+	results: PublicGuest[],
+	selectedGuest: PublicGuest | null,
 	tooBroad: boolean,
 ): { status: "success" | "info" | "warning"; title: string; description: string } | null {
 	if (tooBroad) {
@@ -76,17 +72,28 @@ function getSearchAlert(
 	};
 }
 
-export function GuestSearch({ formUrl }: GuestSearchProps) {
+export function GuestSearch() {
 	const toast = useToast();
 	const resultsRef = useRef<HTMLDivElement>(null);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [searchedTerm, setSearchedTerm] = useState("");
-	const [matchingGuests, setMatchingGuests] = useState<Guest[]>([]);
-	const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null);
+	const [matchingGuests, setMatchingGuests] = useState<PublicGuest[]>([]);
+	const [selectedGuest, setSelectedGuest] = useState<PublicGuest | null>(null);
 	const [isTooBroad, setIsTooBroad] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
 	const [isSearching, setIsSearching] = useState(false);
 	const [showScrollHint, setShowScrollHint] = useState(false);
+	const [inviteCode, setInviteCode] = useState("");
+	const [isVerifying, setIsVerifying] = useState(false);
+	const [verifyError, setVerifyError] = useState<string | null>(null);
+	const [verifiedFormUrl, setVerifiedFormUrl] = useState<string | null>(null);
+
+	const clearVerification = useCallback(() => {
+		setInviteCode("");
+		setIsVerifying(false);
+		setVerifyError(null);
+		setVerifiedFormUrl(null);
+	}, []);
 
 	const searchAlert = useMemo(
 		() =>
@@ -97,7 +104,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 	);
 
 	const notifySearchResult = useCallback(
-		(results: Guest[], selected: Guest | null, tooBroad: boolean) => {
+		(results: PublicGuest[], selected: PublicGuest | null, tooBroad: boolean) => {
 			const alert = getSearchAlert(results, selected, tooBroad);
 			if (!alert) return;
 
@@ -198,15 +205,16 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 			}
 
 			const data = (await response.json()) as {
-				guests?: Guest[];
+				guests?: PublicGuest[];
 				tooBroad?: boolean;
 			};
 			const tooBroad = data.tooBroad ?? false;
 			const results = tooBroad ? [] : data.guests ?? [];
+			clearVerification();
 			setMatchingGuests(results);
 			setIsTooBroad(tooBroad);
 
-			let selected: Guest | null = null;
+			let selected: PublicGuest | null = null;
 			if (results.length === 1) {
 				selected = results[0];
 			} else if (results.length > 1) {
@@ -241,6 +249,7 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 		setIsTooBroad(false);
 		setHasSearched(false);
 		setShowScrollHint(false);
+		clearVerification();
 	};
 
 	const handleRefineSearch = () => {
@@ -249,15 +258,90 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 		setIsTooBroad(false);
 		setHasSearched(false);
 		setShowScrollHint(false);
+		clearVerification();
 	};
 
 	const handleBackToList = () => {
 		setSelectedGuest(null);
+		clearVerification();
 	};
 
-	const handleGuestSelect = (guest: Guest) => {
+	const handleGuestSelect = (guest: PublicGuest) => {
 		setSelectedGuest(guest);
+		clearVerification();
 		notifySearchResult(matchingGuests, guest, false);
+	};
+
+	const handleVerify = async () => {
+		if (!selectedGuest) return;
+
+		const code = inviteCode.trim();
+		if (!code) {
+			toast({
+				title: "Enter your code",
+				description: "Please type the invite code printed on your invitation.",
+				status: "info",
+				duration: 4000,
+				isClosable: true,
+				position: "top",
+			});
+			return;
+		}
+
+		setIsVerifying(true);
+		setVerifyError(null);
+
+		try {
+			const response = await fetch("/api/guests/verify", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ id: selectedGuest.id, code }),
+			});
+
+			const data = (await response.json().catch(() => ({}))) as {
+				formUrl?: string;
+				error?: string;
+			};
+
+			if (!response.ok || !data.formUrl) {
+				const message =
+					data.error ?? "We couldn't verify that code. Please try again.";
+				setVerifyError(message);
+				toast({
+					title: "Code not verified",
+					description: message,
+					status: "error",
+					duration: 4000,
+					isClosable: true,
+					position: "top",
+				});
+				return;
+			}
+
+			setVerifiedFormUrl(data.formUrl);
+			toast({
+				title: "You're verified!",
+				description: "Your reply form is ready to open.",
+				status: "success",
+				duration: 4000,
+				isClosable: true,
+				position: "top",
+			});
+		} catch (err) {
+			console.error("Guest verify error:", err);
+			const message = "Something went wrong. Please try again in a moment.";
+			setVerifyError(message);
+			toast({
+				title: "Something went wrong",
+				description: message,
+				status: "error",
+				duration: 4000,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsVerifying(false);
+		}
 	};
 
 	return (
@@ -314,42 +398,138 @@ export function GuestSearch({ formUrl }: GuestSearchProps) {
 
 										<RSVPDivider />
 
-										<RSVPHelperText>
-											Tap the button below to open the reply form. It will open
-											in a new tab.
-										</RSVPHelperText>
+										{verifiedFormUrl ? (
+											<>
+												<RSVPHelperText>
+													You&apos;re verified! Tap the button below to open the
+													reply form. It will open in a new tab.
+												</RSVPHelperText>
 
-										<Link
-											href={formUrl}
-											target="_blank"
-											rel="noopener noreferrer"
-											_hover={{ textDecoration: "none" }}
-											w="100%"
-										>
-											<AnimatedButton
-												size="lg"
-												variant="solid"
-												bg="secondary.500"
-												color="white"
-												leftIcon={<EditIcon />}
-												px={{ base: 8, md: 10 }}
-												py={{ base: 6, md: 7 }}
-												minH="52px"
-												fontSize={{ base: "md", md: "lg" }}
-												fontFamily="body"
-												fontWeight="semibold"
-												w="100%"
-												borderRadius="xl"
-												boxShadow="0 4px 16px rgba(192,57,43,0.3)"
-												_hover={{
-													bg: "secondary.600",
-													boxShadow: "0 6px 24px rgba(192,57,43,0.4)",
-													transform: "translateY(-2px)",
-												}}
-											>
-												Go to Reply Form
-											</AnimatedButton>
-										</Link>
+												<Link
+													href={verifiedFormUrl}
+													target="_blank"
+													rel="noopener noreferrer"
+													_hover={{ textDecoration: "none" }}
+													w="100%"
+												>
+													<AnimatedButton
+														size="lg"
+														variant="solid"
+														bg="secondary.500"
+														color="white"
+														leftIcon={<EditIcon />}
+														px={{ base: 8, md: 10 }}
+														py={{ base: 6, md: 7 }}
+														minH="52px"
+														fontSize={{ base: "md", md: "lg" }}
+														fontFamily="body"
+														fontWeight="semibold"
+														w="100%"
+														borderRadius="xl"
+														boxShadow="0 4px 16px rgba(192,57,43,0.3)"
+														_hover={{
+															bg: "secondary.600",
+															boxShadow: "0 6px 24px rgba(192,57,43,0.4)",
+															transform: "translateY(-2px)",
+														}}
+													>
+														Go to Reply Form
+													</AnimatedButton>
+												</Link>
+											</>
+										) : (
+											<>
+												<RSVPHelperText>
+													Enter the invite code printed on your invitation to
+													unlock your reply form.
+												</RSVPHelperText>
+
+												<Input
+													value={inviteCode}
+													onChange={(e) => setInviteCode(e.target.value)}
+													onKeyDown={(e) => {
+														if (e.key === "Enter") {
+															e.preventDefault();
+															void handleVerify();
+														}
+													}}
+													placeholder="e.g. K7Q9ZP"
+													aria-label="Invite code"
+													autoCapitalize="characters"
+													autoCorrect="off"
+													spellCheck={false}
+													maxLength={16}
+													isDisabled={isVerifying}
+													isInvalid={Boolean(verifyError)}
+													bg="white"
+													textAlign="center"
+													fontFamily="body"
+													fontSize={{ base: "lg", md: "xl" }}
+													fontWeight="semibold"
+													letterSpacing="0.25em"
+													textTransform="uppercase"
+													minH="52px"
+													borderRadius="xl"
+													borderColor="purple.100"
+													_placeholder={{
+														letterSpacing: "normal",
+														textTransform: "none",
+														fontWeight: "normal",
+														color: "gray.400",
+													}}
+													_focusVisible={{
+														borderColor: "secondary.400",
+														boxShadow:
+															"0 0 0 1px var(--chakra-colors-secondary-400)",
+													}}
+												/>
+
+												{verifyError && (
+													<Text
+														fontFamily="body"
+														fontSize={{ base: "sm", md: "md" }}
+														color="secondary.600"
+														textAlign="center"
+														lineHeight="tall"
+														role="alert"
+													>
+														{verifyError}
+													</Text>
+												)}
+
+												<AnimatedButton
+													size="lg"
+													variant="solid"
+													bg="secondary.500"
+													color="white"
+													leftIcon={<LockIcon />}
+													onClick={() => void handleVerify()}
+													isLoading={isVerifying}
+													loadingText="Checking your code…"
+													px={{ base: 8, md: 10 }}
+													py={{ base: 6, md: 7 }}
+													minH="52px"
+													fontSize={{ base: "md", md: "lg" }}
+													fontFamily="body"
+													fontWeight="semibold"
+													w="100%"
+													borderRadius="xl"
+													boxShadow="0 4px 16px rgba(192,57,43,0.3)"
+													_hover={{
+														bg: "secondary.600",
+														boxShadow: "0 6px 24px rgba(192,57,43,0.4)",
+														transform: "translateY(-2px)",
+													}}
+												>
+													Unlock My Reply Form
+												</AnimatedButton>
+
+												<RSVPNoteText>
+													The code is on your invitation. Can&apos;t find it?
+													Please reach out to the couple.
+												</RSVPNoteText>
+											</>
+										)}
 
 										<RSVPNoteText>
 											You can come back here anytime if you need to look up your

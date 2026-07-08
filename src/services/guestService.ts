@@ -7,5 +7,5 @@
  * without leaking the full list into the browser bundle.
  */
 
-export type { Guest } from "@/config/guests/types";
+export type { Guest, PublicGuest } from "@/config/guests/types";
 export { getGuestDisplayName } from "@/lib/guestDisplay";

@@ -92,7 +92,7 @@
       "enabled": true,
       "title": "RSVP",
       "deadline": "2099-01-01",
-      "formUrl": "https://forms.example.com/rsvp",
+      "formUrl": "",
       "message": "Please reply by the deadline."
     },
     "entourage": {

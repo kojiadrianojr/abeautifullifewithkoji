@@ -81,6 +81,7 @@ export function RSVPSection() {
 						<RSVPStepsGuide
 							steps={[
 								'Type your name below, then tap "Look Up My Name".',
+								"Enter the invite code from your invitation to unlock your form.",
 								"Fill out the short form that opens.",
 							]}
 						/>
@@ -88,7 +89,7 @@ export function RSVPSection() {
 						<RSVPDivider />
 
 						<Box w="100%">
-							<GuestSearch formUrl={rsvp.formUrl} />
+							<GuestSearch />
 						</Box>
 
 						<RSVPNoteText>

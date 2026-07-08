@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon, ChevronDownIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
-import type { Guest } from "@/services";
+import type { PublicGuest } from "@/services";
 import { getGuestDisplayName } from "@/lib/guestDisplay";
 import {
 	RSVPCard,
@@ -24,9 +24,9 @@ import {
 } from "./RSVPPrimitives";
 
 export interface GuestSearchResultsListProps {
-	guests: Guest[];
+	guests: PublicGuest[];
 	searchTerm: string;
-	onSelect: (guest: Guest) => void;
+	onSelect: (guest: PublicGuest) => void;
 	onRefineSearch?: () => void;
 }
 

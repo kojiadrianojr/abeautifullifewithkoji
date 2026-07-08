@@ -4,6 +4,27 @@ export interface Guest {
 	fullName?: string;
 	members?: string[];
 	allowedSeats?: number;
+	/**
+	 * Secret per-guest invite code used to gate access to the RSVP form.
+	 * SERVER-ONLY: never send this to the browser. Always strip it with
+	 * `toPublicGuest` before returning a guest over the network.
+	 */
+	inviteCode?: string;
+}
+
+/**
+ * Guest shape safe to send to the client. Structurally identical to `Guest`
+ * minus the secret `inviteCode`.
+ */
+export type PublicGuest = Omit<Guest, "inviteCode">;
+
+/**
+ * Strip the secret `inviteCode` (and any future server-only fields) so a guest
+ * can be safely serialized to the browser.
+ */
+export function toPublicGuest(guest: Guest): PublicGuest {
+	const { inviteCode: _inviteCode, ...publicGuest } = guest;
+	return publicGuest;
 }
 
 export interface GuestsFile {
