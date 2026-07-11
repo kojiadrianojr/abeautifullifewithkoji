@@ -23,7 +23,18 @@ on:
       - 'ai-docs/**'
       - 'LICENSE'
       - '.gitignore'
+  # GitHub does not emit an event when Actions secrets change. After updating
+  # secrets (e.g. GUESTS_*_JSON / WEDDING_JSON), redeploy via:
+  #   • Actions → Deploy to Vercel → Run workflow (workflow_dispatch), or
+  #   • POST /repos/{owner}/{repo}/dispatches with event_type: secrets-updated
   workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Why redeploying (e.g. secrets updated)'
+        required: false
+        default: 'manual'
+  repository_dispatch:
+    types: [secrets-updated]
 
 # Prevent concurrent production deployments; preview deploys can run in parallel.
 concurrency:
