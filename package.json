@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "validate-config": "tsx scripts/validate-config.ts",
     "generate-invite-codes": "node scripts/generate-invite-codes.mjs",
+    "export-invite-codes": "node scripts/generate-invite-codes.mjs --export-only",
     "export": "next build",
     "sync-images": "tsx scripts/sync-images.ts",
     "test-drive": "tsx scripts/test-google-drive.ts",

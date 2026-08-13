@@ -10,10 +10,14 @@
  *
  * Usage:
  *   node scripts/generate-invite-codes.mjs
+ *   node scripts/generate-invite-codes.mjs --export-only
  *
  * Outputs:
- *   - Rewrites config/guests/bea.json and config/guests/koji.json in place.
- *   - Writes config/guests/invite-codes.csv (gitignored — contains secrets).
+ *   - Rewrites config/guests/bea.json and config/guests/koji.json in place
+ *     (unless --export-only).
+ *   - Writes config/guests/invite-codes.csv (gitignored — contains secrets)
+ *     from config/guests/bea.json and config/guests/koji.json with columns:
+ *     list, id, groupName, guestName, code.
  *
  * IMPORTANT: after running, refresh your GUESTS_BEA_JSON / GUESTS_KOJI_JSON
  * deploy secrets (and your local files are already updated).
@@ -48,19 +52,57 @@ function generateCode(used) {
 	throw new Error("Unable to generate a unique invite code — alphabet exhausted?");
 }
 
-function displayName(guest) {
-	if (guest.fullName) return guest.fullName;
-	if (guest.groupName) return guest.groupName;
-	if (Array.isArray(guest.members) && guest.members.length > 0) {
-		return guest.members.join(" / ");
-	}
-	return "(unnamed)";
-}
-
 function csvCell(value) {
 	const str = String(value ?? "");
 	return /[",\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;
 }
+
+/** One CSV row per person: groupName when present, individual guest name, shared code. */
+function inviteCodeRows(guest, listLabel) {
+	const code = guest.inviteCode ?? "";
+	const groupName = guest.groupName?.trim() ?? "";
+
+	if (guest.fullName?.trim()) {
+		return [[listLabel, guest.id, "", guest.fullName.trim(), code]];
+	}
+
+	if (Array.isArray(guest.members) && guest.members.length > 0) {
+		return guest.members.map((member) => [
+			listLabel,
+			guest.id,
+			groupName,
+			String(member).trim(),
+			code,
+		]);
+	}
+
+	if (groupName) {
+		return [[listLabel, guest.id, groupName, groupName, code]];
+	}
+
+	return [[listLabel, guest.id, "", "(unnamed)", code]];
+}
+
+function writeInviteCodesCsv(loaded) {
+	const csvRows = [["list", "id", "groupName", "guestName", "code"]];
+
+	for (const { label, data } of loaded) {
+		for (const guest of data.guests) {
+			csvRows.push(...inviteCodeRows(guest, label));
+		}
+	}
+
+	const csvPath = path.join(guestsDir, "invite-codes.csv");
+	fs.writeFileSync(
+		csvPath,
+		`${csvRows.map((row) => row.map(csvCell).join(",")).join("\n")}\n`,
+		"utf8",
+	);
+
+	return csvPath;
+}
+
+const exportOnly = process.argv.includes("--export-only");
 
 const loaded = LISTS.map(({ label, file }) => {
 	if (!fs.existsSync(file)) {
@@ -85,32 +127,33 @@ for (const { data } of loaded) {
 
 let assigned = 0;
 let kept = 0;
-const csvRows = [["list", "id", "name", "code"]];
 
-for (const { label, file, data } of loaded) {
-	for (const guest of data.guests) {
-		if (typeof guest.inviteCode === "string" && guest.inviteCode.trim()) {
-			kept += 1;
-		} else {
-			const code = generateCode(used);
-			used.add(code);
-			guest.inviteCode = code;
-			assigned += 1;
+if (!exportOnly) {
+	for (const { file, data } of loaded) {
+		for (const guest of data.guests) {
+			if (typeof guest.inviteCode === "string" && guest.inviteCode.trim()) {
+				kept += 1;
+			} else {
+				const code = generateCode(used);
+				used.add(code);
+				guest.inviteCode = code;
+				assigned += 1;
+			}
 		}
-		csvRows.push([label, guest.id, displayName(guest), guest.inviteCode]);
-	}
 
-	fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+		fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+	}
 }
 
-const csvPath = path.join(guestsDir, "invite-codes.csv");
-fs.writeFileSync(
-	csvPath,
-	`${csvRows.map((row) => row.map(csvCell).join(",")).join("\n")}\n`,
-	"utf8",
-);
+const csvPath = writeInviteCodesCsv(loaded);
 
-console.log(`Invite codes: ${assigned} newly assigned, ${kept} kept.`);
-console.log(`Guest files updated: ${LISTS.map((l) => path.basename(l.file)).join(", ")}`);
+if (exportOnly) {
+	console.log(`Distribution sheet exported from ${LISTS.map((l) => path.basename(l.file)).join(", ")}.`);
+} else {
+	console.log(`Invite codes: ${assigned} newly assigned, ${kept} kept.`);
+	console.log(`Guest files updated: ${LISTS.map((l) => path.basename(l.file)).join(", ")}`);
+}
 console.log(`Distribution sheet: ${csvPath}`);
-console.log("Remember to refresh GUESTS_BEA_JSON / GUESTS_KOJI_JSON deploy secrets.");
+if (!exportOnly) {
+	console.log("Remember to refresh GUESTS_BEA_JSON / GUESTS_KOJI_JSON deploy secrets.");
+}
