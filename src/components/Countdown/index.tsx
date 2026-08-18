@@ -134,7 +134,7 @@ const renderer = (
 				fontWeight="semibold" 
 				color={isFullScreenMode ? "white" : isDark ? "primary.300" : "primary.600"}
 			>
-				Today&apos;s the day! 🎉
+				Thank you for celebrating with us!
 			</Text>
 		);
 	}
